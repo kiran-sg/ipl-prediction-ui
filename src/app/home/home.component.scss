@@ -1,0 +1,20 @@
+.card-row {
+  display: flex;
+  justify-content: space-between;
+  margin: 20px;
+}
+
+.match-card {
+  flex: 1;
+  margin: 0 8px;
+  background-color: #f5f5f5;
+  border: 1px solid #ddd;
+  padding: 16px;
+  border-radius: 8px;
+}
+
+.ipl-header-image {
+  background-image: url('https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhuey_8VKd-PkrlcSkLgGDMVxFfczgI5nEeEDadAgBLy9tE9DXMH7axynfMTg1WoQItWyJyK5mIa50CW65iNTIVRetq3dlAbvGBNxgyTzJ73jLVbo3e240AC1eriS71J9hCU7L_f5zgapKLqMYIFT-MroRk-HzKyGlnkTtTFA5LmPalHnfPt_LM0mop/s1920/Original%20Indian%20Premier%20League%20IPL%20Logo%20PNG%20Transparent%20Images%20File%20Download%20Free%20Download.png');
+  background-size: cover;
+}
+  

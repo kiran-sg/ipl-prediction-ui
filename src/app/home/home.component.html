@@ -1,0 +1,30 @@
+<ng-container *ngFor="let row of matches | slice:0:matches.length; let i = index">
+    <div class="card-row" *ngIf="i % 3 === 0">
+      <mat-card class="match-card" appearance="outlined" *ngFor="let match of matches.slice(i, i + 3)">
+        <mat-card-header>
+          <div mat-card-avatar class="ipl-header-image"></div>
+          <mat-card-title style="padding-top: 10px;">MATCH {{match.matchNr}}</mat-card-title>
+        </mat-card-header>
+        <mat-grid-list cols="3" rowHeight="1:1">
+          <mat-grid-tile>
+            <img mat-card-md-image [src]="match.team1Logo" alt="Team 1 Logo" class="team-logo">
+          </mat-grid-tile>
+          <mat-grid-tile>
+            <img mat-card-sm-image src="assets/ipl/versus.avif" alt="Versus Logo" class="versus-logo">
+          </mat-grid-tile>
+          <mat-grid-tile>
+            <img mat-card-md-image [src]="match.team2Logo" alt="Team 2 Logo" class="team-logo">
+          </mat-grid-tile>
+        </mat-grid-list>
+        <mat-card-content>
+          <p>
+            {{match.dateTime | customDate}}
+          </p>
+        </mat-card-content>
+        <mat-card-actions>
+          <button mat-flat-button (click)="openPredictDialog(match)">PREDICT MATCH</button>
+        </mat-card-actions>
+      </mat-card>
+    </div>
+</ng-container>
+  

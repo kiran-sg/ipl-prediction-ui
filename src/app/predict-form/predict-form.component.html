@@ -1,0 +1,13 @@
+<mat-form-field>
+    <mat-label>Toss Winner</mat-label>
+    <mat-select>
+        <mat-option *ngFor="let team of teams" [value]="team.shortName">{{team.name}}</mat-option>
+    </mat-select>
+</mat-form-field>
+
+<mat-form-field>
+    <mat-label>Match Winner</mat-label>
+    <mat-select>
+        <mat-option *ngFor="let team of teams" [value]="team.shortName">{{team.name}}</mat-option>
+    </mat-select>
+</mat-form-field>  

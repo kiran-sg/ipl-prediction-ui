@@ -1,0 +1,39 @@
+/* navigation-bar.component.css */
+.navbar {
+  padding: 10px;
+  background-color: color(srgb 0.8378 0.8879 0.994);
+  margin-bottom: 20px;
+}
+
+.container {
+  display: flex;
+  width: 100%;
+}
+
+.navbar-brand {
+  margin-left: auto;
+}
+
+.navbar-links {
+  margin-left: 20px;
+}
+
+.navbar-links a {
+  color: white;
+  text-decoration: none;
+  font-size: 1rem;
+  transition: color 0.3s ease;
+}
+
+.navbar-links a:hover {
+  color: #ffd740; /* Angular Material accent color */
+}
+
+.navbar-links a.active {
+  font-weight: bold;
+  color: #ffd740;
+}
+
+.ipl-logo {
+  width: 100px;
+}
