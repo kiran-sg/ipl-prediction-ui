@@ -1,39 +1,76 @@
-/* navigation-bar.component.css */
 .navbar {
   padding: 10px;
-  background-color: color(srgb 0.8378 0.8879 0.994);
+  background-color: color(srgb 0.0981 0.2225 0.5413);
   margin-bottom: 20px;
+  position: relative;
 }
 
 .container {
   display: flex;
+  align-items: center;
   width: 100%;
 }
 
 .navbar-brand {
   margin-left: auto;
+  font-size: 1rem;
+  color: white;
 }
 
-.navbar-links {
+.nav-links {
+  display: flex;
+  gap: 10px;
   margin-left: 20px;
 }
 
-.navbar-links a {
-  color: white;
+.nav-links a {
   text-decoration: none;
   font-size: 1rem;
   transition: color 0.3s ease;
+  color: white;
 }
 
-.navbar-links a:hover {
-  color: #ffd740; /* Angular Material accent color */
-}
-
-.navbar-links a.active {
+.nav-links a.active {
   font-weight: bold;
-  color: #ffd740;
 }
 
 .ipl-logo {
   width: 100px;
+}
+
+.menu-button {
+  display: none;
+  color: white;
+}
+
+.mobile-sidenav {
+  background-color: white; /* White background */
+  width: 250px; /* Adjust width as needed */
+}
+
+.mobile-menu {
+  display: flex;
+  flex-direction: column;
+  padding: 16px;
+}
+
+.mobile-menu a {
+  color: black; /* Black text for better visibility */
+  text-decoration: none;
+  margin: 8px 0;
+}
+
+.mobile-menu a:hover {
+  color: #3f51b5; /* Optional: Change color on hover */
+}
+
+/* Responsive Styles for Mobile */
+@media (max-width: 768px) {
+  .nav-links {
+    display: none; /* Hide desktop links on mobile */
+  }
+
+  .menu-button {
+    display: block; /* Show menu button on mobile */
+  }
 }

@@ -1,20 +1,83 @@
-.card-row {
+.prediction-heading {
+  text-align: center;
+  font-size: 2rem;
+  font-weight: bold;
+  margin: 20px 0;
+  color: #061e59;
+}
+
+.card-container {
   display: flex;
-  justify-content: space-between;
-  margin: 20px;
+  flex-wrap: wrap;
+  gap: 16px;
+  padding: 16px;
 }
 
 .match-card {
-  flex: 1;
-  margin: 0 8px;
+  flex: 1 1 calc(33.333% - 32px);
+  box-sizing: border-box;
   background-color: #f5f5f5;
   border: 1px solid #ddd;
-  padding: 16px;
   border-radius: 8px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 350px; /* Adjust as needed */
 }
 
-.ipl-header-image {
-  background-image: url('https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhuey_8VKd-PkrlcSkLgGDMVxFfczgI5nEeEDadAgBLy9tE9DXMH7axynfMTg1WoQItWyJyK5mIa50CW65iNTIVRetq3dlAbvGBNxgyTzJ73jLVbo3e240AC1eriS71J9hCU7L_f5zgapKLqMYIFT-MroRk-HzKyGlnkTtTFA5LmPalHnfPt_LM0mop/s1920/Original%20Indian%20Premier%20League%20IPL%20Logo%20PNG%20Transparent%20Images%20File%20Download%20Free%20Download.png');
-  background-size: cover;
+.match-header {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  background-image: url('/assets/ipl/ipl-background.png'); /* Set background image */
+  background-size: cover; /* Ensure the image covers the entire header */
+  background-position: center; /* Center the background image */
+  padding: 16px; /* Add padding */
+  border-radius: 8px 8px 0 0; /* Rounded corners at the top */
 }
-  
+
+.match-actions {
+  display: flex;
+  justify-content: center;
+}
+
+.team-logos {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  margin: 16px 0;
+}
+
+.logo-container {
+  width: 100px;
+  height: 100px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+}
+
+.team-logo {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+}
+
+.versus-logo {
+  width: 80px;
+  height: 80px;
+  object-fit: contain;
+}
+
+.match-date {
+  text-align: center;
+  margin: 16px 0;
+}
+
+@media (max-width: 768px) {
+  .match-card {
+    flex: 1 1 100%;
+  }
+}
