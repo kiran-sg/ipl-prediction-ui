@@ -2,7 +2,6 @@ import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import {MatGridListModule} from '@angular/material/grid-list';
-import { CricketService } from '../cricket.service';
 import { CommonModule } from '@angular/common';
 import { CustomDatePipe } from "../custom-date.pipe";
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
@@ -27,7 +26,7 @@ export class HomeComponent {
   matches: Match[] = [];
   readonly dialog = inject(MatDialog);
 
-  constructor(private cricketService: CricketService) { }
+  constructor() { }
 
   ngOnInit(): void {
     this.fetchUpcomingMatches();

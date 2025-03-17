@@ -1,0 +1,37 @@
+<div class="login-container">
+    <mat-card class="login-card">
+      <mat-card-header style="padding-bottom: 32px;">
+        <mat-card-title>Login</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>User ID</mat-label>
+            <input matInput formControlName="userId" type="text" required>
+            <mat-icon matSuffix>person</mat-icon>
+            <mat-error *ngIf="loginForm.get('userId')?.hasError('userId')">
+              User Id is required
+            </mat-error>
+          </mat-form-field>
+  
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Password</mat-label>
+            <input matInput formControlName="password" type="password" required>
+            <mat-icon matSuffix>lock</mat-icon>
+            <mat-error *ngIf="loginForm.get('password')?.hasError('required')">
+              Password is required
+            </mat-error>
+          </mat-form-field>
+
+          <mat-error *ngIf="invalidPwd" style="padding-bottom: 20px;">
+            Invalid User ID or Password
+          </mat-error>
+  
+          <button mat-raised-button color="primary" type="submit" class="full-width" [disabled]="loginForm.invalid">
+            Login
+          </button>
+        </form>
+      </mat-card-content>
+    </mat-card>
+  </div>
+  
