@@ -8,16 +8,16 @@
       <mat-card-content>
         <div class="team-logos">
           <div class="logo-container">
-            <img [src]="match.team1Logo" alt="Team 1 Logo" class="team-logo">
+            <img [src]="match.homeLogo" alt="Team 1 Logo" class="team-logo">
           </div>
           <div class="logo-container">
             <img src="assets/ipl/versus.avif" alt="Versus Logo" class="versus-logo">
           </div>
           <div class="logo-container">
-            <img [src]="match.team2Logo" alt="Team 2 Logo" class="team-logo">
+            <img [src]="match.awayLogo" alt="Team 2 Logo" class="team-logo">
           </div>
         </div>
-        <p class="match-date">{{match.dateTime | customDate}}</p>
+        <p class="match-date">{{ match.date + ' ' + match.time + ' IST' }}</p>
       </mat-card-content>
       <mat-card-actions class="match-actions">
         <button mat-flat-button (click)="openPredictDialog(match)">PREDICT MATCH</button>

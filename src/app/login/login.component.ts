@@ -7,7 +7,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { Router } from '@angular/router';
-import { UserService } from '../services/user.service';
+import { CommonService } from '../common.service';
 
 @Component({
   selector: 'app-login',
@@ -28,7 +28,7 @@ export class LoginComponent {
   invalidPwd: boolean = false;
 
   constructor(private fb: FormBuilder, private router: Router, 
-    private userService: UserService) {
+    private service: CommonService) {
     this.loginForm = this.fb.group({
       userId: ['', [Validators.required]],
       password: ['', Validators.required]
@@ -39,7 +39,7 @@ export class LoginComponent {
     if (this.loginForm.valid) {
       console.log('Login Form Submitted', this.loginForm.value);
       const { userId, password } = this.loginForm.value;
-      this.userService.validateUser(userId, password).subscribe(
+      this.service.validateUser(userId, password).subscribe(
         (isValid: boolean) => {
           if (isValid) {
             this.router.navigate(['/home']);

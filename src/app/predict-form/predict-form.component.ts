@@ -32,15 +32,15 @@ export class PredictFormComponent implements OnInit {
     this.teams = [
       {
         id: 1,
-        name: TeamName[this.matchDetails?.team1 as keyof typeof TeamName],
-        logo: this.matchDetails?.team1Logo,
-        shortName: this.matchDetails?.team1
+        name: this.matchDetails?.home,
+        logo: this.matchDetails?.homeLogo,
+        shortName: this.matchDetails?.home
       },
       {
         id: 2,
-        name: TeamName[this.matchDetails?.team2 as keyof typeof TeamName],
-        logo: this.matchDetails?.team2Logo,
-        shortName: this.matchDetails?.team2
+        name: this.matchDetails?.away,
+        logo: this.matchDetails?.awayLogo,
+        shortName: this.matchDetails?.away
       }
     ]
   }
