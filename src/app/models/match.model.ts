@@ -4,6 +4,8 @@ export interface Match {
     time: string;
     home: string;
     away: string;
+    homeShortName: string;
+    awayShortName: string;
     homeLogo: string;
     awayLogo: string;
 }

@@ -10,4 +10,25 @@
     <mat-select>
         <mat-option *ngFor="let team of teams" [value]="team.shortName">{{team.name}}</mat-option>
     </mat-select>
-</mat-form-field>  
+</mat-form-field> 
+
+<mat-form-field>
+    <mat-label>High Scorer</mat-label>
+    <mat-select>
+        <mat-option *ngFor="let player of players" [value]="player.playerNo">{{player.playerName}}</mat-option>
+    </mat-select>
+</mat-form-field> 
+
+<mat-form-field>
+    <mat-label>Most Wicket Taker</mat-label>
+    <mat-select>
+        <mat-option *ngFor="let player of players" [value]="player.playerNo">{{player.playerName}}</mat-option>
+    </mat-select>
+</mat-form-field> 
+
+<mat-form-field>
+    <mat-label>Player of the Match</mat-label>
+    <mat-select>
+        <mat-option *ngFor="let player of players" [value]="player.playerNo">{{player.playerName}}</mat-option>
+    </mat-select>
+</mat-form-field> 

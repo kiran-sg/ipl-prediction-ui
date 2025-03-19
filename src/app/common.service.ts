@@ -24,4 +24,8 @@ export class CommonService {
   getLeaderBoard(): Observable<any> {
     return this.http.get(`${this.baseUrl}/predictions/leaderboard`);
   }
+
+  getPlayersByTeam(team: string): Observable<any> {
+    return this.http.get(`${this.baseUrl}/players?team=${team}`);
+  }
 }

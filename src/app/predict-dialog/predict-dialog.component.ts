@@ -4,6 +4,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MAT_DIALOG_DATA, MatDialogModule } from '@angular/material/dialog';
 import { Match } from '../models/match.model';
 import { CommonModule } from '@angular/common';
+import { TeamName } from '../enums/team';
 
 @Component({
   selector: 'app-predict-dialog',
@@ -22,6 +23,13 @@ export class PredictDialogComponent {
 
   constructor(@Inject(MAT_DIALOG_DATA) public data: any) {
     this.matchDetails = data.match;
+    this.matchDetails.homeShortName = Object.keys(TeamName).find(
+      key => TeamName[key as keyof typeof TeamName] === this.matchDetails?.home
+    ) as keyof typeof TeamName,
+    this.matchDetails.awayShortName = Object.keys(TeamName).find(
+      key => TeamName[key as keyof typeof TeamName] === this.matchDetails?.away
+    ) as keyof typeof TeamName,
+    console.log(this.matchDetails);
   }
 
   ngOnInit(): void {
