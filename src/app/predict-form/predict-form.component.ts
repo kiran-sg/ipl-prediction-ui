@@ -46,7 +46,7 @@ export class PredictFormComponent implements OnInit {
   ngOnInit(): void {
     this.predictForm = this.fb.group({
       predictionId: [''],
-      userId: ['user1', [Validators.required]],
+      userId: ['', [Validators.required]],
       matchId: [this.matchDetails?.matchNo, Validators.required],
       tossPredicted: ['', Validators.required],
       firstInnScorePredicted: ['', Validators.required],
@@ -127,6 +127,16 @@ export class PredictFormComponent implements OnInit {
         console.log("this.players", this.players);
       }
     });
+  }
+
+  getUser(): string {
+    const userId = sessionStorage.getItem('userId');
+    if (userId) {
+      return userId;
+    } else {
+      this.router.navigate(['/login']);
+      return '';
+    }
   }
 
 }
