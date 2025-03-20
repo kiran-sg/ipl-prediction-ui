@@ -46,7 +46,7 @@ export class PredictFormComponent implements OnInit {
   ngOnInit(): void {
     this.predictForm = this.fb.group({
       predictionId: [''],
-      userId: ['', [Validators.required]],
+      userId: [sessionStorage.getItem('userId'), [Validators.required]],
       matchId: [this.matchDetails?.matchNo, Validators.required],
       tossPredicted: ['', Validators.required],
       firstInnScorePredicted: ['', Validators.required],
@@ -82,6 +82,8 @@ export class PredictFormComponent implements OnInit {
     if (this.predictForm.valid) {
       const predictedMatch: PredictedMatch = this.predictForm.value;
       this.formSubmitted.emit(predictedMatch);
+    } else if (this.predictForm.value.userId == '') {
+      this.router.navigate(['/login']);
     }
   }
 
