@@ -3,7 +3,6 @@ import { Injectable } from '@angular/core';
 import { Observable, tap } from 'rxjs';
 import { environment } from '../environments/environment';
 import { PredictedMatch } from './models/predicted-match.model';
-import { EncryptionService } from './encryption.service';
 
 @Injectable({
   providedIn: 'root'
@@ -12,7 +11,7 @@ export class CommonService {
 
   private baseUrl = environment.apiUrl;
 
-  constructor(private http: HttpClient, private encryptionService: EncryptionService) { }
+  constructor(private http: HttpClient) { }
 
   validateUser(userId: string, pwd: string): Observable<boolean> {
     const user = { userId, pwd };
