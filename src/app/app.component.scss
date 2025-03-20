@@ -1,0 +1,79 @@
+/* Make the page take full height */
+html, body {
+    height: 100%;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Main container to fill the page */
+.app-container {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh; /* Ensures full viewport height */
+}
+
+/* Main content area */
+.main-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto; /* Allow scrolling */
+    padding-bottom: 40px; /* Space to prevent overlap */
+}
+
+/* Sticky, responsive footer */
+.footer {
+    background-color: #ffffff;
+    color: #12141c;
+    padding: 10px 20px;
+    width: 100%;
+    font-size: 0.7rem;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    height: 40px; /* Adjusted for better spacing */
+    display: flex;
+    justify-content: space-between; /* Pushes content apart */
+    align-items: center;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    text-transform: uppercase;
+}
+
+.footer-content {
+    width: 100%;
+    display: flex;
+    justify-content: space-between; /* Pushes items to opposite ends */
+    align-items: center;
+}
+
+/* Left-aligned app name */
+.footer-title {
+    margin-left: 10px;
+}
+
+/* Right-aligned author name */
+.app-author {
+    margin-right: 40px;
+    margin-left: auto;
+}
+
+/* Ensure router-outlet content doesn't overlap the footer */
+.content-container {
+    flex: 1;
+    overflow-y: auto;
+    height: calc(100vh - 60px - 40px); /* Adjusted height (Navbar - Footer) */
+}
+
+/* Responsive adjustments */
+@media (max-width: 600px) {
+    .footer {
+        flex-direction: column;
+        height: auto;
+        text-align: center;
+        padding: 5px 10px;
+    }
+    .footer-title, .footer-author {
+        margin: 2px 0;
+    }
+}

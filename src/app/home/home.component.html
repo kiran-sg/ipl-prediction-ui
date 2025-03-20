@@ -17,11 +17,14 @@
             <img [src]="match.awayLogo" alt="Team 2 Logo" class="team-logo">
           </div>
         </div>
-        <p class="match-date">{{ match.date + ' ' + match.time + ' IST' }}</p>
+        <p class="match-date">{{ match.dateTime | customDate }}</p>
       </mat-card-content>
       <mat-card-actions class="match-actions">
-        <button mat-flat-button (click)="openPredictDialog(match)">PREDICT MATCH</button>
+        <button mat-flat-button [disabled]="match.isLocked" (click)="openPredictDialog(match)">PREDICT MATCH</button>
       </mat-card-actions>
+      <p *ngIf="match.isLocked" class="error-message">
+        Prediction closed!
+      </p>
     </mat-card>
   </ng-container>
 </div>

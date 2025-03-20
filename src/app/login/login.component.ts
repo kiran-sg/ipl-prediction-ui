@@ -31,7 +31,7 @@ export class LoginComponent {
     private service: CommonService) {
     this.loginForm = this.fb.group({
       userId: ['', [Validators.required]],
-      password: ['', Validators.required]
+      password: ['']
     });
   }
 

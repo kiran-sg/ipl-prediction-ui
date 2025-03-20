@@ -3,7 +3,9 @@
   font-size: 2rem;
   font-weight: bold;
   margin: 20px 0;
-  color: #061e59;
+  color: black;
+  text-transform: uppercase;
+  font-family: var(--mdc-text-button-label-text-font, var(--mat-sys-label-large-font));
 }
 
 .card-container {
@@ -41,6 +43,12 @@
 .match-actions {
   display: flex;
   justify-content: center;
+}
+
+.error-message {
+  justify-content: center;
+  text-align: center;
+  color: red;
 }
 
 .team-logos {

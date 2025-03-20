@@ -3,18 +3,23 @@
     <img mat-card-sm-image src="assets/ipl/ipl-logo.png" alt="Versus Logo" class="ipl-logo">
     <div class="nav-links">
       <a mat-button routerLink="/home" routerLinkActive="active">Home</a>
-      <a mat-button routerLink="/leaderboard" routerLinkActive="active">Leaderbord</a>
+      <a mat-button routerLink="/leaderboard" routerLinkActive="active">Leaderboard</a>
+    </div>
+    <div class="powered-by">
+      <span class="powered-text">Powered By</span>
+      <span class="fuel-up-text">CTO Fuel Up</span>
     </div>
     <button mat-icon-button class="menu-button" (click)="toggleMenu()">
       <mat-icon>menu</mat-icon>
     </button>
   </div>
 </mat-toolbar>
+
 <mat-sidenav-container hasBackdrop="true">
   <mat-sidenav #sidenav mode="over" [fixedInViewport]="isMobile" [opened]="isMenuOpen" class="mobile-sidenav">
     <div class="mobile-menu">
       <a mat-button routerLink="/home" routerLinkActive="active" (click)="closeMenu()">Home</a>
-      <a mat-button routerLink="/leaderboard" routerLinkActive="active" (click)="closeMenu()">Leaderbord</a>
+      <a mat-button routerLink="/leaderboard" routerLinkActive="active" (click)="closeMenu()">Leaderboard</a>
     </div>
   </mat-sidenav>
 </mat-sidenav-container>

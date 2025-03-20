@@ -1,34 +1,75 @@
-<mat-form-field>
-    <mat-label>Toss Winner</mat-label>
-    <mat-select>
-        <mat-option *ngFor="let team of teams" [value]="team.shortName">{{team.name}}</mat-option>
-    </mat-select>
-</mat-form-field>
+<form [formGroup]="predictForm" (ngSubmit)="onSubmit()" class="predict-form">
+    <div class="form-container">
+        <div class="form-field">
+            <mat-form-field appearance="fill">
+                <mat-label>Toss Winner</mat-label>
+                <mat-select formControlName="tossPredicted">
+                    <mat-option *ngFor="let team of teams" [value]="team.shortName">{{ team.name }}</mat-option>
+                </mat-select>
+                <mat-error *ngIf="predictForm.get('tossPredicted')?.hasError('required')">
+                    This field is required
+                </mat-error>
+            </mat-form-field>
+        </div>
 
-<mat-form-field>
-    <mat-label>Match Winner</mat-label>
-    <mat-select>
-        <mat-option *ngFor="let team of teams" [value]="team.shortName">{{team.name}}</mat-option>
-    </mat-select>
-</mat-form-field> 
+        <div class="form-field">
+            <mat-form-field appearance="fill">
+                <mat-label>First Innings Score</mat-label>
+                <mat-select formControlName="firstInnScorePredicted">
+                    <mat-option *ngFor="let option of firstInnScoreOptions" [value]="option">{{ option }}</mat-option>
+                </mat-select>
+                <mat-error *ngIf="predictForm.get('firstInnScorePredicted')?.hasError('required')">
+                    This field is required
+                </mat-error>
+            </mat-form-field>
+        </div>
 
-<mat-form-field>
-    <mat-label>High Scorer</mat-label>
-    <mat-select>
-        <mat-option *ngFor="let player of players" [value]="player.playerNo">{{player.playerName}}</mat-option>
-    </mat-select>
-</mat-form-field> 
+        <div class="form-field">
+            <mat-form-field appearance="fill">
+                <mat-label>Winner</mat-label>
+                <mat-select formControlName="teamPredicted">
+                    <mat-option *ngFor="let team of teams" [value]="team.shortName">{{ team.name }}</mat-option>
+                </mat-select>
+                <mat-error *ngIf="predictForm.get('teamPredicted')?.hasError('required')">
+                    This field is required
+                </mat-error>
+            </mat-form-field>
+        </div>
 
-<mat-form-field>
-    <mat-label>Most Wicket Taker</mat-label>
-    <mat-select>
-        <mat-option *ngFor="let player of players" [value]="player.playerNo">{{player.playerName}}</mat-option>
-    </mat-select>
-</mat-form-field> 
+        <div class="form-field">
+            <mat-form-field appearance="fill">
+                <mat-label>FUEL UP Batter</mat-label>
+                <mat-select formControlName="mostRunsScorerPredicted">
+                    <mat-option *ngFor="let player of players" [value]="player.playerNo">{{ player.displayValue }}</mat-option>
+                </mat-select>
+                <mat-error *ngIf="predictForm.get('mostRunsScorerPredicted')?.hasError('required')">
+                    This field is required
+                </mat-error>
+            </mat-form-field>
+        </div>
 
-<mat-form-field>
-    <mat-label>Player of the Match</mat-label>
-    <mat-select>
-        <mat-option *ngFor="let player of players" [value]="player.playerNo">{{player.playerName}}</mat-option>
-    </mat-select>
-</mat-form-field> 
+        <div class="form-field">
+            <mat-form-field appearance="fill">
+                <mat-label>FUEL UP Bowler</mat-label>
+                <mat-select formControlName="mostWicketsTakerPredicted">
+                    <mat-option *ngFor="let player of players" [value]="player.playerNo">{{ player.displayValue }}</mat-option>
+                </mat-select>
+                <mat-error *ngIf="predictForm.get('mostWicketsTakerPredicted')?.hasError('required')">
+                    This field is required
+                </mat-error>
+            </mat-form-field>
+        </div>
+
+        <div class="form-field">
+            <mat-form-field appearance="fill">
+                <mat-label>FUEL UP Man of the Match</mat-label>
+                <mat-select formControlName="momPredicted">
+                    <mat-option *ngFor="let player of players" [value]="player.playerNo">{{ player.displayValue }}</mat-option>
+                </mat-select>
+                <mat-error *ngIf="predictForm.get('momPredicted')?.hasError('required')">
+                    This field is required
+                </mat-error>
+            </mat-form-field>
+        </div>
+    </div>
+</form>

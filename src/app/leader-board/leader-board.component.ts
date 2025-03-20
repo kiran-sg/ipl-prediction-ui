@@ -1,6 +1,10 @@
 import { Component } from '@angular/core';
 import { MatTableModule } from '@angular/material/table';
 import { CommonService } from '../common.service';
+import { CommonModule } from '@angular/common';
+import { MatButtonModule } from '@angular/material/button';
+import { MatCardModule } from '@angular/material/card';
+import { MatGridListModule } from '@angular/material/grid-list';
 
 export interface LeaderBoard {
   position: number;
@@ -12,19 +16,29 @@ export interface LeaderBoard {
 @Component({
   selector: 'app-leader-board',
   imports: [
-    MatTableModule
+    MatTableModule,
+    CommonModule,
+    MatCardModule,
+    MatButtonModule,
+    MatGridListModule,
   ],
   templateUrl: './leader-board.component.html',
   styleUrl: './leader-board.component.scss'
 })
 export class LeaderBoardComponent {
 
-  displayedColumns: string[] = ['position', 'userId', 'location', 'points'];
+  locations: Array<{ loc: string; leaderBoard: LeaderBoard[] }> = [
+    { loc: 'TVM', leaderBoard: [] },
+    { loc: 'PUNE', leaderBoard: [] }
+  ];
+  displayedColumns: string[] = ['position', 'userName', 'points'];
   dataSource: LeaderBoard[] = [];
 
   constructor(private service: CommonService) { 
-    this.service.getLeaderBoard().subscribe((data) => {
-      this.dataSource = data;
+    this.locations.forEach((item: any) => {
+      this.service.getLeaderBoard(item.loc).subscribe((data) => {
+        item.leaderBoard = data;
+      });
     });
   }
 

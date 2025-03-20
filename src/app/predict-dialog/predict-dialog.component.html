@@ -1,8 +1,10 @@
-<h2 mat-dialog-title>{{'Predict ' + matchDetails.homeShortName + ' VS ' + matchDetails.awayShortName}}</h2>
-<mat-dialog-content class="mat-typography">
-    <app-predict-form [matchDetails]="matchDetails"></app-predict-form>  
-</mat-dialog-content>
-<mat-dialog-actions align="end">
-  <button mat-button mat-dialog-close>Cancel</button>
-  <button mat-button [mat-dialog-close]="true" cdkFocusInitial>Predict</button>
-</mat-dialog-actions>
+<h2 mat-dialog-title>{{'Predict ' + matchDetails.home + ' VS ' + matchDetails.away}}</h2>
+
+  <mat-dialog-content class="mat-typography">
+    <app-predict-form [matchDetails]="matchDetails" (formSubmitted)="onFormSubmitted($event)"></app-predict-form>  
+  </mat-dialog-content>
+  <mat-dialog-actions align="end">
+    <button mat-button mat-dialog-close>Cancel</button>
+    <button mat-button cdkFocusInitial (click)="onPredictClick()">Predict</button>
+  </mat-dialog-actions>
+

@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
@@ -6,9 +6,12 @@ import { Match } from '../models/match.model';
 import { Team } from '../models/team.model';
 import { TeamName } from '../enums/team';
 import { CommonModule } from '@angular/common';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CommonService } from '../common.service';
 import { Player } from '../models/player.model';
+import { isMatchTimeBelowSixtyMins } from '../utils/common-utils';
+import { PredictedMatch } from '../models/predicted-match.model';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-predict-form',
@@ -16,7 +19,8 @@ import { Player } from '../models/player.model';
     CommonModule,
     MatSelectModule,
     MatInputModule,
-    MatFormFieldModule
+    MatFormFieldModule,
+    ReactiveFormsModule
   ],
   templateUrl: './predict-form.component.html',
   styleUrl: './predict-form.component.scss'
@@ -24,27 +28,73 @@ import { Player } from '../models/player.model';
 export class PredictFormComponent implements OnInit {
   teams!: Team[];
   players: Player[] = [];
-  predictForm: FormGroup;
+  firstInnScoreOptions = [
+    '< 100','100 - 130','131 - 160','161 - 180','181 - 200','> 200'
+  ]
+  predictForm!: FormGroup;
 
   @Input() matchDetails!: Match;
+  @Output() formSubmitted = new EventEmitter<PredictedMatch>();
 
-  constructor(private fb: FormBuilder, private service: CommonService) {
-    this.predictForm = this.fb.group({
-      userId: ['', [Validators.required]],
-      matchId: ['', Validators.required],
-      tossPredicted: ['', Validators.required],
-      teamPredicted: ['', Validators.required],
-      momPredicted: ['', Validators.required],
-      mostRunsScorerPredicted: ['', Validators.required],
-      mostWicketsTakerPredicted: ['', Validators.required]
-    });
+  constructor(
+    private fb: FormBuilder, 
+    private service: CommonService,
+    private router: Router, 
+  ) {
   }
 
   ngOnInit(): void {
-    this.setTeams();
-    this.teams.forEach((team: Team) => {
-      this.setPlayers(team.shortName); 
+    this.predictForm = this.fb.group({
+      predictionId: [''],
+      userId: ['user1', [Validators.required]],
+      matchId: [this.matchDetails?.matchNo, Validators.required],
+      tossPredicted: ['', Validators.required],
+      firstInnScorePredicted: ['', Validators.required],
+      teamPredicted: ['', Validators.required],
+      mostRunsScorerPredicted: ['', Validators.required],
+      mostWicketsTakerPredicted: ['', Validators.required],
+      momPredicted: ['', Validators.required],
     });
+    this.setTeams();
+    this.setPlayers();
+    this.getPreviousPrediction();
+  }
+
+  getPreviousPrediction() {
+    this.service.getPredictionByMatchId(this.matchDetails.matchNo).subscribe((data) => {
+      if (data.invalidUser) {
+        alert(data.message);
+        this.router.navigate(['/login']);
+        this.formSubmitted.emit(undefined);
+        return;
+      }
+      if (data.status && data.prediction !== null) {
+        this.updateForm(data.prediction);
+      } 
+    })
+  }
+
+  onSubmit(): void {
+    if (isMatchTimeBelowSixtyMins(this.matchDetails.dateTime)) {
+      alert('You can only predict a match 60 minutes before the match starts.');
+      return;
+    }
+    if (this.predictForm.valid) {
+      const predictedMatch: PredictedMatch = this.predictForm.value;
+      this.formSubmitted.emit(predictedMatch);
+    }
+  }
+
+  updateForm(prediction: PredictedMatch) {
+    this.predictForm.patchValue({
+      predictionId: prediction.predictionId,
+      tossPredicted: prediction.tossPredicted,
+      firstInnScorePredicted: prediction.firstInnScorePredicted,
+      teamPredicted: prediction.teamPredicted,
+      mostRunsScorerPredicted: prediction.mostRunsScorerPredicted,
+      mostWicketsTakerPredicted: prediction.mostWicketsTakerPredicted,
+      momPredicted: prediction.momPredicted,
+    })
   }
 
   setTeams(): void {
@@ -53,22 +103,28 @@ export class PredictFormComponent implements OnInit {
         id: 1,
         name: this.matchDetails?.home,
         logo: this.matchDetails?.homeLogo,
-        shortName: this.matchDetails.homeShortName
+        shortName: this.matchDetails.home
       },
       {
         id: 2,
         name: this.matchDetails?.away,
         logo: this.matchDetails?.awayLogo,
-        shortName: this.matchDetails.awayShortName
+        shortName: this.matchDetails.away
       }
     ]
   }
 
-  setPlayers(team: string): void {
-    this.service.getPlayersByTeam(team).subscribe({
+  setPlayers(): void {
+    const teamNames = this.teams.map(team => team.name);
+    this.service.getPlayersByTeam(teamNames).subscribe({
       next: (data: Player[]) => {
-        this.players.push(...data);
-        console.log('Players:', this.players);
+        this.players = data.map((player: Player) => {
+          return {
+            ...player,
+            displayValue: player.playerName + ' - ' + player.category + ' - ' + player.team + ''
+          }
+        });
+        console.log("this.players", this.players);
       }
     });
   }

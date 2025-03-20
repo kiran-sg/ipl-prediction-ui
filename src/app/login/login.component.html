@@ -14,17 +14,17 @@
             </mat-error>
           </mat-form-field>
   
-          <mat-form-field appearance="outline" class="full-width">
+          <!-- <mat-form-field appearance="outline" class="full-width">
             <mat-label>Password</mat-label>
             <input matInput formControlName="password" type="password" required>
             <mat-icon matSuffix>lock</mat-icon>
             <mat-error *ngIf="loginForm.get('password')?.hasError('required')">
               Password is required
             </mat-error>
-          </mat-form-field>
+          </mat-form-field> -->
 
           <mat-error *ngIf="invalidPwd" style="padding-bottom: 20px;">
-            Invalid User ID or Password
+            Invalid User ID
           </mat-error>
   
           <button mat-raised-button color="primary" type="submit" class="full-width" [disabled]="loginForm.invalid">

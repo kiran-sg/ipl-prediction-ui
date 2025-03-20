@@ -9,6 +9,8 @@ import { Match } from '../models/match.model';
 import { CommonService } from '../common.service';
 import { TeamName } from '../enums/team';
 import { TeamLogo } from '../enums/team-logo';
+import { CustomDatePipe } from '../custom-date.pipe';
+import { isMatchTimeBelowSixtyMins } from '../utils/common-utils';
 
 @Component({
   selector: 'app-home',
@@ -17,13 +19,16 @@ import { TeamLogo } from '../enums/team-logo';
     MatCardModule,
     MatButtonModule,
     MatGridListModule,
-    MatDialogModule
+    MatDialogModule,
+    CustomDatePipe
 ],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss'
 })
 export class HomeComponent {
   matches: Match[] = [];
+  matchStartDate: Date = new Date();
+  matchEndDate: Date = new Date(new Date().setDate(new Date().getDate() + 10));
   readonly dialog = inject(MatDialog);
 
   constructor(private service: CommonService, private datePipe: DatePipe) {
@@ -35,24 +40,35 @@ export class HomeComponent {
   }
 
   openPredictDialog(match: Match): void {
+    if (isMatchTimeBelowSixtyMins(match.dateTime)) {
+      alert('You can only predict a match 60 minutes before the match starts.');
+      return;
+    }
     const dialogRef = this.dialog.open(PredictDialogComponent, {
+      width: '500px', // Initial width
+      height: 'auto', // Initial height
       data: { match }
     });
-
+  
     dialogRef.afterClosed().subscribe(result => {
-      console.log(`Dialog result: ${result}`);
+      console.log('Dialog closed', result);
     });
   }
 
   fetchUpcomingMatches(): void {
     this.service.getMatches().subscribe({
       next: (data: Match[]) => {
-        this.matches = data.map((match: Match) => {
+        this.matches = data
+        .filter((match: Match) => {
+          return new Date(match.dateTime) >= this.matchStartDate
+          && new Date(match.dateTime) <= this.matchEndDate;
+        })
+        .map((match: Match) => {
           return {
             ...match,
-            homeLogo: this.getTeamLogo(match.home),
-            awayLogo: this.getTeamLogo(match.away),
-            //dateTime: match.date 
+            isLocked: isMatchTimeBelowSixtyMins(match.dateTime),
+            homeLogo: TeamLogo[match.home as keyof typeof TeamLogo],
+            awayLogo: TeamLogo[match.away as keyof typeof TeamLogo],
           };
         });
         console.log('Matches:', this.matches);
@@ -63,31 +79,5 @@ export class HomeComponent {
     });
   }
 
-  private getTeamLogo(teamName: string): string {
-    switch (teamName) {
-      case TeamName.KKR:
-        return TeamLogo.KKR;
-      case TeamName.RCB:
-        return TeamLogo.RCB;
-      case TeamName.SRH:
-        return TeamLogo.SRH;
-      case TeamName.RR:
-        return TeamLogo.RR;
-      case TeamName.CSK:
-        return TeamLogo.CSK;
-      case TeamName.MI:
-        return TeamLogo.MI;
-      case TeamName.DC:
-        return TeamLogo.DC;
-      case TeamName.LSG:
-        return TeamLogo.LSG;
-      case TeamName.GT:
-        return TeamLogo.GT;
-      case TeamName.PK:
-        return TeamLogo.PK;
-      default:
-        return '';
-    }
-  }
-
 }
+

@@ -1,11 +1,9 @@
 export interface Match {
     matchNo: string;
-    date: string;
-    time: string;
+    dateTime: string;
     home: string;
     away: string;
-    homeShortName: string;
-    awayShortName: string;
     homeLogo: string;
     awayLogo: string;
+    isLocked: boolean;
 }
