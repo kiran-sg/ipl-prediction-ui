@@ -87,16 +87,15 @@ export class PredictDialogComponent {
     this.service.predictMatch(predictedMatch).subscribe((data) => {
       if (data.invalidUser) {
         //alert(data.message);
-
-        this._snackBar.open(data.message, "Close");
         this.dialogRef.close(predictedMatch);
+        this._snackBar.open(data.message, "Close");
         this.router.navigate(['/login']);
         return;
       }
       if (data.status) {
         //alert('Prediction submitted');
-        this._snackBar.open(data.message, "Close");
         this.dialogRef.close(predictedMatch);
+        this._snackBar.open(data.message, "Close");
       } else {
         alert('Prediction failed');
       }
