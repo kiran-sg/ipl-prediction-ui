@@ -8,5 +8,5 @@ export enum TeamLogo {
     DC = 'assets/ipl/dc.png',
     LSG = 'assets/ipl/lsg.png',
     GT = 'assets/ipl/gt.png',
-    PK = 'assets/ipl/pk.png'
+    PBKS = 'assets/ipl/pk.png'
 }

@@ -8,5 +8,5 @@ export enum TeamName {
     DC = 'Delhi Capitals',
     LSG = 'Lucknow Super Giants',
     GT = 'Gujarat Titans',
-    PK = 'Punjab Kings'
+    PBKS = 'Punjab Kings'
 }
