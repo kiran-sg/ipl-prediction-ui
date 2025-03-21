@@ -29,6 +29,7 @@
                 <mat-label>Winner</mat-label>
                 <mat-select formControlName="teamPredicted">
                     <mat-option *ngFor="let team of teams" [value]="team.shortName">{{ team.name }}</mat-option>
+                    <mat-option value="no_result">No Result</mat-option>
                 </mat-select>
                 <mat-error *ngIf="predictForm.get('teamPredicted')?.hasError('required')">
                     This field is required
