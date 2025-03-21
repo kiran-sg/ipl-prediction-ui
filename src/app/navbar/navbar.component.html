@@ -2,7 +2,7 @@
   <div class="container">
     <img mat-card-sm-image src="assets/ipl/ipl-logo.png" alt="Versus Logo" class="ipl-logo">
     <div class="nav-links">
-      <a mat-button routerLink="/home" routerLinkActive="active">Home</a>
+      <a mat-button routerLink="/home" routerLinkActive="active">Matches</a>
       <a mat-button routerLink="/leaderboard" routerLinkActive="active">Leaderboard</a>
     </div>
     <div class="powered-by">
@@ -19,7 +19,7 @@
 <mat-sidenav-container hasBackdrop="true">
   <mat-sidenav #sidenav mode="over" [fixedInViewport]="isMobile" [opened]="isMenuOpen" class="mobile-sidenav">
     <div class="mobile-menu">
-      <a mat-button routerLink="/home" routerLinkActive="active" (click)="closeMenu()">Home</a>
+      <a mat-button routerLink="/home" routerLinkActive="active" (click)="closeMenu()">Matches</a>
       <a mat-button routerLink="/leaderboard" routerLinkActive="active" (click)="closeMenu()">Leaderboard</a>
     </div>
   </mat-sidenav>
