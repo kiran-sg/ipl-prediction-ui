@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, Inject, ViewChild } from '@angular/core';
+import { Component, inject, Inject, ViewChild } from '@angular/core';
 import { PredictFormComponent } from "../predict-form/predict-form.component";
 import { MatButtonModule } from '@angular/material/button';
 import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
@@ -12,6 +12,7 @@ import { MatFormField, MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { CommonService } from '../common.service';
 import { Router } from '@angular/router';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-predict-dialog',
@@ -32,6 +33,9 @@ export class PredictDialogComponent {
   matchDetails!: Match;
   dialogWidth: string = '500px'; // Default width
   dialogHeight: string = 'auto'; // Default height
+
+
+  private _snackBar = inject(MatSnackBar);
 
   @ViewChild(PredictFormComponent) predictFormComponent!: PredictFormComponent;
 
@@ -82,18 +86,25 @@ export class PredictDialogComponent {
     }
     this.service.predictMatch(predictedMatch).subscribe((data) => {
       if (data.invalidUser) {
-        alert(data.message);
+        //alert(data.message);
+
+        this._snackBar.open(data.message, "Close");
         this.dialogRef.close(predictedMatch);
         this.router.navigate(['/login']);
         return;
       }
       if (data.status) {
-        alert('Prediction submitted');
-          this.dialogRef.close(predictedMatch);
+        //alert('Prediction submitted');
+        this._snackBar.open(data.message, "Close");
+        this.dialogRef.close(predictedMatch);
       } else {
         alert('Prediction failed');
       }
     });
+  }
+
+  openSnackBar(message: string, action: string) {
+    this._snackBar.open(message, action);
   }
 
 }

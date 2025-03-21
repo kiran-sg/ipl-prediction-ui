@@ -9,10 +9,10 @@
 }
 
 .card-container {
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
   gap: 16px;
   padding: 16px;
+  //grid-template-columns: repeat(3, 1fr); 
 }
 
 .match-card {
@@ -89,6 +89,9 @@
   .match-card {
     flex: 1 1 calc(50% - 32px); /* 2 cards per row */
   }
+  .card-container {
+    grid-template-columns: repeat(2, 1fr); /* 2 columns */
+  }
 }
 
 /* Responsive styles for laptops (3 cards per row) */
@@ -96,11 +99,17 @@
   .match-card {
     flex: 1 1 calc(33.333% - 32px); /* 3 cards per row */
   }
+  .card-container {
+    grid-template-columns: repeat(3, 1fr); /* 3 columns */
+  }
 }
 
 /* Responsive styles for large screens (4 cards per row) */
 @media (min-width: 1440px) {
   .match-card {
     flex: 1 1 calc(25% - 32px); /* 4 cards per row */
+  }
+  .card-container {
+    grid-template-columns: repeat(4, 1fr); /* 4 columns */
   }
 }
