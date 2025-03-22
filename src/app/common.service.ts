@@ -14,12 +14,12 @@ export class CommonService {
 
   constructor(private http: HttpClient, private loadingService: LoadingService) { }
 
-  validateUser(userId: string, pwd: string): Observable<boolean> {
+  validateUser(userId: string, pwd: string): Observable<any> {
     this.loadingService.show(); // Show loader
     const user = { userId, pwd };
-    return this.http.post<boolean>(`${this.baseUrl}/users/validate`, user).pipe(
-      tap((isValid: boolean) => {
-        if (isValid) {
+    return this.http.post(`${this.baseUrl}/users/validate`, user).pipe(
+      tap((data: any) => {
+        if (data.isValidUser) {
           sessionStorage.removeItem('userId');
           sessionStorage.setItem('userId', userId);
         }

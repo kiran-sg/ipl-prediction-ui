@@ -40,8 +40,8 @@ export class LoginComponent {
       console.log('Login Form Submitted', this.loginForm.value);
       const { userId, password } = this.loginForm.value;
       this.service.validateUser(userId, password).subscribe(
-        (isValid: boolean) => {
-          if (isValid) {
+        (data: any) => {
+          if (data.isValidUser) {
             this.router.navigate(['/home']);
           } else {
             console.error('Invalid user');
