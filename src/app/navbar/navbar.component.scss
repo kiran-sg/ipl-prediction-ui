@@ -42,12 +42,12 @@
   text-align: right;
   margin-left: auto;
   color: white;
-  font-weight: bold;
+  //font-weight: bold;
   margin-right: 15px;
 }
 
 .powered-text {
-  font-size: 0.8rem; 
+  font-size: 0.7rem; 
   text-transform: uppercase;
 }
 
@@ -61,9 +61,20 @@
   color: white;
 }
 
+/* Ensure the sidenav has a higher z-index */
 .mobile-sidenav {
   background-color: white;
   width: 250px;
+  z-index: 1000; /* Increase z-index to ensure it appears on top */
+}
+
+/* Ensure the backdrop covers the content */
+.mat-sidenav-container {
+  z-index: 999; /* Ensure the backdrop is below the sidenav */
+}
+
+.mat-sidenav-backdrop {
+  z-index: 998; /* Ensure the backdrop covers the content */
 }
 
 .mobile-menu {

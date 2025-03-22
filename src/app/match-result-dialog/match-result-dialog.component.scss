@@ -1,0 +1,23 @@
+/* Full width on small screens, two columns on larger screens */
+.form-container {
+    display: grid;
+    gap: 16px;
+    grid-template-columns: 1fr; /* Default: single column */
+  }
+  
+  @media (min-width: 768px) {
+    .form-container {
+        grid-template-columns: 1fr 1fr; /* Two columns */
+    }
+  }
+  
+  /* Ensure form fields take full width */
+  .form-field {
+    width: 100%;
+  }
+  
+  /* Make mat-form-field responsive */
+  mat-form-field {
+    width: 100%;
+  }
+  

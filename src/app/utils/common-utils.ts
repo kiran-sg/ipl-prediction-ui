@@ -3,7 +3,12 @@ export function isMatchTimeBelowSixtyMins(matchDateTime: string | Date): boolean
     return timeDiff.hours == 0 && timeDiff.minutes < 60;
 }
 
-export function getTimeDifference(providedDateTime: string | Date): { hours: number; minutes: number } {
+export function isMatchOpenForUpdateResult(matchDateTime: string | Date): boolean {
+    const timeDiff = getTimeDifference(matchDateTime);
+    return timeDiff.hours <= -4;
+}
+
+function getTimeDifference(providedDateTime: string | Date): { hours: number; minutes: number } {
     const currentTime = new Date();
     const diffInMs = new Date(providedDateTime).getTime() - currentTime.getTime();
 

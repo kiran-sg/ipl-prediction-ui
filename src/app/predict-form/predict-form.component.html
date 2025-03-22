@@ -14,18 +14,6 @@
 
         <div class="form-field">
             <mat-form-field appearance="fill">
-                <mat-label>First Innings Score</mat-label>
-                <mat-select formControlName="firstInnScorePredicted">
-                    <mat-option *ngFor="let option of firstInnScoreOptions" [value]="option">{{ option }}</mat-option>
-                </mat-select>
-                <mat-error *ngIf="predictForm.get('firstInnScorePredicted')?.hasError('required')">
-                    This field is required
-                </mat-error>
-            </mat-form-field>
-        </div>
-
-        <div class="form-field">
-            <mat-form-field appearance="fill">
                 <mat-label>Winner</mat-label>
                 <mat-select formControlName="teamPredicted">
                     <mat-option *ngFor="let team of teams" [value]="team.shortName">{{ team.name }}</mat-option>
@@ -39,8 +27,23 @@
 
         <div class="form-field">
             <mat-form-field appearance="fill">
+                <mat-label>First Innings Score</mat-label>
+                <mat-select formControlName="firstInnScorePredicted">
+                    <mat-option *ngFor="let option of firstInnScoreOptions" [value]="option">{{ option }}</mat-option>
+                </mat-select>
+                <mat-error *ngIf="predictForm.get('firstInnScorePredicted')?.hasError('required')">
+                    This field is required
+                </mat-error>
+            </mat-form-field>
+        </div>
+
+        <div class="form-field">
+            <mat-form-field appearance="fill">
                 <mat-label>FUEL UP Batter</mat-label>
                 <mat-select formControlName="mostRunsScorerPredicted">
+                    <mat-option>
+                        <ngx-mat-select-search [formControl]="batterFilterCtrl" placeholderLabel="Search" ></ngx-mat-select-search>
+                    </mat-option>
                     <mat-option *ngFor="let player of players" [value]="player.playerNo">{{ player.displayValue }}</mat-option>
                 </mat-select>
                 <mat-error *ngIf="predictForm.get('mostRunsScorerPredicted')?.hasError('required')">

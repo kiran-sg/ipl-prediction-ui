@@ -11,6 +11,8 @@
   flex-wrap: wrap;
   gap: 16px;
   padding: 16px;
+  position: relative;
+  z-index: 1; /* Lower z-index to ensure it stays below the sidenav */
 }
 
 .leaderboard-card {

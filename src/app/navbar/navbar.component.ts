@@ -5,6 +5,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatSidenavContainer, MatSidenavModule } from '@angular/material/sidenav';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { RouterModule } from '@angular/router';
+import { User } from '../enums/user';
 
 @Component({
   selector: 'app-navbar',
@@ -35,6 +36,11 @@ export class NavbarComponent {
 
   closeMenu(): void {
     this.isMenuOpen = false;
+  }
+
+  isAdmin(): boolean {
+    const userId = sessionStorage.getItem('userId');
+    return userId === User.ADMIN;
   }
 
 }

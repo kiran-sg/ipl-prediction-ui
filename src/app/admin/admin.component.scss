@@ -1,0 +1,101 @@
+table {
+    width: 100%;
+}
+
+.mat-mdc-form-field {
+    font-size: 14px;
+    width: 100%;
+}
+
+td, th {
+    width: 25%;
+}
+
+.example-container {
+    height: 450px;
+    overflow: auto;
+}
+
+.admin-title {
+    text-transform: uppercase;
+    //color: #fff;
+    color: black;
+    font-size: 20px;
+    margin-bottom: 15px;
+    letter-spacing: 1px;
+    font-weight: bold;
+}
+  
+.card-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    padding: 16px;
+}
+  
+.admin-card {
+    flex: 1 1 100%; /* 1 card per row on mobile */
+    box-sizing: border-box;
+    background-color: #faf9fd; /* Card background */
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    min-height: 350px;
+}
+  
+.admin-header {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    background-size: cover;
+    background-position: center;
+    //padding: 16px;
+    border-radius: 8px 8px 0 0;
+    margin-bottom: 0; /* Remove default margin */
+    padding-bottom: 0; /* Remove default padding */
+    //background-color: #11141c;
+    //background-image: url("/assets/ipl/footer-sparkel-top.svg");
+    //background-position: left top,right bottom 47px;
+    //background-repeat: no-repeat,no-repeat;
+}
+  
+  mat-card-content {
+    margin-top: 0; /* Remove default margin */
+    padding-top: 0; /* Remove default padding */
+  }
+  
+  /* Ensure tables are aligned equally */
+  mat-table {
+    width: 100%;
+    table-layout: fixed; /* Ensures equal column width */
+  }
+  
+  mat-header-cell, mat-cell {
+    text-align: center; /* Center-align table content */
+    padding: 8px; /* Add padding for better spacing */
+  }
+  
+  /* Responsive styles for tablets (2 cards per row) */
+  @media (min-width: 768px) {
+    .leaderboard-card {
+      flex: 1 1 calc(50% - 32px); /* 2 cards per row */
+    }
+  }
+  
+  /* Responsive styles for laptops (3 cards per row) */
+  @media (min-width: 1024px) {
+    .leaderboard-card {
+      flex: 1 1 calc(33.333% - 32px); /* 3 cards per row */
+    }
+  }
+  
+  /* Responsive styles for large screens (4 cards per row) */
+  @media (min-width: 1440px) {
+    .leaderboard-card {
+      flex: 1 1 calc(25% - 32px); /* 4 cards per row */
+    }
+  }

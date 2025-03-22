@@ -1,5 +1,6 @@
 import { inject, Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, CanActivate, CanActivateFn, Router, RouterStateSnapshot } from '@angular/router';
+import { User } from './enums/user';
 
 @Injectable({
   providedIn: 'root'
@@ -15,6 +16,14 @@ export class AuthGuard implements CanActivate {
     if (userId) {
       if (state.url === '/login') {
         this.router.navigate(['/home']);
+        return false;
+      }
+      if (state.url === '/admin' && userId !== User.ADMIN) {
+        this.router.navigate(['/home']);
+        return false;
+      }
+      if (state.url === '/home' && userId === User.ADMIN) {
+        this.router.navigate(['/admin']);
         return false;
       }
       return true;
