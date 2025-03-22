@@ -41,9 +41,6 @@
             <mat-form-field appearance="fill">
                 <mat-label>FUEL UP Batter</mat-label>
                 <mat-select formControlName="mostRunsScorerPredicted">
-                    <mat-option>
-                        <ngx-mat-select-search [formControl]="batterFilterCtrl" placeholderLabel="Search" ></ngx-mat-select-search>
-                    </mat-option>
                     <mat-option *ngFor="let player of players" [value]="player.playerNo">{{ player.displayValue }}</mat-option>
                 </mat-select>
                 <mat-error *ngIf="predictForm.get('mostRunsScorerPredicted')?.hasError('required')">

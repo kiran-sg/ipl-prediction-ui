@@ -4,16 +4,13 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { Match } from '../models/match.model';
 import { Team } from '../models/team.model';
-import { TeamName } from '../enums/team';
 import { CommonModule } from '@angular/common';
-import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CommonService } from '../common.service';
 import { Player } from '../models/player.model';
 import { isMatchTimeBelowSixtyMins } from '../utils/common-utils';
 import { PredictedMatch } from '../models/predicted-match.model';
 import { Router } from '@angular/router';
-import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
-import { ReplaySubject, Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-predict-form',
@@ -22,8 +19,7 @@ import { ReplaySubject, Subject, takeUntil } from 'rxjs';
     MatSelectModule,
     MatInputModule,
     MatFormFieldModule,
-    ReactiveFormsModule,
-    NgxMatSelectSearchModule
+    ReactiveFormsModule
   ],
   templateUrl: './predict-form.component.html',
   styleUrl: './predict-form.component.scss'
@@ -36,18 +32,8 @@ export class PredictFormComponent implements OnInit {
   ]
   predictForm!: FormGroup;
 
-  public batterFilterCtrl: FormControl<string | null> = new FormControl<string>('');
-  public bowlerFilterCtrl: FormControl<string | null> = new FormControl<string>('');
-  public pomFilterCtrl: FormControl<string | null> = new FormControl<string>('');
-
   @Input() matchDetails!: Match;
   @Output() formSubmitted = new EventEmitter<PredictedMatch>();
-
-  /** Subject that emits when the component has been destroyed. */
-  protected _onDestroy = new Subject<void>();
-
-  /** list of banks filtered by search keyword */
-  public filteredBatters: ReplaySubject<Player[]> = new ReplaySubject<Player[]>(1);
 
   constructor(
     private fb: FormBuilder, 
@@ -61,12 +47,6 @@ export class PredictFormComponent implements OnInit {
     this.setTeams();
     this.setPlayers();
     this.getPreviousPrediction();
-    this.filteredBatters.next(this.players.slice());
-    this.batterFilterCtrl.valueChanges
-      .pipe(takeUntil(this._onDestroy))
-      .subscribe(() => {
-        this.filterBatters();
-      });
   }
 
   getPreviousPrediction() {
@@ -162,24 +142,6 @@ export class PredictFormComponent implements OnInit {
       this.router.navigate(['/login']);
       return '';
     }
-  }
-
-  protected filterBatters() {
-    if (!this.players) {
-      return;
-    }
-    // get the search keyword
-    let search = this.batterFilterCtrl.value;
-    if (!search) {
-      this.filteredBatters.next(this.players.slice());
-      return;
-    } else {
-      search = search.toLowerCase();
-    }
-    // filter the banks
-    this.filteredBatters.next(
-      this.players.filter(player => player.playerName.toLowerCase().indexOf(search) > -1)
-    );
   }
 
 }
