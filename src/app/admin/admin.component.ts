@@ -35,8 +35,7 @@ export interface MatchData {
     MatPaginatorModule,
     MatCardModule,
     MatButtonModule,
-    MatIconModule,
-    CustomDatePipe
+    MatIconModule
   ],
   templateUrl: './admin.component.html',
   styleUrl: './admin.component.scss'
