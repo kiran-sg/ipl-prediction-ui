@@ -1,13 +1,12 @@
-import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import {MatGridListModule} from '@angular/material/grid-list';
-import { CommonModule, DatePipe } from '@angular/common';
+import { CommonModule } from '@angular/common';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { PredictDialogComponent } from '../predict-dialog/predict-dialog.component';
 import { Match } from '../models/match.model';
 import { CommonService } from '../common.service';
-import { TeamName } from '../enums/team';
 import { TeamLogo } from '../enums/team-logo';
 import { CustomDatePipe } from '../custom-date.pipe';
 import { isMatchTimeBelowSixtyMins } from '../utils/common-utils';
@@ -31,7 +30,7 @@ export class HomeComponent {
   matchEndDate: Date = new Date(new Date().setDate(new Date().getDate() + 10));
   readonly dialog = inject(MatDialog);
 
-  constructor(private service: CommonService, private datePipe: DatePipe) {
+  constructor(private service: CommonService) {
 
     this.fetchUpcomingMatches();
    }
