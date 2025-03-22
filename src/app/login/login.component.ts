@@ -41,7 +41,7 @@ export class LoginComponent {
       const { userId, password } = this.loginForm.value;
       this.service.validateUser(userId, password).subscribe(
         (data: any) => {
-          if (data.isValidUser) {
+          if (data.validUser) {
             this.router.navigate(['/home']);
           } else {
             console.error('Invalid user');

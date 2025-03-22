@@ -19,7 +19,7 @@ export class CommonService {
     const user = { userId, pwd };
     return this.http.post(`${this.baseUrl}/users/validate`, user).pipe(
       tap((data: any) => {
-        if (data.isValidUser) {
+        if (data.validUser) {
           sessionStorage.removeItem('userId');
           sessionStorage.setItem('userId', userId);
         }
