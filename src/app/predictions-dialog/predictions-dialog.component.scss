@@ -1,0 +1,81 @@
+table {
+    width: 100%;
+    min-width: 600px; /* Ensures table does not break */
+}
+
+.mat-mdc-form-field {
+    font-size: 14px;
+    width: 100%;
+}
+
+td, th {
+    width: 25%;
+}
+
+.result-menu {
+    margin-right: auto;
+    margin-left: 15px;
+}
+
+mat-dialog-content {
+    max-height: 70vh; /* Adjustable height */
+    overflow-y: auto; /* Enables scrolling */
+    display: flex;
+    flex-direction: column;
+}
+
+/* Ensure the dialog content adjusts dynamically */
+.dialog-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+}
+
+/* Responsive container for table */
+.table-container {
+    width: 100%;
+    overflow-x: auto;
+}
+
+/* Ensure the table adjusts its layout */
+.table-wrapper {
+    width: 100%;
+    overflow-x: auto;
+}
+
+/* Table should scale properly */
+.responsive-table {
+    width: 100%;
+    min-width: 600px;
+}
+
+/* Make the table responsive */
+@media screen and (max-width: 768px) {
+    .responsive-table {
+        min-width: 100%;
+    }
+
+    th, td {
+        padding: 8px;
+        font-size: 14px;
+    }
+
+    /* Reduce font size on smaller screens */
+    .mat-mdc-form-field {
+        font-size: 12px;
+    }
+}
+
+/* Smaller screens like mobile devices */
+@media screen and (max-width: 480px) {
+    .responsive-table {
+        display: block;
+        overflow-x: auto;
+        white-space: nowrap;
+    }
+
+    .mat-paginator {
+        font-size: 12px;
+    }
+}

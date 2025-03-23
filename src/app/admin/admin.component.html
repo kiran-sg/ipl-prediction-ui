@@ -15,27 +15,33 @@
             <table mat-table [dataSource]="dataSource" matSort>
 
                 <ng-container matColumnDef="matchNo">
-                <th mat-header-cell *matHeaderCellDef mat-sort-header> Match No. </th>
+                <th mat-header-cell *matHeaderCellDef> Match No. </th>
                 <td mat-cell *matCellDef="let row"> {{row.matchNo}} </td>
                 </ng-container>
 
                 <ng-container matColumnDef="match">
-                <th mat-header-cell *matHeaderCellDef mat-sort-header> Match </th>
+                <th mat-header-cell *matHeaderCellDef> Match </th>
                 <td mat-cell *matCellDef="let row"> {{row.match}} </td>
                 </ng-container>
 
                 <ng-container matColumnDef="dateTime">
-                <th mat-header-cell *matHeaderCellDef mat-sort-header> Date & Time </th>
+                <th mat-header-cell *matHeaderCellDef> Date & Time </th>
                 <td mat-cell *matCellDef="let row"> {{row.dateTime}} </td>
                 </ng-container>
 
                 <ng-container matColumnDef="action">
-                <th mat-header-cell *matHeaderCellDef mat-sort-header> Action </th>
+                <th mat-header-cell *matHeaderCellDef> Action </th>
                 <td mat-cell *matCellDef="let row">
-                    <div class="example-button-row">
-                        <button mat-flat-button [disabled]="row.disableUpdate"
-                          (click)="openMatchResultDialog(row)">
-                          Update Results
+                    <div class="action-button-row">
+                        <button mat-mini-fab [disabled]="row.disableUpdate"
+                          (click)="openMatchResultDialog(row)"
+                          class="match-button" matTooltip="Update Match Results">
+                          <mat-icon>sports_score</mat-icon>                          
+                        </button>
+                        <button mat-mini-fab aria-label="View Predictions"
+                          (click)="openPredictionsDialog(row)"
+                          matTooltip="View Predictions">
+                          <mat-icon>format_list_bulleted</mat-icon>
                         </button>
                     </div>
                 </td>

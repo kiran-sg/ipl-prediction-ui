@@ -22,11 +22,18 @@ export class AdminService {
   }
 
   updateMatchResults(matchResult: MatchResult): Observable<any> {
-      this.loadingService.show(); // Show loader
-      return this.http.post(`${this.baseUrl}/match/result`, matchResult, {
-        withCredentials: true,
-      }).pipe(
-        finalize(() => this.loadingService.hide()) // Hide loader when the request completes
-      );
-    }
+    this.loadingService.show(); // Show loader
+    return this.http.post(`${this.baseUrl}/match/result`, matchResult, {
+      withCredentials: true,
+    }).pipe(
+      finalize(() => this.loadingService.hide()) // Hide loader when the request completes
+    );
+  }
+
+  getPredictionsByMatch(matchId: string): Observable<any> {
+    this.loadingService.show(); // Show loader
+    return this.http.get(`${this.baseUrl}/predictions/match?matchId=${matchId}`).pipe(
+      finalize(() => this.loadingService.hide()) // Hide loader when the request completes
+    );
+  }
 }

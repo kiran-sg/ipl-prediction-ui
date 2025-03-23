@@ -62,6 +62,20 @@ td, th {
     //background-position: left top,right bottom 47px;
     //background-repeat: no-repeat,no-repeat;
 }
+
+.action-button-row {
+  display: flex;
+  gap: 10px; /* Space between buttons */
+  flex-wrap: nowrap; /* Prevents wrapping */
+}
+
+.action-button-row .mat-mdc-button-base {
+  margin: 8px 8px 8px 0;
+}
+
+.match-button {
+  margin-right: 10px;
+}
   
   mat-card-content {
     margin-top: 0; /* Remove default margin */
@@ -83,6 +97,12 @@ td, th {
   @media (min-width: 768px) {
     .leaderboard-card {
       flex: 1 1 calc(50% - 32px); /* 2 cards per row */
+    }
+    .example-button-row {
+      gap: 5px; /* Reduce space */
+    }
+    .match-button {
+        margin-right: 2px;
     }
   }
   

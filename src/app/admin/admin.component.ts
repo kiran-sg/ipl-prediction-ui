@@ -15,6 +15,9 @@ import { MatchResultDialogComponent } from '../match-result-dialog/match-result-
 import { PredictedMatch } from '../models/predicted-match.model';
 import { MatIconModule } from '@angular/material/icon';
 import { isMatchOpenForUpdateResult } from '../utils/common-utils';
+import { PredictionsDialogComponent } from '../predictions-dialog/predictions-dialog.component';
+import { Overlay } from '@angular/cdk/overlay';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 export interface MatchData {
   matchNo: string;
@@ -35,7 +38,8 @@ export interface MatchData {
     MatPaginatorModule,
     MatCardModule,
     MatButtonModule,
-    MatIconModule
+    MatIconModule,
+    MatTooltipModule
   ],
   templateUrl: './admin.component.html',
   styleUrl: './admin.component.scss'
@@ -52,7 +56,11 @@ export class AdminComponent {
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
-  constructor(private service: CommonService, private customDatePipe: CustomDatePipe) {
+  constructor(
+    private service: CommonService, 
+    private customDatePipe: CustomDatePipe,
+    private overlay: Overlay
+  ) {
     this.dataSource = new MatTableDataSource(this.matches);
     this.fetchMatches();
   }
@@ -94,6 +102,22 @@ export class AdminComponent {
     const dialogRef = this.dialog.open(MatchResultDialogComponent, {
       width: '500px', // Initial width
       height: 'auto', // Initial height
+      data: { match }
+    });
+  
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('Dialog closed', result);
+    });
+  }
+
+  openPredictionsDialog(match: MatchData): void {
+    const dialogRef = this.dialog.open(PredictionsDialogComponent, {
+      //width: '90vw', // Initial width
+      //height: 'auto', // Initial height
+      maxWidth: '80vw',
+      maxHeight: '90vw',
+      autoFocus: false,
+      scrollStrategy: this.overlay.scrollStrategies.block(),
       data: { match }
     });
   
