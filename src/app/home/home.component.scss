@@ -8,6 +8,11 @@
   font-family: var(--mdc-text-button-label-text-font, var(--mat-sys-label-large-font));
 }
 
+.prediction-lock {
+  color: red;
+  text-align: center;
+}
+
 .card-container {
   display: grid;
   gap: 16px;
