@@ -44,9 +44,21 @@ export class PredictFormComponent implements OnInit {
 
   ngOnInit(): void {
     this.setPredictForm();
+    this.validateUser();
     this.setTeams();
     this.setPlayers();
     this.getPreviousPrediction();
+  }
+
+  validateUser() {
+    if (!this.predictForm.value.userId) {
+      console.error('Unauthorized access - redirecting to login');
+      alert('Login session expired. Please login again.');
+      this.formSubmitted.emit(undefined);
+      sessionStorage.removeItem('userId');
+      this.router.navigate(['/login']);
+      return;
+    }
   }
 
   getPreviousPrediction() {
@@ -64,6 +76,7 @@ export class PredictFormComponent implements OnInit {
   }
 
   onSubmit(): void {
+    this.validateUser();
     if (isMatchTimeBelowSixtyMins(this.matchDetails.dateTime)) {
       alert('You can only predict a match 60 minutes before the match starts.');
       return;

@@ -10,6 +10,8 @@ import { CommonService } from '../common.service';
 import { TeamLogo } from '../enums/team-logo';
 import { CustomDatePipe } from '../custom-date.pipe';
 import { isMatchTimeBelowSixtyMins } from '../utils/common-utils';
+import { PredictionsDialogComponent } from '../predictions-dialog/predictions-dialog.component';
+import { Overlay } from '@angular/cdk/overlay';
 
 @Component({
   selector: 'app-home',
@@ -30,8 +32,10 @@ export class HomeComponent {
   matchEndDate: Date = new Date(new Date().setDate(new Date().getDate() + 10));
   readonly dialog = inject(MatDialog);
 
-  constructor(private service: CommonService) {
-
+  constructor(
+    private service: CommonService, 
+    private overlay: Overlay
+  ) {
     this.fetchUpcomingMatches();
    }
 
@@ -47,6 +51,22 @@ export class HomeComponent {
       width: '500px', // Initial width
       height: 'auto', // Initial height
       data: { match }
+    });
+  
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('Dialog closed', result);
+    });
+  }
+
+  openPredictionsDialog(): void {
+    const dialogRef = this.dialog.open(PredictionsDialogComponent, {
+      //width: '50vw', // Initial width
+      height: 'auto', // Initial height
+      maxWidth: '80vw',
+      maxHeight: '700vw',
+      autoFocus: false,
+      scrollStrategy: this.overlay.scrollStrategies.block(),
+      data: { source: 'user' }
     });
   
     dialogRef.afterClosed().subscribe(result => {

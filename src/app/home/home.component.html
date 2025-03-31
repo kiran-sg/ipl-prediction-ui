@@ -1,31 +1,38 @@
-<h1 class="prediction-heading">IPL Prediction Contest</h1>
-<p class="prediction-lock">Predictions will be locked 1 hour before each match</p>
-<div class="card-container">
-  <ng-container *ngFor="let match of matches">
-    <mat-card class="match-card">
-      <mat-card-header class="match-header">
-        <div mat-card-avatar></div>
-      </mat-card-header>
-      <mat-card-content>
-        <div class="team-logos">
-          <div class="logo-container">
-            <img [src]="match.homeLogo" alt="Team 1 Logo" class="team-logo">
+<div class="prediction-container">
+  <h1 class="prediction-heading">IPL Prediction Contest</h1>
+  <div class="prediction-row">
+    <p class="prediction-lock">Predictions will be locked 1 hour before each match</p>
+    <button mat-stroked-button class="prediction-history" (click)="openPredictionsDialog()">
+      View previous predictions
+    </button>
+  </div>
+  <div class="card-container">
+    <ng-container *ngFor="let match of matches">
+      <mat-card class="match-card">
+        <mat-card-header class="match-header">
+          <div mat-card-avatar></div>
+        </mat-card-header>
+        <mat-card-content>
+          <div class="team-logos">
+            <div class="logo-container">
+              <img [src]="match.homeLogo" alt="Team 1 Logo" class="team-logo">
+            </div>
+            <div class="logo-container">
+              <img src="assets/ipl/versus.avif" alt="Versus Logo" class="versus-logo">
+            </div>
+            <div class="logo-container">
+              <img [src]="match.awayLogo" alt="Team 2 Logo" class="team-logo">
+            </div>
           </div>
-          <div class="logo-container">
-            <img src="assets/ipl/versus.avif" alt="Versus Logo" class="versus-logo">
-          </div>
-          <div class="logo-container">
-            <img [src]="match.awayLogo" alt="Team 2 Logo" class="team-logo">
-          </div>
-        </div>
-        <p class="match-date">{{ match.dateTime | customDate }}</p>
-      </mat-card-content>
-      <mat-card-actions class="match-actions">
-        <button mat-flat-button [disabled]="match.isLocked" (click)="openPredictDialog(match)">PREDICT MATCH</button>
-      </mat-card-actions>
-      <p *ngIf="match.isLocked" class="error-message">
-        Prediction closed!
-      </p>
-    </mat-card>
-  </ng-container>
+          <p class="match-date">{{ match.dateTime | customDate }}</p>
+        </mat-card-content>
+        <mat-card-actions class="match-actions">
+          <button mat-flat-button [disabled]="match.isLocked" (click)="openPredictDialog(match)">PREDICT MATCH</button>
+        </mat-card-actions>
+        <p *ngIf="match.isLocked" class="error-message">
+          Prediction closed!
+        </p>
+      </mat-card>
+    </ng-container>
+  </div>
 </div>

@@ -118,7 +118,7 @@ export class AdminComponent {
       maxHeight: '700vw',
       autoFocus: false,
       scrollStrategy: this.overlay.scrollStrategies.block(),
-      data: { match }
+      data: { match, source: 'admin' }
     });
   
     dialogRef.afterClosed().subscribe(result => {

@@ -1,8 +1,11 @@
+import { MatchResult } from "./match-result";
 import { User } from "./user.model";
 
 export interface Prediction {
     predictionId: number;
     matchId: string;
+    match: string;
+    matchResult: MatchResult;
     userId: string;
     user: User
     userName: string;

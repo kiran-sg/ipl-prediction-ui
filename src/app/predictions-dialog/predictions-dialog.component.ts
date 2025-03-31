@@ -1,6 +1,6 @@
 import { Component, Inject, inject, signal, ViewChild } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
-import { MAT_DIALOG_DATA, MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialog, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
@@ -19,6 +19,7 @@ import { MatExpansionModule } from '@angular/material/expansion';
 import { MatchResult } from '../models/match-result';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-predictions-dialog',
@@ -41,6 +42,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 })
 export class PredictionsDialogComponent {
 
+  source!: string;
   matchDetails!: Match;
   predictions: Prediction[] = [];
   teams!: Team[];
@@ -50,7 +52,10 @@ export class PredictionsDialogComponent {
   readonly dialog = inject(MatDialog);
   readonly panelOpenState = signal(false);
 
-  columnsToDisplay = ['name', 'tossPredicted', 'teamPredicted', 
+  columnsToDisplayForAdmin = ['name', 'tossPredicted', 'teamPredicted', 
+    'firstInnScorePredicted', 'mostRunsScorerPredicted', 
+    'mostWicketsTakerPredicted', 'momPredicted', 'points'];
+  columnsToDisplayForUser = ['matchId', 'match', 'tossPredicted', 'teamPredicted', 
     'firstInnScorePredicted', 'mostRunsScorerPredicted', 
     'mostWicketsTakerPredicted', 'momPredicted', 'points'];
 
@@ -61,10 +66,17 @@ export class PredictionsDialogComponent {
     @Inject(MAT_DIALOG_DATA) public data: any,
     private service: CommonService,
     private adminService: AdminService,
+    private router: Router,
+    private dialogRef: MatDialogRef<PredictionsDialogComponent>,
   ) {
     this.matchDetails = data.match;
+    this.source = data.source;
     this.dataSource = new MatTableDataSource(this.predictions);
-    this.setTeams();
+    if (this.source === 'admin') {
+      this.setTeams();
+    } else {
+      this.validateUser();
+    }
     this.getPlayers();
   }
 
@@ -72,8 +84,20 @@ export class PredictionsDialogComponent {
     this.dataSource.paginator = this.paginator;
   }
 
-  getResultsIfAvailable() {
-    this.adminService.getMatchResult(this.matchDetails.matchNo).subscribe(data => {
+  validateUser() {
+    const userId = sessionStorage.getItem('userId');
+    if (!userId) {
+      console.error('Unauthorized access - redirecting to login');
+      alert('Login session expired. Please login again.');
+      this.dialogRef.close();
+      sessionStorage.removeItem('userId');
+      this.router.navigate(['/login']);
+      return;
+    }
+  }
+
+  getResultsIfAvailable(matchId: string) {
+    this.adminService.getMatchResult(matchId).subscribe(data => {
       if (data.matchResult !== null) {
         this.matchResult = {
           ...data.matchResult,
@@ -85,7 +109,20 @@ export class PredictionsDialogComponent {
     });
   }
 
-  fetchPredictions(): void {
+  getMatchResult(prediction: Prediction) {
+    this.adminService.getMatchResult(prediction.matchId).subscribe(data => {
+      if (data.matchResult !== null) {
+        prediction.matchResult = {
+          ...data.matchResult,
+          mostRunsScorer: this.getPlayerById(data.matchResult.mostRunsScorer),
+          mostWicketsTaker: this.getPlayerById(data.matchResult.mostWicketsTaker),
+          playerOfTheMatch: this.getPlayerById(data.matchResult.playerOfTheMatch),
+        }
+      }
+    });
+  }
+
+  fetchPredictionsForAdmin(): void {
     this.adminService.getPredictionsByMatch(this.matchDetails.matchNo).subscribe({
       next: (data: any) => {
         this.predictions = data.predictions.map((prediction: Prediction) => {
@@ -107,8 +144,28 @@ export class PredictionsDialogComponent {
     });
   }
 
+  fetchPredictionsForUser(): void {
+    this.service.getPredictionsByUserId().subscribe({
+      next: (data: any) => {
+        this.predictions = data.predictions.map((prediction: Prediction) => {
+          return {
+            ...prediction,
+            mostRunsScorerPredicted: this.getPlayerById(prediction.mostRunsScorerPredicted),
+            mostWicketsTakerPredicted: this.getPlayerById(prediction.mostWicketsTakerPredicted),
+            momPredicted: this.getPlayerById(prediction.momPredicted),
+          };
+        })
+        this.dataSource = new MatTableDataSource(this.predictions);
+        this.dataSource.paginator = this.paginator;
+      },
+      error: (error) => {
+        console.error('Error fetching predictions:', error);
+      },
+    });
+  }
+
   getPlayers(): void {
-    const teamNames = this.teams.map(team => team.name);
+    const teamNames = this.source === 'admin' ? this.teams.map(team => team.name) : [];
     this.service.getPlayersByTeam(teamNames).subscribe({
       next: (data: Player[]) => {
         this.players = data.map((player: Player) => {
@@ -117,8 +174,12 @@ export class PredictionsDialogComponent {
             displayValue: player.playerName + ' - ' + player.category + ' - ' + player.team + ''
           }
         });
-        this.fetchPredictions();
-        this.getResultsIfAvailable();
+        if (this.source === 'admin') {
+          this.fetchPredictionsForAdmin();
+          this.getResultsIfAvailable(this.matchDetails.matchNo);
+        } else {
+          this.fetchPredictionsForUser();
+        }
       }
     });
   }

@@ -1,7 +1,10 @@
-<h2 mat-dialog-title>Predictions - {{matchDetails.home + ' VS ' + matchDetails.away + ' - ' + matchDetails.dateTime}}</h2>
+@if (source==='admin') {
+    <h2 mat-dialog-title>Predictions - {{matchDetails.home + ' VS ' + matchDetails.away + ' - ' + matchDetails.dateTime}}</h2>
+} @else {
+    <h2 mat-dialog-title>Predictions History</h2>
+}
 
-@if (matchResult) {
-
+@if (source==='admin' && matchResult) {
     <button mat-button [matMenuTriggerFor]="menu" 
         class="result-menu" matTooltip="Click here to view match results">
         Match Results
@@ -28,10 +31,35 @@
         <div class="table-wrapper">
             <table mat-table [dataSource]="dataSource" matSort class="responsive-table">
 
-                <ng-container matColumnDef="name">
-                    <th mat-header-cell *matHeaderCellDef> Name </th>
-                    <td mat-cell *matCellDef="let row"> {{row.user.name}} </td>
-                </ng-container>
+                @if (source==='admin') {
+                    <ng-container matColumnDef="name">
+                        <th mat-header-cell *matHeaderCellDef> Name </th>
+                        <td mat-cell *matCellDef="let row"> {{row.user.name}} </td>
+                    </ng-container>
+                } @else {
+                    <ng-container matColumnDef="matchId">
+                        <th mat-header-cell *matHeaderCellDef> No </th>
+                        <td mat-cell *matCellDef="let row"> {{row.matchId}} </td>
+                    </ng-container>
+                    <ng-container matColumnDef="match">
+                        <th mat-header-cell *matHeaderCellDef> Match </th>
+                        <td mat-cell *matCellDef="let row" style="padding-left: 0;">
+                            <a mat-button [matMenuTriggerFor]="menuUser" 
+                                matTooltip="Click here to view match results"
+                                (click)="getMatchResult(row)">{{row.match}}</a>
+                            <mat-menu #menuUser="matMenu">
+                                <div style="padding: 10px;">
+                                    <p>Toss Won : {{row.matchResult?.tossWon}}</p>
+                                    <p>Team Won : {{row.matchResult?.teamWon}}</p>
+                                    <p>First Inns. Score : {{row.matchResult?.firstInnScore}}</p>
+                                    <p>FUEL UP Batter : {{row.matchResult?.mostRunsScorer}}</p>
+                                    <p>FUEL UP Bowler : {{row.matchResult?.mostWicketsTaker}}</p>
+                                    <p>FUEL UP Man of the Match : {{row.matchResult?.playerOfTheMatch}}</p>
+                                </div>
+                            </mat-menu> 
+                        </td>
+                    </ng-container>
+                }
 
                 <ng-container matColumnDef="tossPredicted">
                     <th mat-header-cell *matHeaderCellDef> Toss </th>
@@ -68,8 +96,13 @@
                     <td mat-cell *matCellDef="let row"> {{row.points}} </td>
                 </ng-container>
 
-                <tr mat-header-row *matHeaderRowDef="columnsToDisplay; sticky: true"></tr>
-                <tr mat-row *matRowDef="let row; columns: columnsToDisplay;"></tr>
+                @if (source === 'admin') {
+                    <tr mat-header-row *matHeaderRowDef="columnsToDisplayForAdmin; sticky: true"></tr>
+                    <tr mat-row *matRowDef="let row; columns: columnsToDisplayForAdmin;"></tr>
+                } @else {
+                    <tr mat-header-row *matHeaderRowDef="columnsToDisplayForUser; sticky: true"></tr>
+                    <tr mat-row *matRowDef="let row; columns: columnsToDisplayForUser;"></tr>
+                }
 
                 <!-- Row shown when there is no matching data. -->
                 <tr class="mat-row" *matNoDataRow>

@@ -1,3 +1,11 @@
+/* Container for better spacing control */
+.prediction-container {
+  width: 100%;
+  max-width: 1200px; /* Optional: Prevents stretching on very large screens */
+  margin: 0 auto; /* Centers the container */
+  padding: 0 16px; /* Prevents content from touching edges on small screens */
+}
+
 .prediction-heading {
   text-align: center;
   font-size: 2rem;
@@ -8,9 +16,30 @@
   font-family: var(--mdc-text-button-label-text-font, var(--mat-sys-label-large-font));
 }
 
+/* Flexbox row for text + button alignment */
+.prediction-row {
+  display: flex;
+  flex-wrap: wrap; /* Allows stacking on small screens */
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px; /* Space between text and button */
+  margin-left: 20px;
+  margin-right: 20px;
+  margin-bottom: 10px;
+}
+
+/* Text styling */
 .prediction-lock {
+  margin: 0;
+  flex: 1; /* Takes available space, prevents button from squeezing text */
+  min-width: 200px; /* Prevents text from becoming too narrow */
   color: red;
-  text-align: center;
+}
+
+/* Button styling */
+.prediction-history {
+  text-transform: uppercase;
+  white-space: nowrap;
 }
 
 .card-container {
@@ -89,6 +118,13 @@
   margin: 16px 0;
 }
 
+@media (max-width: 600px) {
+  .prediction-row {
+    flex-direction: column; /* Stacks text + button vertically on small screens */
+    align-items: flex-start; /* Left-aligns both items when stacked */
+  }
+}
+
 /* Responsive styles for tablets (2 cards per row) */
 @media (min-width: 768px) {
   .match-card {
@@ -106,15 +142,5 @@
   }
   .card-container {
     grid-template-columns: repeat(3, 1fr); /* 3 columns */
-  }
-}
-
-/* Responsive styles for large screens (4 cards per row) */
-@media (min-width: 1440px) {
-  .match-card {
-    flex: 1 1 calc(25% - 32px); /* 4 cards per row */
-  }
-  .card-container {
-    grid-template-columns: repeat(4, 1fr); /* 4 columns */
   }
 }

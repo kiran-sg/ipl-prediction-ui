@@ -1,9 +1,11 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
-import { finalize, Observable, tap } from 'rxjs';
+import { inject, Injectable } from '@angular/core';
+import { catchError, finalize, Observable, tap, throwError } from 'rxjs';
 import { environment } from '../environments/environment';
 import { PredictedMatch } from './models/predicted-match.model';
 import { LoadingService } from './loading.service';
+import { Router } from '@angular/router';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Injectable({
   providedIn: 'root'
@@ -11,8 +13,13 @@ import { LoadingService } from './loading.service';
 export class CommonService {
 
   private baseUrl = environment.apiUrl;
+  private _snackBar = inject(MatSnackBar);
 
-  constructor(private http: HttpClient, private loadingService: LoadingService) { }
+  constructor(
+    private http: HttpClient, 
+    private loadingService: LoadingService,
+    private router: Router
+  ) { }
 
   validateUser(userId: string, pwd: string): Observable<any> {
     this.loadingService.show(); // Show loader
@@ -64,6 +71,24 @@ export class CommonService {
     return this.http.post(`${this.baseUrl}/predictions`, predictedMatch, {
       withCredentials: true,
     }).pipe(
+      catchError((error) => {
+        if (error.status === 401) {
+          // Handle 401 Unauthorized error
+          console.error('Unauthorized access - redirecting to login');
+          this._snackBar.open(error.message, "Close");
+          sessionStorage.removeItem('userId');
+          this.router.navigate(['/login']); // Redirect to login page
+        }
+        return throwError(() => error); // Re-throw the error for further handling
+      }),
+      finalize(() => this.loadingService.hide()) // Hide loader when the request completes
+    );
+  }
+
+  getPredictionsByUserId(): Observable<any> {
+    this.loadingService.show(); // Show loader
+    const userId = sessionStorage.getItem('userId');
+    return this.http.get(`${this.baseUrl}/predictions?user=${userId}`).pipe(
       finalize(() => this.loadingService.hide()) // Hide loader when the request completes
     );
   }
