@@ -55,7 +55,7 @@ export class PredictionsDialogComponent {
   columnsToDisplayForAdmin = ['name', 'tossPredicted', 'teamPredicted', 
     'firstInnScorePredicted', 'mostRunsScorerPredicted', 
     'mostWicketsTakerPredicted', 'momPredicted', 'points'];
-  columnsToDisplayForUser = ['matchId', 'match', 'tossPredicted', 'teamPredicted', 
+  columnsToDisplayForUser = ['matchDate', 'match', 'tossPredicted', 'teamPredicted', 
     'firstInnScorePredicted', 'mostRunsScorerPredicted', 
     'mostWicketsTakerPredicted', 'momPredicted', 'points'];
 

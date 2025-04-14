@@ -37,9 +37,9 @@
                         <td mat-cell *matCellDef="let row"> {{row.user.name}} </td>
                     </ng-container>
                 } @else {
-                    <ng-container matColumnDef="matchId">
-                        <th mat-header-cell *matHeaderCellDef> No </th>
-                        <td mat-cell *matCellDef="let row"> {{row.matchId}} </td>
+                    <ng-container matColumnDef="matchDate">
+                        <th mat-header-cell *matHeaderCellDef> Date </th>
+                        <td mat-cell *matCellDef="let row"> {{row.matchDate}} </td>
                     </ng-container>
                     <ng-container matColumnDef="match">
                         <th mat-header-cell *matHeaderCellDef> Match </th>

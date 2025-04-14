@@ -3,21 +3,19 @@ import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
-import { MatSort, MatSortModule } from '@angular/material/sort';
+import { MatSortModule } from '@angular/material/sort';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { CommonService } from '../common.service';
 import { CustomDatePipe } from '../custom-date.pipe';
 import { MatButtonModule } from '@angular/material/button';
-import { Match } from '../models/match.model';
 import { MatDialog } from '@angular/material/dialog';
-import { PredictDialogComponent } from '../predict-dialog/predict-dialog.component';
 import { MatchResultDialogComponent } from '../match-result-dialog/match-result-dialog.component';
-import { PredictedMatch } from '../models/predicted-match.model';
 import { MatIconModule } from '@angular/material/icon';
 import { isMatchOpenForUpdateResult } from '../utils/common-utils';
 import { PredictionsDialogComponent } from '../predictions-dialog/predictions-dialog.component';
 import { Overlay } from '@angular/cdk/overlay';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { CommonModule } from '@angular/common';
 
 export interface MatchData {
   matchNo: string;
@@ -31,6 +29,7 @@ export interface MatchData {
 @Component({
   selector: 'app-admin',
   imports: [
+    CommonModule,
     MatFormFieldModule,
     MatInputModule, 
     MatTableModule, 
@@ -50,7 +49,7 @@ export class AdminComponent {
   dataSource: MatTableDataSource<MatchData>;
   readonly dialog = inject(MatDialog);
 
-  columnsToDisplay = ['matchNo', 'match', 'dateTime', 'action'];
+  columnsToDisplay = ['match', 'dateTime', 'action'];
   columnsToDisplayWithExpand = [...this.columnsToDisplay, 'expand'];
   expandedElement!: MatchData | null;
 
@@ -84,11 +83,12 @@ export class AdminComponent {
         this.matches = data.map((match: any) => {
           return {
             ...match,
-            match: match.home + ' VS ' + match.away,
+            match: match.home + ' VS ' + match.away + ' (Match ' + match.matchNo + ')',
             disableUpdate: !isMatchOpenForUpdateResult(match.dateTime),
             dateTime: this.customDatePipe.transform(match.dateTime)
           };
         })
+        this.sortMatches(this.matches);
         this.dataSource = new MatTableDataSource(this.matches);
         this.dataSource.paginator = this.paginator;
       },
@@ -135,5 +135,73 @@ export class AdminComponent {
   toggle(element: MatchData) {
     this.expandedElement = this.isExpanded(element) ? null : element;
   }
+
+  isToday(dateStr: string): boolean {
+    const matchDate = this.parseISTDate(dateStr);
+    const today = new Date();
+    return matchDate.toDateString() === today.toDateString();
+  }
+  
+  isYesterday(dateStr: string): boolean {
+    const matchDate = this.parseISTDate(dateStr);
+    const yesterday = new Date();
+    yesterday.setDate(yesterday.getDate() - 1);
+    return matchDate.toDateString() === yesterday.toDateString();
+  }  
+
+  private parseISTDate(dateStr: string): Date {
+    const cleaned = dateStr.replace(' IST', '');
+    return new Date(cleaned + ' GMT+0530'); // Ensure IST parsing
+  }
+  
+  private sortMatches(matches: MatchData[]): any[] {
+    const now = new Date();
+    const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    const yesterday = new Date(today);
+    yesterday.setDate(today.getDate() - 1);
+  
+    return matches.sort((a, b) => {
+      const aDate = this.parseISTDate(a.dateTime);
+      const bDate = this.parseISTDate(b.dateTime);
+  
+      const aDay = new Date(aDate.getFullYear(), aDate.getMonth(), aDate.getDate());
+      const bDay = new Date(bDate.getFullYear(), bDate.getMonth(), bDate.getDate());
+  
+      const getGroup = (day: Date): number => {
+        if (day.getTime() === today.getTime()) return 1;      // Today
+        if (day.getTime() === yesterday.getTime()) return 2;  // Yesterday
+        return 3;                                              // Others
+      };
+  
+      const aGroup = getGroup(aDay);
+      const bGroup = getGroup(bDay);
+  
+      if (aGroup !== bGroup) {
+        return aGroup - bGroup;
+      }
+  
+      // Group 1: Today
+      if (aGroup === 1) {
+        const aIsPast = now > aDate;
+        const bIsPast = now > bDate;
+  
+        if (aIsPast && bIsPast) {
+          return bDate.getTime() - aDate.getTime(); // Both past → latest first
+        } else if (!aIsPast && !bIsPast) {
+          return aDate.getTime() - bDate.getTime(); // Both upcoming → earliest first
+        } else {
+          return aIsPast ? -1 : 1; // Past match before upcoming
+        }
+      }
+  
+      // Group 2: Yesterday → sort by latest time first
+      if (aGroup === 2) {
+        return bDate.getTime() - aDate.getTime();
+      }
+  
+      // Group 3: Other dates → sort ascending
+      return aDate.getTime() - bDate.getTime();
+    });
+  }  
 
 }

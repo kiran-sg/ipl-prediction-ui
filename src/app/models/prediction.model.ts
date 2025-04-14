@@ -5,6 +5,7 @@ export interface Prediction {
     predictionId: number;
     matchId: string;
     match: string;
+    matchDate: string;
     matchResult: MatchResult;
     userId: string;
     user: User

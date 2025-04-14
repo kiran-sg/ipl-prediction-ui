@@ -76,46 +76,64 @@ td, th {
 .match-button {
   margin-right: 10px;
 }
+
+.today-row {
+  background-color: #e6f7ff; /* light blue */
+}
+
+.yesterday-row {
+  background-color: #fff7e6; /* light orange */
+}
+
+.admin-info-icon {
+  margin-bottom: 15px;
+  margin-left: 5px;
+}
+
+.multiline-tooltip {
+  white-space: pre-line;
+  max-width: 300px;
+}
   
-  mat-card-content {
-    margin-top: 0; /* Remove default margin */
-    padding-top: 0; /* Remove default padding */
-  }
+mat-card-content {
+  margin-top: 0; /* Remove default margin */
+  padding-top: 0; /* Remove default padding */
+}
+
+/* Ensure tables are aligned equally */
+mat-table {
+  width: 100%;
+  table-layout: fixed; /* Ensures equal column width */
+}
+
+mat-header-cell, mat-cell {
+  text-align: center; /* Center-align table content */
+  padding: 8px; /* Add padding for better spacing */
+}
   
-  /* Ensure tables are aligned equally */
-  mat-table {
-    width: 100%;
-    table-layout: fixed; /* Ensures equal column width */
+/* Responsive styles for tablets (2 cards per row) */
+@media (min-width: 768px) {
+  .leaderboard-card {
+    flex: 1 1 calc(50% - 32px); /* 2 cards per row */
   }
-  
-  mat-header-cell, mat-cell {
-    text-align: center; /* Center-align table content */
-    padding: 8px; /* Add padding for better spacing */
+  .example-button-row {
+    gap: 5px; /* Reduce space */
   }
-  
-  /* Responsive styles for tablets (2 cards per row) */
-  @media (min-width: 768px) {
-    .leaderboard-card {
-      flex: 1 1 calc(50% - 32px); /* 2 cards per row */
-    }
-    .example-button-row {
-      gap: 5px; /* Reduce space */
-    }
-    .match-button {
-        margin-right: 2px;
-    }
+  .match-button {
+      margin-right: 2px;
   }
-  
-  /* Responsive styles for laptops (3 cards per row) */
-  @media (min-width: 1024px) {
-    .leaderboard-card {
-      flex: 1 1 calc(33.333% - 32px); /* 3 cards per row */
-    }
+}
+
+/* Responsive styles for laptops (3 cards per row) */
+@media (min-width: 1024px) {
+  .leaderboard-card {
+    flex: 1 1 calc(33.333% - 32px); /* 3 cards per row */
   }
-  
-  /* Responsive styles for large screens (4 cards per row) */
-  @media (min-width: 1440px) {
-    .leaderboard-card {
-      flex: 1 1 calc(25% - 32px); /* 4 cards per row */
-    }
+}
+
+/* Responsive styles for large screens (4 cards per row) */
+@media (min-width: 1440px) {
+  .leaderboard-card {
+    flex: 1 1 calc(25% - 32px); /* 4 cards per row */
   }
+}
