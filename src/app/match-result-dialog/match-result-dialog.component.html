@@ -2,12 +2,16 @@
 
 <form [formGroup]="resultForm" (ngSubmit)="onSubmit()" class="predict-form">
     <mat-dialog-content class="mat-typography">
+        <p><mat-slide-toggle [checked]="isMatchAbandoned" (change)="onMatchAbandonedChange($event.checked)">
+            Match Abandoned
+        </mat-slide-toggle></p>
         <div class="form-container">
             <div class="form-field">
                 <mat-form-field appearance="fill">
                     <mat-label>Toss Winner</mat-label>
                     <mat-select formControlName="tossWon">
                         <mat-option *ngFor="let team of teams" [value]="team.shortName">{{ team.name }}</mat-option>
+                        <mat-option value="no_result">No Result</mat-option>
                     </mat-select>
                     <mat-error *ngIf="resultForm.get('tossWon')?.hasError('required')">
                         This field is required
@@ -19,7 +23,9 @@
                 <mat-form-field appearance="fill">
                     <mat-label>Winner</mat-label>
                     <mat-select formControlName="teamWon">
-                        <mat-option *ngFor="let team of teams" [value]="team.shortName">{{ team.name }}</mat-option>
+                        @if (!isMatchAbandoned) {
+                            <mat-option *ngFor="let team of teams" [value]="team.shortName">{{ team.name }}</mat-option>
+                        }
                         <mat-option value="no_result">No Result</mat-option>
                     </mat-select>
                     <mat-error *ngIf="resultForm.get('teamWon')?.hasError('required')">
@@ -39,42 +45,45 @@
                     </mat-error>
                 </mat-form-field>
             </div>
-
-            <div class="form-field">
-                <mat-form-field appearance="fill">
-                    <mat-label>FUEL UP Batter</mat-label>
-                    <mat-select formControlName="mostRunsScorer">
-                        <mat-option *ngFor="let player of players" [value]="player.playerNo">{{ player.displayValue }}</mat-option>
-                    </mat-select>
-                    <mat-error *ngIf="resultForm.get('mostRunsScorer')?.hasError('required')">
-                        This field is required
-                    </mat-error>
-                </mat-form-field>
-            </div>
-
-            <div class="form-field">
-                <mat-form-field appearance="fill">
-                    <mat-label>FUEL UP Bowler</mat-label>
-                    <mat-select formControlName="mostWicketsTaker">
-                        <mat-option *ngFor="let player of players" [value]="player.playerNo">{{ player.displayValue }}</mat-option>
-                    </mat-select>
-                    <mat-error *ngIf="resultForm.get('mostWicketsTaker')?.hasError('required')">
-                        This field is required
-                    </mat-error>
-                </mat-form-field>
-            </div>
-
-            <div class="form-field">
-                <mat-form-field appearance="fill">
-                    <mat-label>FUEL UP Man of the Match</mat-label>
-                    <mat-select formControlName="playerOfTheMatch">
-                        <mat-option *ngFor="let player of players" [value]="player.playerNo">{{ player.displayValue }}</mat-option>
-                    </mat-select>
-                    <mat-error *ngIf="resultForm.get('playerOfTheMatch')?.hasError('required')">
-                        This field is required
-                    </mat-error>
-                </mat-form-field>
-            </div>
+            
+            @if (!isMatchAbandoned) {
+    
+                <div class="form-field">
+                    <mat-form-field appearance="fill">
+                        <mat-label>FUEL UP Batter</mat-label>
+                        <mat-select formControlName="mostRunsScorer">
+                            <mat-option *ngFor="let player of players" [value]="player.playerNo">{{ player.displayValue }}</mat-option>
+                        </mat-select>
+                        <mat-error *ngIf="resultForm.get('mostRunsScorer')?.hasError('required')">
+                            This field is required
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+    
+                <div class="form-field">
+                    <mat-form-field appearance="fill">
+                        <mat-label>FUEL UP Bowler</mat-label>
+                        <mat-select formControlName="mostWicketsTaker">
+                            <mat-option *ngFor="let player of players" [value]="player.playerNo">{{ player.displayValue }}</mat-option>
+                        </mat-select>
+                        <mat-error *ngIf="resultForm.get('mostWicketsTaker')?.hasError('required')">
+                            This field is required
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+    
+                <div class="form-field">
+                    <mat-form-field appearance="fill">
+                        <mat-label>FUEL UP Man of the Match</mat-label>
+                        <mat-select formControlName="playerOfTheMatch">
+                            <mat-option *ngFor="let player of players" [value]="player.playerNo">{{ player.displayValue }}</mat-option>
+                        </mat-select>
+                        <mat-error *ngIf="resultForm.get('playerOfTheMatch')?.hasError('required')">
+                            This field is required
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+            }
         </div>
     
     </mat-dialog-content>

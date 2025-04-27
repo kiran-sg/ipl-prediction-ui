@@ -16,6 +16,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { Player } from '../models/player.model';
 import { Team } from '../models/team.model';
 import { MatchResult } from '../models/match-result';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 
 export interface MatchData {
   matchNo: string;
@@ -34,7 +35,8 @@ export interface MatchData {
     MatSelectModule,
     MatInputModule,
     MatFormFieldModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    MatSlideToggleModule
   ],
   templateUrl: './match-result-dialog.component.html',
   styleUrl: './match-result-dialog.component.scss'
@@ -49,6 +51,7 @@ export class MatchResultDialogComponent {
     '< 100','100 - 130','131 - 160','161 - 180','181 - 200','> 200'
   ]
   resultForm!: FormGroup;
+  isMatchAbandoned: boolean = false;
 
   private _snackBar = inject(MatSnackBar);
 
@@ -82,6 +85,14 @@ export class MatchResultDialogComponent {
 
   onSubmit(): void {
     if (this.resultForm.valid) {
+      if (!this.isMatchAbandoned && this.resultForm.value.tossWon === 'no_result') {
+        alert("Please select a team for Toss Winner. If the match is abandoned, please select the checkbox.");
+        return;
+      }
+      if (!this.isMatchAbandoned && this.resultForm.value.teamWon === 'no_result') {
+        alert("Please select a team for Team Winner. If the match is abandoned, please select the checkbox.");
+        return;
+      }
       const matchResult: MatchResult = this.resultForm.value;
       this.adminService.updateMatchResults(matchResult).subscribe(data => {
         if (data.status) {
@@ -106,6 +117,12 @@ export class MatchResultDialogComponent {
   }
 
   updateForm(result: MatchResult) {
+    if (result.teamWon === 'no_result') {
+      this.isMatchAbandoned = true;
+      this.onMatchAbandonedChange(this.isMatchAbandoned);
+    } else {
+      this.isMatchAbandoned = false;
+    }
     this.resultForm.patchValue({
       tossWon: result.tossWon,
       teamWon: result.teamWon,
@@ -171,6 +188,38 @@ export class MatchResultDialogComponent {
       // Update the dialog size
       this.dialogRef.updateSize(this.dialogWidth, this.dialogHeight);
     });
+  }
+
+  onMatchAbandonedChange(isMatchAbandoned: any) {
+    console.log("onMatchAbandonedChange value", isMatchAbandoned);
+    this.isMatchAbandoned = isMatchAbandoned;
+    this.resetResults();
+    //remove validators from the form controls except tossWon and teamWon
+    if (isMatchAbandoned) {
+      this.resultForm.get('playerOfTheMatch')?.clearValidators();
+      this.resultForm.get('mostRunsScorer')?.clearValidators();
+      this.resultForm.get('mostWicketsTaker')?.clearValidators();
+      this.resultForm.get('firstInnScore')?.clearValidators();
+    }
+    else {
+      this.resultForm.get('playerOfTheMatch')?.setValidators([Validators.required]);
+      this.resultForm.get('mostRunsScorer')?.setValidators([Validators.required]);
+      this.resultForm.get('mostWicketsTaker')?.setValidators([Validators.required]);
+      this.resultForm.get('firstInnScore')?.setValidators([Validators.required]);
+    }
+    this.resultForm.get('playerOfTheMatch')?.updateValueAndValidity();
+    this.resultForm.get('mostRunsScorer')?.updateValueAndValidity();
+    this.resultForm.get('mostWicketsTaker')?.updateValueAndValidity();
+    this.resultForm.get('firstInnScore')?.updateValueAndValidity();
+  }
+
+  resetResults() {
+    this.resultForm.get('tossWon')?.setValue('');
+    this.resultForm.get('teamWon')?.setValue('');
+    this.resultForm.get('playerOfTheMatch')?.setValue('');
+    this.resultForm.get('mostRunsScorer')?.setValue('');
+    this.resultForm.get('mostWicketsTaker')?.setValue('');
+    this.resultForm.get('firstInnScore')?.setValue('');
   }
 
 }
