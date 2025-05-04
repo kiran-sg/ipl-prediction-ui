@@ -1,3 +1,5 @@
+export const TOURNAMENT_PREDICTION_CLOSING_TIME = '2025-05-09T18:00:00+05:30';
+
 export function isMatchTimeBelowSixtyMins(matchDateTime: string | Date): boolean {
     const timeDiff = getTimeDifference(matchDateTime);
     return timeDiff.hours == 0 && timeDiff.minutes < 60;
@@ -16,7 +18,7 @@ export function isMatchToday(matchDateTime: string | Date): boolean {
 }
 
 export function isTournamentPredictionClosed(): boolean {
-    const closeDate = new Date('2025-05-09T18:00:00+05:30'); // IST
+    const closeDate = new Date(TOURNAMENT_PREDICTION_CLOSING_TIME); // IST
     const now = new Date();
     
     // If deadline has passed

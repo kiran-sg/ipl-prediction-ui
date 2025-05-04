@@ -20,7 +20,7 @@ import { TournamentPrediction } from '../models/tournament-prediction.model';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { map, Observable, startWith } from 'rxjs';
 import { MatIconModule } from '@angular/material/icon';
-import { isTournamentPredictionClosed } from '../utils/common-utils';
+import { isTournamentPredictionClosed, TOURNAMENT_PREDICTION_CLOSING_TIME } from '../utils/common-utils';
 
 @Component({
   selector: 'app-tournament-predictions-dialog',
@@ -254,7 +254,7 @@ export class TournamentPredictionsDialogComponent {
   }
 
   updateCountdown() {
-    const closingDate = new Date('2025-05-09T18:00:00+05:30'); // May 9, 6 PM IST
+    const closingDate = new Date(TOURNAMENT_PREDICTION_CLOSING_TIME); // May 9, 6 PM IST
     const now = new Date();
     const diff = closingDate.getTime() - now.getTime();
 

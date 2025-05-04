@@ -9,7 +9,7 @@ import { Match } from '../models/match.model';
 import { CommonService } from '../common.service';
 import { TeamLogo } from '../enums/team-logo';
 import { CustomDatePipe } from '../custom-date.pipe';
-import { isMatchTimeBelowSixtyMins, isMatchToday } from '../utils/common-utils';
+import { isMatchTimeBelowSixtyMins, isMatchToday, TOURNAMENT_PREDICTION_CLOSING_TIME } from '../utils/common-utils';
 import { PredictionsDialogComponent } from '../predictions-dialog/predictions-dialog.component';
 import { Overlay } from '@angular/cdk/overlay';
 import { TournamentPredictionsDialogComponent } from '../tournament-predictions-dialog/tournament-predictions-dialog.component';
@@ -127,7 +127,7 @@ export class HomeComponent {
   }
 
   updateCountdown() {
-    const closingDate = new Date('2025-05-09T18:00:00+05:30'); // May 9, 6 PM IST
+    const closingDate = new Date(TOURNAMENT_PREDICTION_CLOSING_TIME); // May 9, 6 PM IST
     const now = new Date();
     const diff = closingDate.getTime() - now.getTime();
 
