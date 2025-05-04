@@ -6,6 +6,7 @@ import { PredictedMatch } from './models/predicted-match.model';
 import { LoadingService } from './loading.service';
 import { Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { TournamentPrediction } from './models/tournament-prediction.model';
 
 @Injectable({
   providedIn: 'root'
@@ -89,6 +90,36 @@ export class CommonService {
     this.loadingService.show(); // Show loader
     const userId = sessionStorage.getItem('userId');
     return this.http.get(`${this.baseUrl}/predictions?user=${userId}`).pipe(
+      finalize(() => this.loadingService.hide()) // Hide loader when the request completes
+    );
+  }
+
+  saveTournamentPrediction(prediction: TournamentPrediction): Observable<any> {
+    this.loadingService.show(); // Show loader
+    return this.http.post(`${this.baseUrl}/predictions/tournament`, prediction, {
+      withCredentials: true,
+    }).pipe(
+      catchError((error) => {
+        if (error.status === 401) {
+          // Handle 401 Unauthorized error
+          console.error('Unauthorized access - redirecting to login');
+          this._snackBar.open(error.message, "Close");
+          sessionStorage.removeItem('userId');
+          this.router.navigate(['/login']); // Redirect to login page
+        }
+        if (error.status === 400 && error.error.message !== null) {
+          alert(error.error.message);// Redirect to login page
+        }
+        return throwError(() => error); // Re-throw the error for further handling
+      }),
+      finalize(() => this.loadingService.hide()) // Hide loader when the request completes
+    );
+  }
+
+  getTournamentPredictionByUserId(): Observable<any> {
+    this.loadingService.show(); // Show loader
+    const userId = sessionStorage.getItem('userId');
+    return this.http.get(`${this.baseUrl}/predictions/tournament?user=${userId}`).pipe(
       finalize(() => this.loadingService.hide()) // Hide loader when the request completes
     );
   }

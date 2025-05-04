@@ -17,15 +17,26 @@
 }
 
 /* Flexbox row for text + button alignment */
-.prediction-row {
+/* .prediction-row {
   display: flex;
-  flex-wrap: wrap; /* Allows stacking on small screens */
+  flex-wrap: wrap;
   justify-content: space-between;
   align-items: center;
-  gap: 12px; /* Space between text and button */
+  gap: 12px;
   margin-left: 20px;
   margin-right: 20px;
   margin-bottom: 10px;
+} */
+
+.prediction-row {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center; /* Center buttons horizontally */
+  align-items: center;
+  gap: 12px;
+  margin: 0 auto 20px auto; /* Center the row itself */
+  width: fit-content; /* Ensures the row doesn't stretch full width */
+  padding: 0 16px; /* Prevents edge-touching on small screens */
 }
 
 /* Text styling */
@@ -36,10 +47,59 @@
   color: red;
 }
 
-/* Button styling */
-.prediction-history {
+.tournament-prediction{
+  margin: 0;
+  min-width: 200px; 
   text-transform: uppercase;
   white-space: nowrap;
+}
+
+/* Button styling */
+.prediction-history {
+  background-color: transparent; // Or use your theme's background
+  color: #1a378b; // Purple (or your theme's primary/accent)
+  border: 2px solid #1a378b; // Matches the glow of the predictor button
+  font-weight: 500;
+  text-transform: uppercase;
+  white-space: nowrap;
+  padding: 0 16px;
+  transition: all 0.3s ease; // Smooth hover/focus effects
+
+// Hover/focus effects
+  &:hover, &:focus {
+    background-color: rgba(26, 55, 139, 0.1); // Light purple tint
+    transform: translateY(-1px); // Subtle lift
+  }
+
+  // Active state (click feedback)
+  &:active {
+    transform: translateY(0);
+    background-color: rgba(26, 55, 139, 0.2);
+  }
+
+  // Optional: Match the "New" badge style if needed
+  &::after {
+    content: "";
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    background: #ff4081; // Pink badge (same as predictor button)
+    color: white;
+    font-size: 10px;
+    font-weight: bold;
+    padding: 3px 6px;
+    border-radius: 12px;
+    display: none; // Hidden by default (enable if needed)
+  }
+}
+
+.tournament-prediction,
+.prediction-history {
+  margin: 0;
+  min-width: 200px;
+  text-transform: uppercase;
+  white-space: nowrap;
+  flex-shrink: 0; /* Prevents button text from wrapping */
 }
 
 .card-container {
@@ -118,10 +178,105 @@
   margin: 16px 0;
 }
 
+.tournament-prediction {
+  // Your existing styles
+  background-color: #1a378b;
+  color: white;
+  font-weight: 500;
+  box-shadow: 0 0 10px rgb(26 55 139);
+  animation: pulse 2s infinite;
+  padding: 0 20px; // Slightly wider padding
+  
+  // New structural styles
+  height: auto;
+  min-height: 48px;
+  
+  .button-content {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    width: 100%;
+  }
+  
+  mat-icon {
+    margin-right: 8px;
+    flex-shrink: 0; // Prevents icon from shrinking
+  }
+  
+  .text-column {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.2;
+    text-align: left;
+    overflow: hidden; // Prevents text overflow
+  }
+  
+  .main-text {
+    font-weight: 500;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+  
+  .closing-text {
+    font-size: 11px;
+    opacity: 0.9;
+    font-weight: 400;
+    text-transform: none;
+    white-space: nowrap;
+    color: rgba(255, 255, 255, 0.9); // Slightly transparent white
+  }
+  
+  // Keep your existing pulse animation
+  @keyframes pulse {
+    0% { box-shadow: 0 0 0 0 rgba(26, 55, 139, 0.7); }
+    70% { box-shadow: 0 0 0 10px rgba(26, 55, 139, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(26, 55, 139, 0); }
+  }
+}
+
+// Pulsing animation
+/* @keyframes pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(26, 55, 139, 0.7);
+  }
+  70% {
+    box-shadow: 0 0 0 10px rgb(26, 55, 139, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgb(26, 55, 139, 0);
+  }
+} */
+
+// Optional: Add a "New" badge
+.tournament-prediction::after {
+  content: "New";
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  background: #ff4081; // Pink (or another attention-grabbing color)
+  color: white;
+  font-size: 10px;
+  font-weight: bold;
+  padding: 3px 6px;
+  border-radius: 12px;
+}
+
 @media (max-width: 600px) {
+  
   .prediction-row {
-    flex-direction: column; /* Stacks text + button vertically on small screens */
-    align-items: flex-start; /* Left-aligns both items when stacked */
+    flex-direction: column; /* Stack buttons vertically */
+    align-items: center; /* Center-align stacked buttons */
+    width: 100%; /* Full width for better touch targets */
+  }
+  /* Optional: Make buttons full-width on mobile */
+  .tournament-prediction,
+  .prediction-history {
+    width: 100%;
+    max-width: 280px; /* Limits button width for readability */
+  }
+  .closing-message {
+    margin: 12px 0;
+    order: 1; // Places message between buttons when stacked
   }
 }
 

@@ -8,6 +8,23 @@ export function isMatchOpenForUpdateResult(matchDateTime: string | Date): boolea
     return timeDiff.hours <= -4;
 }
 
+export function isMatchToday(matchDateTime: string | Date): boolean {
+    const matchDate = new Date(matchDateTime);
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    return matchDate.toDateString() === today.toDateString();
+}
+
+export function isTournamentPredictionClosed(): boolean {
+    const closeDate = new Date('2025-05-09T18:00:00+05:30'); // IST
+    const now = new Date();
+    
+    // If deadline has passed
+    if (now >= closeDate) {
+      return true;
+    } else return false;
+}
+
 function getTimeDifference(providedDateTime: string | Date): { hours: number; minutes: number } {
     const currentTime = new Date();
     const diffInMs = new Date(providedDateTime).getTime() - currentTime.getTime();

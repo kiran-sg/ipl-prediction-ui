@@ -1,0 +1,165 @@
+<h2 mat-dialog-title style="padding-bottom: 0px;">Season Predictor</h2>
+
+<form [formGroup]="tournamentPredictionForm" (ngSubmit)="onSubmit()" class="predict-form">
+    <mat-dialog-content class="mat-typography">
+        <div class="closing-message">
+            <mat-icon>schedule</mat-icon>
+            <span>{{countdownText}}</span>
+        </div>
+        <div class="form-container">
+            <div class="form-field">
+                <mat-form-field class="example-full-width">
+                    <mat-label>Orange Cap</mat-label>
+                    <input type="text"
+                            placeholder="Search Player"
+                            aria-label="Orange Cap"
+                            matInput
+                            formControlName="orangeCapPredicted"
+                            [matAutocomplete]="autoOrangeCap"
+                            (input)="filterOrangeCap()"
+                            (focus)="filterOrangeCap()">
+                    <mat-autocomplete autoActiveFirstOption #autoOrangeCap="matAutocomplete">
+                      @for (option of orangeCapFilteredOptions; track option) {
+                        <mat-option [value]="option">{{option}}</mat-option>
+                      }
+                    </mat-autocomplete>
+                  </mat-form-field>
+            </div>
+    
+            <div class="form-field">
+                <mat-form-field class="example-full-width">
+                    <mat-label>Purple Cap</mat-label>
+                    <input type="text"
+                           placeholder="Search Player"
+                           aria-label="Purple Cap"
+                           matInput
+                           formControlName="purpleCapPredicted"
+                           [matAutocomplete]="autoPurpleCap"
+                           (input)="filterPurpleCap()"
+                           (focus)="filterPurpleCap()">
+                    <mat-autocomplete autoActiveFirstOption #autoPurpleCap="matAutocomplete">
+                      @for (option of purpleCapFilteredOptions; track option) {
+                        <mat-option [value]="option">{{option}}</mat-option>
+                      }
+                    </mat-autocomplete>
+                  </mat-form-field>
+            </div>
+    
+            <div class="form-field">
+                <mat-form-field class="example-full-width">
+                    <mat-label>Emerging Player</mat-label>
+                    <input type="text"
+                           placeholder="Search Player"
+                           aria-label="Emerging Player"
+                           matInput
+                           formControlName="emergingPlayerPredicted"
+                           [matAutocomplete]="autoEmergingPlayer"
+                           (input)="filterEmergingPlayer()"
+                           (focus)="filterEmergingPlayer()">
+                    <mat-autocomplete autoActiveFirstOption #autoEmergingPlayer="matAutocomplete">
+                      @for (option of emergingPlayerFilteredOptions; track option) {
+                        <mat-option [value]="option">{{option}}</mat-option>
+                      }
+                    </mat-autocomplete>
+                </mat-form-field>
+            </div>
+    
+            <div class="form-field">
+                <mat-form-field appearance="fill">
+                    <mat-label>Fair Play Team</mat-label>
+                    <mat-select formControlName="fairPlayTeamPredicted">
+                        <mat-option 
+                            *ngFor="let team of teams" 
+                            [value]="team">
+                            {{ team }}
+                        </mat-option>
+                    </mat-select>
+                    <mat-error *ngIf="tournamentPredictionForm.get('fairPlayTeamPredicted')?.hasError('required')">
+                        This field is required
+                    </mat-error>
+                </mat-form-field>
+            </div>
+    
+            <div class="form-field">
+                <mat-form-field class="example-full-width">
+                    <mat-label>Most Fours</mat-label>
+                    <input type="text"
+                           placeholder="Search Player"
+                           aria-label="Most Fours"
+                           matInput
+                           formControlName="mostFoursPredicted"
+                           [matAutocomplete]="autoMostFours"
+                           (input)="filterMostFours()"
+                           (focus)="filterMostFours()">
+                    <mat-autocomplete autoActiveFirstOption #autoMostFours="matAutocomplete">
+                      @for (option of mostFoursFilteredOptions; track option) {
+                        <mat-option [value]="option">{{option}}</mat-option>
+                      }
+                    </mat-autocomplete>
+                </mat-form-field>
+            </div>
+    
+            <div class="form-field">
+                <mat-form-field class="example-full-width">
+                    <mat-label>Most Sixes</mat-label>
+                    <input type="text"
+                           placeholder="Search Player"
+                           aria-label="Most Sixes"
+                           matInput
+                           formControlName="mostSixesPredicted"
+                           [matAutocomplete]="autoMostSixes"
+                           (input)="filterMostSixes()"
+                           (focus)="filterMostSixes()">
+                    <mat-autocomplete autoActiveFirstOption #autoMostSixes="matAutocomplete">
+                      @for (option of mostSixesFilteredOptions; track option) {
+                        <mat-option [value]="option">{{option}}</mat-option>
+                      }
+                    </mat-autocomplete>
+                </mat-form-field>
+            </div>
+
+            <div class="form-field">
+                <mat-form-field class="example-full-width">
+                    <mat-label>Most Dot Balls</mat-label>
+                    <input type="text"
+                           placeholder="Search Player"
+                           aria-label="Most Dot Balls"
+                           matInput
+                           formControlName="mostDotBallsPredicted"
+                           [matAutocomplete]="autoMostDotBalls"
+                           (input)="filterMostDotBalls()"
+                           (focus)="filterMostDotBalls()">
+                    <mat-autocomplete autoActiveFirstOption #autoMostDotBalls="matAutocomplete">
+                      @for (option of mostDotBalssFilteredOptions; track option) {
+                        <mat-option [value]="option">{{option}}</mat-option>
+                      }
+                    </mat-autocomplete>
+                </mat-form-field>
+            </div>
+
+            <div class="form-field">
+                <mat-form-field class="example-full-width">
+                    <mat-label>Best Bowling Figure</mat-label>
+                    <input type="text"
+                           placeholder="Search Player"
+                           aria-label="Best Bowling Figure"
+                           matInput
+                           formControlName="bestBowlingFigPredicted"
+                           [matAutocomplete]="autoBestBowlingFig"
+                           (input)="filterBestBowlingFig()"
+                           (focus)="filterBestBowlingFig()">
+                    <mat-autocomplete autoActiveFirstOption #autoBestBowlingFig="matAutocomplete">
+                      @for (option of bestBowlingFigFilteredOptions; track option) {
+                        <mat-option [value]="option">{{option}}</mat-option>
+                      }
+                    </mat-autocomplete>
+                </mat-form-field>
+            </div>
+        </div>
+    
+    </mat-dialog-content>
+    <mat-dialog-actions align="end">
+        <button mat-button mat-dialog-close>Close</button>
+        <button mat-button cdkFocusInitial type="submit" *ngIf="!lockPrediction">Update Prediction</button>
+    </mat-dialog-actions>
+</form>

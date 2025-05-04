@@ -1,9 +1,20 @@
 <div class="prediction-container">
   <h1 class="prediction-heading">IPL Prediction Contest</h1>
   <div class="prediction-row">
-    <p class="prediction-lock">Predictions will be locked 1 hour before each match</p>
-    <button mat-stroked-button class="prediction-history" (click)="openPredictionsDialog()">
-      View previous predictions
+    <button mat-fab extended class="tournament-prediction" 
+        (click)="openTournamentPredictionDialog()">
+      <div class="button-content">
+        <mat-icon>emoji_events</mat-icon>
+        <div class="text-column">
+          <span class="main-text">Season Predictor</span>
+          <span class="closing-text">{{ countdownText }}!</span>
+        </div>
+      </div>
+    </button>
+    <button mat-fab extended class="prediction-history"
+      (click)="openPreviousPredictionsDialog()">
+      <mat-icon>history</mat-icon>
+       Previous predictions
     </button>
   </div>
   <div class="card-container">
@@ -31,6 +42,9 @@
         </mat-card-actions>
         <p *ngIf="match.isLocked" class="error-message">
           Prediction closed!
+        </p>
+        <p *ngIf="!match.isLocked && match.isToday" class="error-message">
+          Prediction locks at {{ match.predictionLockingTime }} IST
         </p>
       </mat-card>
     </ng-container>

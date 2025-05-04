@@ -6,4 +6,6 @@ export interface Match {
     homeLogo: string;
     awayLogo: string;
     isLocked: boolean;
+    isToday: boolean;
+    predictionLockingTime: string;
 }
