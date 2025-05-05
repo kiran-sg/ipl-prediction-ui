@@ -1,4 +1,4 @@
-export const TOURNAMENT_PREDICTION_CLOSING_TIME = '2025-05-09T18:00:00+05:30';
+export const TOURNAMENT_PREDICTION_CLOSING_TIME = '2025-05-10T12:00:00+05:30';
 
 export function isMatchTimeBelowSixtyMins(matchDateTime: string | Date): boolean {
     const timeDiff = getTimeDifference(matchDateTime);
