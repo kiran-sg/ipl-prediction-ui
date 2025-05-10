@@ -1,0 +1,108 @@
+/* ipl-prediction-paused.component.css */
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 80vh;
+    background-color: #f5f5f5;
+    padding: 20px;
+  }
+  
+  .message-card {
+    max-width: 600px;
+    width: 100%;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    text-align: center;
+  }
+  
+  .header {
+    background: linear-gradient(135deg, #2c3e50, #4ca1af);
+    color: white;
+    padding: 24px;
+  }
+  
+  .header h1 {
+    margin: 0px 0 0;
+    font-size: 24px;
+  }
+  
+  .logo {
+    height: 60px;
+    //margin-bottom: 10px;
+  }
+  
+  .content {
+    padding: 30px;
+  }
+  
+  .icon-container {
+    margin-bottom: 20px;
+  }
+  
+  .pause-icon {
+    font-size: 60px;
+    width: 60px;
+    height: 60px;
+    color: #f39c12;
+  }
+  
+  h2 {
+    color: #2c3e50;
+    margin-bottom: 20px;
+  }
+  
+  .message {
+    color: #555;
+    font-size: 16px;
+    line-height: 1.6;
+    margin-bottom: 20px;
+  }
+  
+  .additional-info {
+    color: #777;
+    font-size: 14px;
+    line-height: 1.5;
+    margin-bottom: 30px;
+  }
+  
+  .actions {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-top: 20px;
+  }
+  
+  .actions button {
+    width: 100%;
+  }
+  
+  .actions button mat-icon {
+    margin-right: 8px;
+  }
+  
+  .footer {
+    padding: 15px;
+    background-color: #f9f9f9;
+    border-top: 1px solid #eee;
+    font-size: 13px;
+    color: #666;
+  }
+  
+  .footer a {
+    color: #3498db;
+    text-decoration: none;
+  }
+  
+  /* Responsive adjustments */
+  @media (max-width: 600px) {
+    .message-card {
+      border-radius: 0;
+    }
+    
+    .content {
+      padding: 20px;
+    }
+  }
