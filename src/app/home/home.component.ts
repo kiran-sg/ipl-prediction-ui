@@ -68,7 +68,9 @@ export class HomeComponent {
     });
   
     dialogRef.afterClosed().subscribe(result => {
-      console.log('Dialog closed', result);
+      if (result) {
+        this.getPredictionsForMatches();
+      }
     });
   }
 
@@ -84,7 +86,7 @@ export class HomeComponent {
     });
   
     dialogRef.afterClosed().subscribe(result => {
-      console.log('Dialog closed', result);
+      
     });
   }
 
@@ -95,7 +97,7 @@ export class HomeComponent {
     });
   
     dialogRef.afterClosed().subscribe(result => {
-      console.log('Dialog closed', result);
+      
     });
   }
 
