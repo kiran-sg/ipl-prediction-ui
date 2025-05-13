@@ -94,6 +94,15 @@ export class CommonService {
     );
   }
 
+  getPredictionsForUserByMatches(matchIds: string[]): Observable<any> {
+    this.loadingService.show(); // Show loader
+    const userId = sessionStorage.getItem('userId');
+    const body = { userId, matchIds };
+    return this.http.post(`${this.baseUrl}/predictions/user/matches`, body).pipe(
+      finalize(() => this.loadingService.hide()) // Hide loader when the request completes
+    );
+  }
+
   saveTournamentPrediction(prediction: TournamentPrediction): Observable<any> {
     this.loadingService.show(); // Show loader
     return this.http.post(`${this.baseUrl}/predictions/tournament`, prediction, {

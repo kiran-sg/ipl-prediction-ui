@@ -118,10 +118,30 @@ export class HomeComponent {
             predictionLockingTime: this.datePipe.transform(predictionLockingTime, 'hh:mm a') || '',
           };
         });
-        console.log('Matches:', this.matches);
+        this.getPredictionsForMatches();
       },
       error: (error) => {
         console.error('Error fetching matches:', error);
+      },
+    });
+  }
+
+  getPredictionsForMatches(): void {
+    //create a map of matchId from this.matches
+    const matchIds = this.matches.map((match: Match) => match.matchNo);
+    this.service.getPredictionsForUserByMatches(matchIds).subscribe({
+      next: (data: any) => {
+        console.log('Predictions:', data);
+        this.matches = this.matches.map((match: Match) => {
+          const prediction = data.predictions.find((pred: any) => pred.matchId === match.matchNo);
+          return {
+            ...match,
+            isPredicted: prediction,
+          };
+        });
+      },
+      error: (error) => {
+        console.error('Error fetching predictions:', error);
       },
     });
   }

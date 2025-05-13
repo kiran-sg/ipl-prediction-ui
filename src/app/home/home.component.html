@@ -24,6 +24,12 @@
           <div mat-card-avatar></div>
         </mat-card-header>
         <mat-card-content>
+          <div class="prediction-pending-badge-container">
+            <span *ngIf="!match.isPredicted && !match.isLocked" 
+              class="prediction-pending-badge">
+              Prediction Pending
+            </span>
+          </div>
           <div class="team-logos">
             <div class="logo-container">
               <img [src]="match.homeLogo" alt="Team 1 Logo" class="team-logo">
@@ -38,14 +44,21 @@
           <p class="match-date">{{ match.dateTime | customDate }}</p>
         </mat-card-content>
         <mat-card-actions class="match-actions">
-          <button mat-flat-button [disabled]="match.isLocked" (click)="openPredictDialog(match)">PREDICT MATCH</button>
+          <button mat-flat-button 
+            [disabled]="match.isLocked" 
+            class="predict-match-button"
+            [class.has-pending]="!match.isPredicted"
+            (click)="openPredictDialog(match)">
+            <div class="button-content">
+              <div class="text-column">
+                <span class="main-text">Predict Match</span>
+                <span class="closing-text" *ngIf="!match.isLocked && match.isToday">
+                  locks at {{ match.predictionLockingTime }} IST
+                </span>
+              </div>
+            </div>
+          </button>
         </mat-card-actions>
-        <p *ngIf="match.isLocked" class="error-message">
-          Prediction closed!
-        </p>
-        <p *ngIf="!match.isLocked && match.isToday" class="error-message">
-          Prediction locks at {{ match.predictionLockingTime }} IST
-        </p>
       </mat-card>
     </ng-container>
   </div>

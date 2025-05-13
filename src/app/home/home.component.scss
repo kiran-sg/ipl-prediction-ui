@@ -139,6 +139,73 @@
   justify-content: center;
 }
 
+.predict-match-button {
+  color: white;
+  font-weight: 500;
+  padding: 0 20px;
+  height: auto;
+  min-height: 48px;
+
+  .button-content {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    width: 100%;
+  }
+  
+  .text-column {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.2;
+    text-align: left;
+    overflow: hidden; // Prevents text overflow
+  }
+  
+  .main-text {
+    font-weight: 500;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    text-transform: uppercase;
+  }
+  
+  .closing-text {
+    font-size: 11px;
+    opacity: 0.9;
+    font-weight: 400;
+    text-transform: none;
+    white-space: nowrap;
+    color: rgb(245 245 138);
+    align-items: center;
+    text-align: center;
+    padding-bottom: 5px;
+  }
+  
+  // Keep your existing pulse animation
+  @keyframes pulse {
+    0% { box-shadow: 0 0 0 0 rgba(26, 55, 139, 0.7); }
+    70% { box-shadow: 0 0 0 10px rgba(26, 55, 139, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(26, 55, 139, 0); }
+  }
+}
+
+.prediction-pending-badge-container {
+  display: flex;
+  justify-content: center;
+  margin: 15px 0; /* Spacing above/below the badge */
+}
+
+.prediction-pending-badge {
+  background: #ff4081;
+  color: white;
+  border-radius: 12px;
+  padding: 4px 12px;
+  font-size: 12px;
+  font-weight: 500;
+  text-transform: uppercase;
+  //animation: pulse 2s infinite;
+  white-space: nowrap;
+}
+
 .error-message {
   justify-content: center;
   text-align: center;
