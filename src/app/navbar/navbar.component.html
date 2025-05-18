@@ -2,11 +2,13 @@
   <div class="container">
     <img mat-card-sm-image src="assets/ipl/ipl-logo.png" alt="Versus Logo" class="ipl-logo">
     <div class="nav-links">
-      @if (!isAdmin()) {
+      @if (!isAdmin() && !isSuperAdmin()) {
         <a mat-button routerLink="/home" routerLinkActive="active">Matches</a>
       }
-      <a mat-button routerLink="/leaderboard" routerLinkActive="active">Leaderboard</a>
-      @if (isAdmin()) {
+      @if (isSuperAdmin()) {
+        <a mat-button routerLink="/leaderboard" routerLinkActive="active">Leaderboard</a>
+      }
+      @if (isAdmin() || isSuperAdmin()) {
         <a mat-button routerLink="/admin" routerLinkActive="active">Admin</a>
       }
     </div>

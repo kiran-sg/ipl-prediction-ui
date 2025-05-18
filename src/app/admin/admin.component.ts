@@ -16,6 +16,7 @@ import { PredictionsDialogComponent } from '../predictions-dialog/predictions-di
 import { Overlay } from '@angular/cdk/overlay';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { CommonModule } from '@angular/common';
+import { User } from '../enums/user';
 
 export interface MatchData {
   matchNo: string;
@@ -80,14 +81,25 @@ export class AdminComponent {
   fetchMatches(): void {
     this.service.getMatches().subscribe({
       next: (data: any[]) => {
-        this.matches = data.map((match: any) => {
-          return {
-            ...match,
-            match: match.home + ' VS ' + match.away + ' (Match ' + match.matchNo + ')',
-            disableUpdate: !isMatchOpenForUpdateResult(match.dateTime),
-            dateTime: this.customDatePipe.transform(match.dateTime)
-          };
-        })
+        const now = new Date();
+        const today = new Date(now.getFullYear(), now.getMonth(), now.getDate()); // Reset time to midnight
+        const yesterday = new Date(today);
+        yesterday.setDate(today.getDate() - 1); // Get yesterday's date
+  
+        this.matches = data
+          .filter((match: any) => {
+            const matchDate = new Date(match.dateTime);
+            const matchDateOnly = new Date(matchDate.getFullYear(), matchDate.getMonth(), matchDate.getDate());
+            return this.isSuperAdmin() || matchDateOnly >= yesterday;
+          })
+          .map((match: any) => {
+            return {
+              ...match,
+              match: match.home + ' VS ' + match.away + ' (Match ' + match.matchNo + ')',
+              disableUpdate: !isMatchOpenForUpdateResult(match.dateTime),
+              dateTime: this.customDatePipe.transform(match.dateTime)
+            };
+          });
         this.sortMatches(this.matches);
         this.dataSource = new MatTableDataSource(this.matches);
         this.dataSource.paginator = this.paginator;
@@ -96,6 +108,11 @@ export class AdminComponent {
         console.error('Error fetching matches:', error);
       },
     });
+  }
+
+  isSuperAdmin(): boolean {
+    const userId = sessionStorage.getItem('userId');
+    return userId === User.SUPER_ADMIN;
   }
 
   openMatchResultDialog(match: MatchData): void {
