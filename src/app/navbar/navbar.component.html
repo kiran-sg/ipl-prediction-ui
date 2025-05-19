@@ -26,11 +26,13 @@
 <mat-sidenav-container hasBackdrop="true">
   <mat-sidenav #sidenav mode="over" [fixedInViewport]="isMobile" [opened]="isMenuOpen" class="mobile-sidenav">
     <div class="mobile-menu">
-      @if (!isAdmin()) {
+      @if (!isAdmin() && !isSuperAdmin()) {
         <a mat-button routerLink="/home" routerLinkActive="active" (click)="closeMenu()">Matches</a>
       }
-      <a mat-button routerLink="/leaderboard" routerLinkActive="active" (click)="closeMenu()">Leaderboard</a>
-      @if (isAdmin()) {
+      @if (isSuperAdmin()) {
+        <a mat-button routerLink="/leaderboard" routerLinkActive="active" (click)="closeMenu()">Leaderboard</a>
+      }
+      @if (isAdmin() || isSuperAdmin()) {
         <a mat-button routerLink="/admin" routerLinkActive="active" (click)="closeMenu()">Admin</a>
       }
     </div>
