@@ -9,4 +9,5 @@ export interface Match {
     isToday: boolean;
     predictionLockingTime: string;
     isPredicted: boolean;
+    name?: string;
 }

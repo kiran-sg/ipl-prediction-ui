@@ -118,6 +118,10 @@ export class HomeComponent {
             awayLogo: TeamLogo[match.away as keyof typeof TeamLogo],
             isToday: isMatchToday(match.dateTime),
             predictionLockingTime: this.datePipe.transform(predictionLockingTime, 'hh:mm a') || '',
+            name: match.matchNo === '71' ? 'Qualifier 1' :
+                  match.matchNo === '72' ? 'Eliminator' :
+                  match.matchNo === '73' ? 'Qualifier 2' :
+                  match.matchNo === '74' ? 'Final' : ''
           };
         });
         this.getPredictionsForMatches();

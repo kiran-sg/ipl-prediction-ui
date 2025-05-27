@@ -188,6 +188,25 @@
   }
 }
 
+.match-name-container {
+  display: flex;
+  justify-content: center;
+  margin: 15px 0;
+}
+
+.match-name {
+  /* background: #043e4f;
+  color: white;
+  border-radius: 12px; */
+  /* padding: 4px 12px; */
+  //font-size: 12px;
+  margin: 0;
+  font-weight: 500;
+  text-transform: uppercase;
+  //animation: pulse 2s infinite;
+  white-space: nowrap;
+}
+
 .prediction-pending-badge-container {
   display: flex;
   justify-content: center;
