@@ -30,7 +30,7 @@
             </h3>
           </div>
           <div class="prediction-pending-badge-container">
-            <span *ngIf="!match.isPredicted && !match.isLocked && match.home !== 'TBC'" 
+            <span *ngIf="!match.isPredicted && !match.isLocked && match.home !== 'TBC' && match.away !== 'TBC'" 
               class="prediction-pending-badge">
               Prediction Pending
             </span>
@@ -50,7 +50,7 @@
         </mat-card-content>
         <mat-card-actions class="match-actions">
           <button mat-flat-button 
-            [disabled]="match.isLocked || match.home === 'TBC'" 
+            [disabled]="match.isLocked || match.home === 'TBC' || match.away === 'TBC'" 
             class="predict-match-button"
             [class.has-pending]="!match.isPredicted"
             (click)="openPredictDialog(match)">
