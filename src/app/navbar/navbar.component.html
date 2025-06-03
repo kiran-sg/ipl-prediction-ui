@@ -5,10 +5,10 @@
       @if (!isAdmin() && !isSuperAdmin()) {
         <a mat-button routerLink="/home" routerLinkActive="active">Matches</a>
       }
-      <!-- @if (isSuperAdmin()) {
+      @if (isSuperAdmin()) {
         <a mat-button routerLink="/leaderboard" routerLinkActive="active">Leaderboard</a>
-      } -->
-      <a mat-button routerLink="/leaderboard" routerLinkActive="active">Leaderboard</a>
+      }
+      <!-- <a mat-button routerLink="/leaderboard" routerLinkActive="active">Leaderboard</a> -->
       @if (isAdmin() || isSuperAdmin()) {
         <a mat-button routerLink="/admin" routerLinkActive="active">Admin</a>
       }
@@ -30,10 +30,10 @@
       @if (!isAdmin() && !isSuperAdmin()) {
         <a mat-button routerLink="/home" routerLinkActive="active" (click)="closeMenu()">Matches</a>
       }
-      <!-- @if (isSuperAdmin()) {
+      @if (isSuperAdmin()) {
         <a mat-button routerLink="/leaderboard" routerLinkActive="active" (click)="closeMenu()">Leaderboard</a>
-      } -->
-      <a mat-button routerLink="/leaderboard" routerLinkActive="active" (click)="closeMenu()">Leaderboard</a>
+      }
+      <!-- <a mat-button routerLink="/leaderboard" routerLinkActive="active" (click)="closeMenu()">Leaderboard</a> -->
       @if (isAdmin() || isSuperAdmin()) {
         <a mat-button routerLink="/admin" routerLinkActive="active" (click)="closeMenu()">Admin</a>
       }

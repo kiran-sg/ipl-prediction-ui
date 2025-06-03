@@ -26,10 +26,10 @@ export class AuthGuard implements CanActivate {
         this.router.navigate(['/admin']);
         return false;
       }
-      /* if (state.url === '/leaderboard' && userId !== User.SUPER_ADMIN) {
+      if (state.url === '/leaderboard' && userId !== User.SUPER_ADMIN) {
         this.router.navigate(['/home']);
         return false;
-      } */
+      }
       return true;
     } else {
       if (state.url !== '/login') {

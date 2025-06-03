@@ -1,6 +1,6 @@
 <div class="prediction-container">
   <h1 class="prediction-heading">IPL Prediction Contest</h1>
-  <div class="prediction-row">
+  <!-- <div class="prediction-row">
     <button mat-fab extended class="tournament-prediction" 
         (click)="openTournamentPredictionDialog()">
       <div class="button-content">
@@ -11,12 +11,7 @@
         </div>
       </div>
     </button>
-    <!-- <button mat-fab extended class="prediction-history"
-      (click)="openPreviousPredictionsDialog()">
-      <mat-icon>history</mat-icon>
-       Previous predictions
-    </button> -->
-  </div>
+  </div> -->
   <div class="card-container">
     <ng-container *ngFor="let match of matches">
       <mat-card class="match-card">
@@ -66,5 +61,8 @@
         </mat-card-actions>
       </mat-card>
     </ng-container>
+  </div>
+  <div class="no-matches-banner">
+    🏁 IPL 2025 has ended in style! Thanks for participating in the FUEL UP Prediction Contest.
   </div>
 </div>
