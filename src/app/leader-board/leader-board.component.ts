@@ -31,7 +31,7 @@ export class LeaderBoardComponent {
     { loc: 'TVM', leaderBoard: [] },
     { loc: 'PUNE', leaderBoard: [] }
   ];
-  displayedColumns: string[] = ['position', 'userName'];
+  displayedColumns: string[] = ['position', 'userName', 'points'];
   dataSource: LeaderBoard[] = [];
 
   constructor(private service: CommonService) { 
