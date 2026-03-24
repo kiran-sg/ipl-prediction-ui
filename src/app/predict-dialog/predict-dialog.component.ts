@@ -4,7 +4,6 @@ import { MatButtonModule } from '@angular/material/button';
 import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { Match } from '../models/match.model';
 import { CommonModule } from '@angular/common';
-import { TeamName } from '../enums/team';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { PredictedMatch } from '../models/predicted-match.model';
 import { ReactiveFormsModule } from '@angular/forms';
@@ -57,20 +56,16 @@ export class PredictDialogComponent {
       Breakpoints.Web, // Large devices (desktops)
     ]).subscribe(result => {
       if (result.breakpoints[Breakpoints.Handset]) {
-        // Small screens (phones)
-        this.dialogWidth = '90vw';
-        this.dialogHeight = '80vh';
+        this.dialogWidth = '95vw';
+        this.dialogHeight = '90vh';
       } else if (result.breakpoints[Breakpoints.Tablet]) {
-        // Medium screens (tablets)
-        this.dialogWidth = '70vw';
-        this.dialogHeight = '60vh';
+        this.dialogWidth = '85vw';
+        this.dialogHeight = '85vh';
       } else {
-        // Large screens (desktops)
-        this.dialogWidth = '500px';
-        this.dialogHeight = 'auto';
+        this.dialogWidth = '80vw';
+        this.dialogHeight = '85vh';
       }
 
-      // Update the dialog size
       this.dialogRef.updateSize(this.dialogWidth, this.dialogHeight);
     });
   }

@@ -4,4 +4,5 @@ export interface Player {
     category: string;
     team: string;
     displayValue: string;
+    imageUrl: string;
 }

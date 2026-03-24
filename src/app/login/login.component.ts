@@ -2,12 +2,13 @@ import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
-import { MatCard, MatCardModule } from '@angular/material/card';
+import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { Router } from '@angular/router';
 import { CommonService } from '../common.service';
+import { AuthService } from '../auth.service';
 
 @Component({
   selector: 'app-login',
@@ -27,24 +28,27 @@ export class LoginComponent {
   loginForm: FormGroup;
   invalidPwd: boolean = false;
 
-  constructor(private fb: FormBuilder, private router: Router, 
-    private service: CommonService) {
+  constructor(
+    private fb: FormBuilder,
+    private router: Router,
+    private service: CommonService,
+    private authService: AuthService
+  ) {
     this.loginForm = this.fb.group({
       userId: ['', [Validators.required]],
-      password: ['']
+      password: ['', [Validators.required]]
     });
   }
 
   onSubmit(): void {
     if (this.loginForm.valid) {
-      console.log('Login Form Submitted', this.loginForm.value);
       const { userId, password } = this.loginForm.value;
       this.service.validateUser(userId, password).subscribe(
         (data: any) => {
           if (data.validUser) {
-            this.router.navigate(['/home']);
+            this.authService.login(userId, data.user?.isAdmin || false, data.user?.location);
+            this.router.navigate([data.user?.isAdmin ? '/admin' : '/home']);
           } else {
-            console.error('Invalid user');
             this.invalidPwd = true;
           }
         },
@@ -54,5 +58,4 @@ export class LoginComponent {
       );
     }
   }
-
 }

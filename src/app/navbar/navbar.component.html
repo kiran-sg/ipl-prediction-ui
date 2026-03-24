@@ -2,22 +2,22 @@
   <div class="container">
     <img mat-card-sm-image src="assets/ipl/ipl-logo.png" alt="Versus Logo" class="ipl-logo">
     <div class="nav-links">
-      @if (!isAdmin() && !isSuperAdmin()) {
+      @if (!authService.isAdmin) {
         <a mat-button routerLink="/home" routerLinkActive="active">Matches</a>
       }
-      @if (isSuperAdmin()) {
-        <a mat-button routerLink="/leaderboard" routerLinkActive="active">Leaderboard</a>
-      }
-      <!-- <a mat-button routerLink="/leaderboard" routerLinkActive="active">Leaderboard</a> -->
-      @if (isAdmin() || isSuperAdmin()) {
+      @if (authService.isAdmin) {
         <a mat-button routerLink="/admin" routerLinkActive="active">Admin</a>
       }
+      <a mat-button routerLink="/leaderboard" routerLinkActive="active">Leaderboard</a>
     </div>
     <div class="powered-by">
       <span class="powered-text">Powered By</span>
       <span class="fuel-up-text">CTO Fuel Up</span>
     </div>
     <img mat-card-sm-image src="assets/fuelup/fuel-up-logo.png" alt="Versus Logo" class="fuelup-logo">
+    <button mat-icon-button class="logout-button" (click)="logout()" matTooltip="Logout">
+      <mat-icon>logout</mat-icon>
+    </button>
     <button mat-icon-button class="menu-button" (click)="toggleMenu()">
       <mat-icon>menu</mat-icon>
     </button>
@@ -27,16 +27,16 @@
 <mat-sidenav-container hasBackdrop="true">
   <mat-sidenav #sidenav mode="over" [fixedInViewport]="isMobile" [opened]="isMenuOpen" class="mobile-sidenav">
     <div class="mobile-menu">
-      @if (!isAdmin() && !isSuperAdmin()) {
+      @if (!authService.isAdmin) {
         <a mat-button routerLink="/home" routerLinkActive="active" (click)="closeMenu()">Matches</a>
       }
-      @if (isSuperAdmin()) {
-        <a mat-button routerLink="/leaderboard" routerLinkActive="active" (click)="closeMenu()">Leaderboard</a>
-      }
-      <!-- <a mat-button routerLink="/leaderboard" routerLinkActive="active" (click)="closeMenu()">Leaderboard</a> -->
-      @if (isAdmin() || isSuperAdmin()) {
+      @if (authService.isAdmin) {
         <a mat-button routerLink="/admin" routerLinkActive="active" (click)="closeMenu()">Admin</a>
       }
+      <a mat-button routerLink="/leaderboard" routerLinkActive="active" (click)="closeMenu()">Leaderboard</a>
+      <a mat-button (click)="logout()" class="logout-link">
+        <mat-icon>logout</mat-icon> Logout
+      </a>
     </div>
   </mat-sidenav>
 </mat-sidenav-container>

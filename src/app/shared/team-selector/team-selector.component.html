@@ -1,0 +1,32 @@
+<div class="selector-section">
+  <div class="section-label">{{ label }}</div>
+  <div class="team-cards">
+    <div *ngFor="let team of teams"
+         class="team-card"
+         [class.selected]="selected === team.shortName"
+         (click)="select(team.shortName)"
+         role="button"
+         [attr.aria-pressed]="selected === team.shortName"
+         [attr.aria-label]="team.name"
+         tabindex="0"
+         (keydown.enter)="select(team.shortName)"
+         (keydown.space)="select(team.shortName); $event.preventDefault()">
+      <img [src]="team.logo" [alt]="team.name" class="team-logo" *ngIf="team.logo">
+      <span class="team-name">{{ team.shortName }}</span>
+      <mat-icon class="check-icon" *ngIf="selected === team.shortName">check_circle</mat-icon>
+    </div>
+    <div *ngIf="showNoResult"
+         class="team-card no-result-card"
+         [class.selected]="selected === 'no_result'"
+         (click)="select('no_result')"
+         role="button"
+         [attr.aria-pressed]="selected === 'no_result'"
+         tabindex="0"
+         (keydown.enter)="select('no_result')"
+         (keydown.space)="select('no_result'); $event.preventDefault()">
+      <mat-icon class="no-result-icon">block</mat-icon>
+      <span class="team-name">No Result</span>
+      <mat-icon class="check-icon" *ngIf="selected === 'no_result'">check_circle</mat-icon>
+    </div>
+  </div>
+</div>

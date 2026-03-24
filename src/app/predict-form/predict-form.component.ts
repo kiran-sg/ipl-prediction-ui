@@ -1,25 +1,26 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatInputModule } from '@angular/material/input';
-import { MatSelectModule } from '@angular/material/select';
-import { Match } from '../models/match.model';
-import { Team } from '../models/team.model';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { Match } from '../models/match.model';
+import { Team } from '../models/team.model';
 import { CommonService } from '../common.service';
 import { Player } from '../models/player.model';
 import { isMatchTimeBelowSixtyMins } from '../utils/common-utils';
 import { PredictedMatch } from '../models/predicted-match.model';
 import { Router } from '@angular/router';
+import { TeamService } from '../team.service';
+import { TeamSelectorComponent } from '../shared/team-selector/team-selector.component';
+import { ScoreSelectorComponent } from '../shared/score-selector/score-selector.component';
+import { PlayerSelectorComponent } from '../shared/player-selector/player-selector.component';
 
 @Component({
   selector: 'app-predict-form',
   imports: [
     CommonModule,
-    MatSelectModule,
-    MatInputModule,
-    MatFormFieldModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    TeamSelectorComponent,
+    ScoreSelectorComponent,
+    PlayerSelectorComponent
   ],
   templateUrl: './predict-form.component.html',
   styleUrl: './predict-form.component.scss'
@@ -28,19 +29,19 @@ export class PredictFormComponent implements OnInit {
   teams!: Team[];
   players: Player[] = [];
   firstInnScoreOptions = [
-    '< 100','100 - 130','131 - 160','161 - 180','181 - 200','> 200'
-  ]
+    '< 100', '100 - 130', '131 - 160', '161 - 180', '181 - 200', '> 200'
+  ];
   predictForm!: FormGroup;
 
   @Input() matchDetails!: Match;
   @Output() formSubmitted = new EventEmitter<PredictedMatch>();
 
   constructor(
-    private fb: FormBuilder, 
+    private fb: FormBuilder,
     private service: CommonService,
-    private router: Router, 
-  ) {
-  }
+    private router: Router,
+    private teamService: TeamService,
+  ) {}
 
   ngOnInit(): void {
     this.setPredictForm();
@@ -52,12 +53,10 @@ export class PredictFormComponent implements OnInit {
 
   validateUser() {
     if (!this.predictForm.value.userId) {
-      console.error('Unauthorized access - redirecting to login');
       alert('Login session expired. Please login again.');
       this.formSubmitted.emit(undefined);
-      sessionStorage.removeItem('userId');
+      localStorage.removeItem('userId');
       this.router.navigate(['/login']);
-      return;
     }
   }
 
@@ -71,8 +70,8 @@ export class PredictFormComponent implements OnInit {
       }
       if (data.status && data.prediction !== null) {
         this.updateForm(data.prediction);
-      } 
-    })
+      }
+    });
   }
 
   onSubmit(): void {
@@ -98,13 +97,13 @@ export class PredictFormComponent implements OnInit {
       mostRunsScorerPredicted: prediction.mostRunsScorerPredicted,
       mostWicketsTakerPredicted: prediction.mostWicketsTakerPredicted,
       momPredicted: prediction.momPredicted,
-    })
+    });
   }
 
   setPredictForm() {
     this.predictForm = this.fb.group({
       predictionId: [''],
-      userId: [sessionStorage.getItem('userId'), [Validators.required]],
+      userId: [localStorage.getItem('userId'), [Validators.required]],
       matchId: [this.matchDetails?.matchNo, Validators.required],
       tossPredicted: ['', Validators.required],
       firstInnScorePredicted: ['', Validators.required],
@@ -120,41 +119,31 @@ export class PredictFormComponent implements OnInit {
       {
         id: 1,
         name: this.matchDetails?.home,
-        logo: this.matchDetails?.homeLogo,
-        shortName: this.matchDetails.home
+        logo: this.teamService.getLogo(this.matchDetails.home),
+        shortName: this.teamService.getShortName(this.matchDetails.home)
       },
       {
         id: 2,
         name: this.matchDetails?.away,
-        logo: this.matchDetails?.awayLogo,
-        shortName: this.matchDetails.away
+        logo: this.teamService.getLogo(this.matchDetails.away),
+        shortName: this.teamService.getShortName(this.matchDetails.away)
       }
-    ]
+    ];
   }
 
   setPlayers(): void {
-    const teamNames = this.teams.map(team => team.name);
+    const teamNames = this.teams.map(team => team.shortName);
     this.service.getPlayersByTeam(teamNames).subscribe({
       next: (data: Player[]) => {
-        this.players = data.map((player: Player) => {
-          return {
-            ...player,
-            displayValue: player.playerName + ' - ' + player.category + ' - ' + player.team + ''
-          }
-        });
-        console.log("this.players", this.players);
+        this.players = data.map((player: Player) => ({
+          ...player,
+          displayValue: player.playerName + ' - ' + player.category + ' - ' + player.team
+        }));
       }
     });
   }
 
-  getUser(): string {
-    const userId = sessionStorage.getItem('userId');
-    if (userId) {
-      return userId;
-    } else {
-      this.router.navigate(['/login']);
-      return '';
-    }
+  onSelect(field: string, value: string): void {
+    this.predictForm.get(field)?.setValue(value);
   }
-
 }

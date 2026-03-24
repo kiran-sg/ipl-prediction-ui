@@ -7,13 +7,13 @@ import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { PredictDialogComponent } from '../predict-dialog/predict-dialog.component';
 import { Match } from '../models/match.model';
 import { CommonService } from '../common.service';
-import { TeamLogo } from '../enums/team-logo';
 import { CustomDatePipe } from '../custom-date.pipe';
 import { isMatchTimeBelowSixtyMins, isMatchToday, TOURNAMENT_PREDICTION_CLOSING_TIME } from '../utils/common-utils';
 import { PredictionsDialogComponent } from '../predictions-dialog/predictions-dialog.component';
 import { Overlay } from '@angular/cdk/overlay';
 import { TournamentPredictionsDialogComponent } from '../tournament-predictions-dialog/tournament-predictions-dialog.component';
 import { MatIconModule } from '@angular/material/icon';
+import { TeamService } from '../team.service';
 
 @Component({
   selector: 'app-home',
@@ -43,8 +43,9 @@ export class HomeComponent {
     private service: CommonService, 
     private overlay: Overlay,
     private datePipe: DatePipe,
+    private teamService: TeamService,
   ) {
-    this.fetchUpcomingMatches();
+    this.teamService.loadTeams().subscribe(() => this.fetchUpcomingMatches());
   }
 
   ngOnInit() {
@@ -62,8 +63,10 @@ export class HomeComponent {
       return;
     }
     const dialogRef = this.dialog.open(PredictDialogComponent, {
-      width: '500px', // Initial width
-      height: 'auto', // Initial height
+      width: '80vw',
+      maxWidth: '900px',
+      height: '85vh',
+      disableClose: true,
       data: { match }
     });
   
@@ -76,11 +79,11 @@ export class HomeComponent {
 
   openPreviousPredictionsDialog(): void {
     const dialogRef = this.dialog.open(PredictionsDialogComponent, {
-      //width: '50vw', // Initial width
-      height: 'auto', // Initial height
+      height: 'auto',
       maxWidth: '80vw',
       maxHeight: '700vw',
       autoFocus: false,
+      disableClose: true,
       scrollStrategy: this.overlay.scrollStrategies.block(),
       data: { source: 'user' }
     });
@@ -92,13 +95,18 @@ export class HomeComponent {
 
   openTournamentPredictionDialog(): void {
     const dialogRef = this.dialog.open(TournamentPredictionsDialogComponent, {
-      width: '500px', // Initial width
-      height: 'auto', // Initial height
+      width: '500px',
+      height: 'auto',
+      disableClose: true,
     });
   
     dialogRef.afterClosed().subscribe(result => {
       
     });
+  }
+
+  private getTeamLogo(teamName: string): string {
+    return this.teamService.getLogo(teamName);
   }
 
   fetchUpcomingMatches(): void {
@@ -114,8 +122,8 @@ export class HomeComponent {
           return {
             ...match,
             isLocked: isMatchTimeBelowSixtyMins(match.dateTime),
-            homeLogo: TeamLogo[match.home as keyof typeof TeamLogo],
-            awayLogo: TeamLogo[match.away as keyof typeof TeamLogo],
+            homeLogo: this.getTeamLogo(match.home),
+            awayLogo: this.getTeamLogo(match.away),
             isToday: isMatchToday(match.dateTime),
             predictionLockingTime: this.datePipe.transform(predictionLockingTime, 'hh:mm a') || '',
             name: match.matchNo === '71' ? 'Qualifier 1' :
@@ -137,14 +145,16 @@ export class HomeComponent {
     const matchIds = this.matches.map((match: Match) => match.matchNo);
     this.service.getPredictionsForUserByMatches(matchIds).subscribe({
       next: (data: any) => {
-        console.log('Predictions:', data);
+        const predictions = data.predictions || [];
+        console.log('Matches before merging predictions:', this.matches);
         this.matches = this.matches.map((match: Match) => {
-          const prediction = data.predictions.find((pred: any) => pred.matchId === match.matchNo);
+          const prediction = predictions.find((pred: any) => pred.matchId === match.matchNo);
           return {
             ...match,
-            isPredicted: prediction,
+            isPredicted: !!prediction,
           };
         });
+        console.log('Matches after merging predictions:', this.matches);
       },
       error: (error) => {
         console.error('Error fetching predictions:', error);

@@ -1,0 +1,17 @@
+<div class="selector-section">
+  <div class="section-label">{{ label }}</div>
+  <div class="score-cards">
+    <div *ngFor="let option of options"
+         class="score-card"
+         [class.selected]="selected === option"
+         (click)="select(option)"
+         role="button"
+         [attr.aria-pressed]="selected === option"
+         tabindex="0"
+         (keydown.enter)="select(option)"
+         (keydown.space)="select(option); $event.preventDefault()">
+      <span class="score-value">{{ option }}</span>
+      <mat-icon class="check-icon" *ngIf="selected === option">check_circle</mat-icon>
+    </div>
+  </div>
+</div>

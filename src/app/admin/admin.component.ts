@@ -16,7 +16,8 @@ import { PredictionsDialogComponent } from '../predictions-dialog/predictions-di
 import { Overlay } from '@angular/cdk/overlay';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { CommonModule } from '@angular/common';
-import { User } from '../enums/user';
+
+import { TeamService } from '../team.service';
 
 export interface MatchData {
   matchNo: string;
@@ -59,10 +60,11 @@ export class AdminComponent {
   constructor(
     private service: CommonService, 
     private customDatePipe: CustomDatePipe,
-    private overlay: Overlay
+    private overlay: Overlay,
+    private teamService: TeamService
   ) {
     this.dataSource = new MatTableDataSource(this.matches);
-    this.fetchMatches();
+    this.teamService.loadTeams().subscribe(() => this.fetchMatches());
   }
 
   ngAfterViewInit() {
@@ -111,14 +113,15 @@ export class AdminComponent {
   }
 
   isSuperAdmin(): boolean {
-    const userId = sessionStorage.getItem('userId');
-    return userId === User.SUPER_ADMIN;
+    return true;
   }
 
   openMatchResultDialog(match: MatchData): void {
     const dialogRef = this.dialog.open(MatchResultDialogComponent, {
-      width: '500px', // Initial width
-      height: 'auto', // Initial height
+      width: '80vw',
+      maxWidth: '900px',
+      height: '85vh',
+      disableClose: true,
       data: { match }
     });
   
@@ -129,11 +132,11 @@ export class AdminComponent {
 
   openPredictionsDialog(match: MatchData): void {
     const dialogRef = this.dialog.open(PredictionsDialogComponent, {
-      //width: '50vw', // Initial width
-      height: 'auto', // Initial height
+      height: 'auto',
       maxWidth: '80vw',
       maxHeight: '700vw',
       autoFocus: false,
+      disableClose: true,
       scrollStrategy: this.overlay.scrollStrategies.block(),
       data: { match, source: 'admin' }
     });

@@ -1,7 +1,8 @@
 .navbar {
-  padding: 10px;
-  background-color: color(srgb 0.06 0.09 0.17);
+  padding: 12px 16px;
+  background: linear-gradient(135deg, #0d1b3e 0%, #1a378b 60%, #3f51b5 100%);
   position: relative;
+  box-shadow: 0 2px 12px rgba(13, 27, 62, 0.4);
 }
 
 .container {
@@ -13,19 +14,31 @@
 
 .nav-links {
   display: flex;
-  gap: 10px;
+  gap: 4px;
   margin-left: 20px;
 }
 
 .nav-links a {
   text-decoration: none;
   text-transform: uppercase;
-  transition: color 0.3s ease;
-  color: white;
+  color: rgba(255, 255, 255, 0.75);
+  font-weight: 600;
+  font-size: 0.9rem;
+  letter-spacing: 1px;
+  padding: 6px 16px;
+  border-radius: 20px;
+  transition: all 0.25s ease;
+}
+
+.nav-links a:hover {
+  color: #fff;
+  background: rgba(255, 255, 255, 0.12);
 }
 
 .nav-links a.active {
-  font-weight: bold;
+  color: #fff;
+  background: rgba(255, 255, 255, 0.2);
+  box-shadow: 0 0 8px rgba(255, 255, 255, 0.15);
 }
 
 .ipl-logo {
@@ -41,19 +54,34 @@
   flex-direction: column;
   text-align: right;
   margin-left: auto;
-  color: white;
-  //font-weight: bold;
+  color: rgba(255, 255, 255, 0.85);
   margin-right: 15px;
 }
 
 .powered-text {
-  font-size: 0.7rem; 
+  font-size: 0.7rem;
   text-transform: uppercase;
+  opacity: 0.7;
 }
 
 .fuel-up-text {
   font-size: 1rem;
   text-transform: uppercase;
+  font-weight: 600;
+}
+
+.logout-button {
+  color: rgba(255, 255, 255, 0.8);
+  margin-left: 8px;
+  transition: color 0.2s;
+
+  &:hover {
+    color: #fff;
+  }
+}
+
+.logout-link {
+  color: #d32f2f;
 }
 
 .menu-button {
@@ -61,20 +89,18 @@
   color: white;
 }
 
-/* Ensure the sidenav has a higher z-index */
 .mobile-sidenav {
   background-color: white;
   width: 250px;
-  z-index: 1000; /* Increase z-index to ensure it appears on top */
+  z-index: 1000;
 }
 
-/* Ensure the backdrop covers the content */
 .mat-sidenav-container {
-  z-index: 999; /* Ensure the backdrop is below the sidenav */
+  z-index: 999;
 }
 
 .mat-sidenav-backdrop {
-  z-index: 998; /* Ensure the backdrop covers the content */
+  z-index: 998;
 }
 
 .mobile-menu {
@@ -84,16 +110,28 @@
 }
 
 .mobile-menu a {
-  color: black;
+  color: #1a378b;
   text-decoration: none;
-  margin: 8px 0;
+  margin: 4px 0;
+  padding: 10px 16px;
+  border-radius: 8px;
+  font-weight: 500;
+  transition: background 0.2s;
 }
 
 .mobile-menu a:hover {
-  color: #3f51b5;
+  background: #e8eaf6;
 }
 
-/* Responsive Styles */
+.mobile-menu a.active {
+  background: #e8eaf6;
+  font-weight: 700;
+}
+
+.mobile-menu .logout-link {
+  color: #d32f2f;
+}
+
 @media (max-width: 768px) {
   .nav-links {
     display: none;
@@ -103,7 +141,11 @@
     display: block;
   }
 
+  .logout-button {
+    display: none;
+  }
+
   .powered-by {
-    display: none; /* Hide text on smaller screens */
+    display: none;
   }
 }

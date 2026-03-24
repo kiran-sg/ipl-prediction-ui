@@ -18,6 +18,7 @@ import { MatListModule } from '@angular/material/list';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatchResult } from '../models/match-result';
 import { MatGridListModule } from '@angular/material/grid-list';
+import { TeamService } from '../team.service';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { Router } from '@angular/router';
 
@@ -68,6 +69,7 @@ export class PredictionsDialogComponent {
     private adminService: AdminService,
     private router: Router,
     private dialogRef: MatDialogRef<PredictionsDialogComponent>,
+    private teamService: TeamService,
   ) {
     this.matchDetails = data.match;
     this.source = data.source;
@@ -85,12 +87,12 @@ export class PredictionsDialogComponent {
   }
 
   validateUser() {
-    const userId = sessionStorage.getItem('userId');
+    const userId = localStorage.getItem('userId');
     if (!userId) {
       console.error('Unauthorized access - redirecting to login');
       alert('Login session expired. Please login again.');
       this.dialogRef.close();
-      sessionStorage.removeItem('userId');
+      localStorage.removeItem('userId');
       this.router.navigate(['/login']);
       return;
     }
@@ -165,7 +167,7 @@ export class PredictionsDialogComponent {
   }
 
   getPlayers(): void {
-    const teamNames = this.source === 'admin' ? this.teams.map(team => team.name) : [];
+    const teamNames = this.source === 'admin' ? this.teams.map(team => team.shortName) : [];
     this.service.getPlayersByTeam(teamNames).subscribe({
       next: (data: Player[]) => {
         this.players = data.map((player: Player) => {
@@ -194,14 +196,14 @@ export class PredictionsDialogComponent {
       {
         id: 1,
         name: this.matchDetails?.home,
-        logo: '',
-        shortName: this.matchDetails.home
+        logo: this.teamService.getLogo(this.matchDetails.home),
+        shortName: this.teamService.getShortName(this.matchDetails.home)
       },
       {
         id: 2,
         name: this.matchDetails?.away,
-        logo: '',
-        shortName: this.matchDetails.away
+        logo: this.teamService.getLogo(this.matchDetails.away),
+        shortName: this.teamService.getShortName(this.matchDetails.away)
       }
     ]
   }

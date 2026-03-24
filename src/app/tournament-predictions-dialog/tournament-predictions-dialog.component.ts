@@ -21,6 +21,7 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { map, Observable, startWith } from 'rxjs';
 import { MatIconModule } from '@angular/material/icon';
 import { isTournamentPredictionClosed, TOURNAMENT_PREDICTION_CLOSING_TIME } from '../utils/common-utils';
+import { TeamService } from '../team.service';
 
 @Component({
   selector: 'app-tournament-predictions-dialog',
@@ -43,8 +44,8 @@ export class TournamentPredictionsDialogComponent {
   
   dialogWidth: string = '500px'; // Default width
   dialogHeight: string = 'auto'; // Default height
-  userId: string = sessionStorage.getItem('userId') || '';
-  teams: string[] = ['CSK', 'MI', 'RCB', 'KKR', 'SRH', 'DC', 'GT', 'LSG', 'RR', 'PBKS'];
+  userId: string = localStorage.getItem('userId') || '';
+  teams: string[] = [];
   players: Player[] = [];
   playerNames: string[] = [];
   tournamentPredictionForm!: FormGroup;
@@ -69,10 +70,12 @@ export class TournamentPredictionsDialogComponent {
     private dialogRef: MatDialogRef<TournamentPredictionsDialogComponent>,
     private service: CommonService,
     private router: Router, 
-    private fb: FormBuilder, 
+    private fb: FormBuilder,
+    private teamService: TeamService,
   ) {}
 
   ngOnInit(): void {
+    this.teams = this.teamService.getAllShortNames();
     this.lockPrediction = isTournamentPredictionClosed();
     this.updateCountdown();
     this.countdownInterval = setInterval(() => this.updateCountdown(), 1000);
@@ -141,7 +144,7 @@ export class TournamentPredictionsDialogComponent {
   setTournamentPredictionForm() {
     this.tournamentPredictionForm = this.fb.group({
       predictionId: [],
-      userId: [sessionStorage.getItem('userId'), [Validators.required]],
+      userId: [localStorage.getItem('userId'), [Validators.required]],
       orangeCapPredicted: [''],
       purpleCapPredicted: [''],
       emergingPlayerPredicted: [''],

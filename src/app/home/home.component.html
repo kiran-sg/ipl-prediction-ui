@@ -1,5 +1,7 @@
 <div class="prediction-container">
-  <h1 class="prediction-heading">IPL Prediction Contest</h1>
+  <div class="page-banner">
+    <h1 class="banner-title">🏏 IPL Prediction Contest</h1>
+  </div>
   <!-- <div class="prediction-row">
     <button mat-fab extended class="tournament-prediction" 
         (click)="openTournamentPredictionDialog()">
@@ -44,6 +46,9 @@
           <p class="match-date">{{ match.dateTime | customDate }}</p>
         </mat-card-content>
         <mat-card-actions class="match-actions">
+          <div *ngIf="!match.isLocked && match.isToday" class="locks-at-badge">
+            🔒 Predictions lock at {{ match.predictionLockingTime }} IST
+          </div>
           <button mat-flat-button 
             [disabled]="match.isLocked || match.home === 'TBC' || match.away === 'TBC'" 
             class="predict-match-button"
@@ -52,9 +57,6 @@
             <div class="button-content">
               <div class="text-column">
                 <span class="main-text">Predict Match</span>
-                <span class="closing-text" *ngIf="!match.isLocked && match.isToday">
-                  locks at {{ match.predictionLockingTime }} IST
-                </span>
               </div>
             </div>
           </button>
@@ -62,7 +64,7 @@
       </mat-card>
     </ng-container>
   </div>
-  <div class="no-matches-banner">
-    🏁 IPL 2025 has ended in style! Thanks for participating in the FUEL UP Prediction Contest.
+  <div class="no-matches-banner" *ngIf="matches.length === 0">
+    🏏 No upcoming matches at the moment. Stay tuned!
   </div>
 </div>

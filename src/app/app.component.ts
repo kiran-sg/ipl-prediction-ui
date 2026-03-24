@@ -3,6 +3,7 @@ import { RouterOutlet } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { NavbarComponent } from './navbar/navbar.component';
 import { LoadingComponent } from './loading/loading.component';
+import { AuthService } from './auth.service';
 
 @Component({
   selector: 'app-root',
@@ -17,4 +18,5 @@ import { LoadingComponent } from './loading/loading.component';
 })
 export class AppComponent {
   title = 'ipl-prediction-ui';
+  constructor(public authService: AuthService) {}
 }

@@ -1,0 +1,56 @@
+<div class="selector-section">
+  <div class="section-label">{{ label }}</div>
+
+  <!-- Selected player chip -->
+  <div class="selected-chip" *ngIf="getSelectedPlayer() as player">
+    <img [src]="player.imageUrl" [alt]="player.playerName" class="chip-img"
+         (error)="$any($event.target).src='assets/ipl/tbc.png'">
+    <span class="chip-name">{{ player.playerName }}</span>
+    <span class="chip-team">{{ player.team }}</span>
+  </div>
+
+  <!-- Category filter chips -->
+  <div class="category-filters">
+    <mat-chip-set>
+      <mat-chip *ngFor="let cat of allCategories"
+                [highlighted]="isCategorySelected(cat)"
+                (click)="toggleCategory(cat)">
+        {{ cat }}
+      </mat-chip>
+    </mat-chip-set>
+    <button class="clear-btn" *ngIf="selectedCategories.length > 0" (click)="clearFilters()">
+      <mat-icon>clear</mat-icon> Clear
+    </button>
+  </div>
+
+  <!-- Search -->
+  <mat-form-field appearance="outline" class="search-field">
+    <mat-icon matPrefix>search</mat-icon>
+    <input matInput placeholder="Search player..." [(ngModel)]="searchText" (input)="filter()">
+  </mat-form-field>
+
+  <!-- Player grid -->
+  <div class="player-grid">
+    <div *ngFor="let player of filteredPlayers"
+         class="player-card"
+         [class.selected]="selected === player.playerNo"
+         (click)="select(player.playerNo)"
+         role="button"
+         [attr.aria-pressed]="selected === player.playerNo"
+         [attr.aria-label]="player.playerName"
+         tabindex="0"
+         (keydown.enter)="select(player.playerNo)"
+         (keydown.space)="select(player.playerNo); $event.preventDefault()">
+      <img [src]="player.imageUrl" [alt]="player.playerName" class="player-img"
+           (error)="$any($event.target).src='assets/ipl/tbc.png'">
+      <div class="player-info">
+        <span class="player-name">{{ player.playerName }}</span>
+        <span class="player-team">{{ player.team }}</span>
+      </div>
+      <mat-icon class="check-icon" *ngIf="selected === player.playerNo">check_circle</mat-icon>
+    </div>
+  </div>
+  <div class="no-results" *ngIf="filteredPlayers.length === 0">
+    No players found
+  </div>
+</div>

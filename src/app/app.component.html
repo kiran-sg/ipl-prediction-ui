@@ -1,6 +1,8 @@
 <div class="app-container">
   <div class="main-content">
-    <app-navbar></app-navbar>
+    @if (authService.isLoggedIn) {
+      <app-navbar></app-navbar>
+    }
     <div class="content-container">
       <router-outlet></router-outlet>
     </div>
@@ -13,4 +15,3 @@
   </footer>
   <app-loading></app-loading>
 </div>
-  

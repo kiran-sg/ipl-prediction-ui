@@ -1,89 +1,243 @@
-.leaderboard-title {
-  text-transform: uppercase;
-  color: #fff;
-  font-size: 20px;
-  margin-bottom: 15px;
-  letter-spacing: 1px;
+.leaderboard-page {
+  max-width: 700px;
+  margin: 0 auto;
+  padding: 0 16px 32px;
 }
 
-.card-container {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 16px;
-  padding: 16px;
+/* ── Banner ── */
+.leaderboard-banner {
   position: relative;
-  z-index: 1; /* Lower z-index to ensure it stays below the sidenav */
+  text-align: center;
+  margin-bottom: 8px;
+  overflow: hidden;
+  border-radius: 0 0 16px 16px;
+  background: linear-gradient(135deg, #0d1b3e 0%, #1a378b 60%, #3f51b5 100%);
+  padding: 20px 16px;
 }
 
-.leaderboard-card {
-  flex: 1 1 100%; /* 1 card per row on mobile */
-  box-sizing: border-box;
-  background-color: #faf9fd; /* Card background */
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  padding: 16px;
+.banner-title {
+  margin: 8px 0 0;
+  color: #fff;
+  font-size: 1.6rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+
+/* ── Tabs ── */
+.location-tabs {
+  margin-top: 12px;
+}
+
+.tab-content {
+  padding: 16px 0;
+}
+
+/* ── Your Rank Card ── */
+.your-rank-card {
+  background: linear-gradient(135deg, #1a378b, #3f51b5);
+  border-radius: 14px;
+  padding: 16px 20px;
+  margin-bottom: 20px;
+  color: #fff;
+  box-shadow: 0 4px 20px rgba(26, 55, 139, 0.35);
+}
+
+.your-rank-label {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  opacity: 0.8;
+  margin-bottom: 8px;
+}
+
+.your-rank-body {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.your-rank-position .medal.large {
+  font-size: 2.4rem;
+}
+
+.your-rank-position .rank-number {
+  font-size: 2rem;
+  font-weight: 800;
+  opacity: 0.95;
+}
+
+.your-rank-info {
   display: flex;
   flex-direction: column;
-  //justify-content: space-between;
-  min-height: 350px;
 }
 
-.leaderboard-header {
+.your-rank-name {
+  font-size: 1.15rem;
+  font-weight: 600;
+}
+
+.your-rank-points {
+  font-size: 0.9rem;
+  opacity: 0.85;
+}
+
+/* ── Podium ── */
+.podium {
   display: flex;
   justify-content: center;
+  align-items: flex-end;
+  gap: 12px;
+  margin-bottom: 24px;
+  padding: 0 8px;
+}
+
+.podium-item {
+  display: flex;
+  flex-direction: column;
   align-items: center;
+  flex: 1;
+  max-width: 180px;
+  transition: transform 0.2s;
+}
+
+.podium-item:hover {
+  transform: translateY(-4px);
+}
+
+.podium-medal {
+  font-size: 2.2rem;
+  margin-bottom: 6px;
+}
+
+.podium-bar {
+  width: 100%;
+  border-radius: 12px 12px 8px 8px;
+  padding: 14px 8px 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
   text-align: center;
-  background-size: cover;
-  background-position: center;
-  padding: 16px;
-  border-radius: 8px 8px 0 0;
-  margin-bottom: 0; /* Remove default margin */
-  padding-bottom: 0; /* Remove default padding */
-  background-color: #11141c;
-  background-image: url("/assets/ipl/footer-sparkel-top.svg");
-  background-position: left top,right bottom 47px;
-  background-repeat: no-repeat,no-repeat;
 }
 
-.logo-container {
-  min-height: 25vh;
-  width: 100%;
-  overflow: hidden;
+.rank-1 .podium-bar {
+  background: linear-gradient(180deg, #ffd700 0%, #f5c842 100%);
+  color: #3e2c00;
+  min-height: 110px;
+  box-shadow: 0 4px 16px rgba(255, 215, 0, 0.4);
 }
 
-mat-card-content {
-  margin-top: 0; /* Remove default margin */
-  padding-top: 0; /* Remove default padding */
+.rank-2 .podium-bar {
+  background: linear-gradient(180deg, #c0c0c0 0%, #a8a8a8 100%);
+  color: #333;
+  min-height: 90px;
+  box-shadow: 0 4px 12px rgba(192, 192, 192, 0.4);
 }
 
-/* Ensure tables are aligned equally */
-mat-table {
-  width: 100%;
-  table-layout: fixed; /* Ensures equal column width */
+.rank-3 .podium-bar {
+  background: linear-gradient(180deg, #cd7f32 0%, #b8722e 100%);
+  color: #fff;
+  min-height: 74px;
+  box-shadow: 0 4px 12px rgba(205, 127, 50, 0.4);
 }
 
-mat-header-cell, mat-cell {
-  text-align: center; /* Center-align table content */
-  padding: 8px; /* Add padding for better spacing */
+.podium-name {
+  font-weight: 700;
+  font-size: 0.85rem;
+  word-break: break-word;
 }
 
-/* Responsive styles for tablets (2 cards per row) */
-@media (min-width: 768px) {
-  .leaderboard-card {
-    flex: 1 1 calc(50% - 32px); /* 2 cards per row */
+.podium-points {
+  font-size: 0.8rem;
+  font-weight: 600;
+  opacity: 0.85;
+}
+
+.podium-item.is-current-user .podium-bar {
+  outline: 3px solid #1a378b;
+  outline-offset: 2px;
+}
+
+/* ── Rank List ── */
+.rank-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.rank-row {
+  display: flex;
+  align-items: center;
+  padding: 12px 16px;
+  background: #f9f9fc;
+  border-radius: 10px;
+  transition: background 0.15s;
+}
+
+.rank-row:hover {
+  background: #eef0f8;
+}
+
+.rank-row.is-current-user {
+  background: linear-gradient(90deg, #e8eaf6, #c5cae9);
+  font-weight: 600;
+  border-left: 4px solid #1a378b;
+}
+
+.rank-pos {
+  width: 44px;
+  font-weight: 700;
+  font-size: 0.95rem;
+  color: #555;
+  flex-shrink: 0;
+}
+
+.rank-name {
+  flex: 1;
+  font-size: 0.95rem;
+}
+
+.rank-pts {
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: #1a378b;
+}
+
+/* ── Empty State ── */
+.empty-state {
+  text-align: center;
+  padding: 48px 16px;
+  color: #888;
+
+  mat-icon {
+    font-size: 48px;
+    width: 48px;
+    height: 48px;
+    opacity: 0.4;
+  }
+
+  p {
+    margin-top: 12px;
+    font-size: 0.95rem;
   }
 }
 
-/* Responsive styles for laptops (3 cards per row) */
-@media (min-width: 1024px) {
-  .leaderboard-card {
-    flex: 1 1 calc(33.333% - 32px); /* 3 cards per row */
+/* ── Responsive ── */
+@media (max-width: 480px) {
+  .podium-medal {
+    font-size: 1.6rem;
   }
-}
 
-/* Responsive styles for large screens (4 cards per row) */
-@media (min-width: 1440px) {
-  .leaderboard-card {
-    flex: 1 1 calc(25% - 32px); /* 4 cards per row */
+  .podium-bar {
+    padding: 10px 6px;
   }
+
+  .podium-name {
+    font-size: 0.75rem;
+  }
+
+  .rank-1 .podium-bar { min-height: 90px; }
+  .rank-2 .podium-bar { min-height: 74px; }
+  .rank-3 .podium-bar { min-height: 60px; }
 }

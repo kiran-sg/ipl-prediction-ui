@@ -1,11 +1,12 @@
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
-import { MatSidenavContainer, MatSidenavModule } from '@angular/material/sidenav';
+import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatToolbarModule } from '@angular/material/toolbar';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import { RouterModule } from '@angular/router';
-import { User } from '../enums/user';
+import { AuthService } from '../auth.service';
 
 @Component({
   selector: 'app-navbar',
@@ -14,6 +15,7 @@ import { User } from '../enums/user';
     MatToolbarModule,
     MatIconModule,
     MatSidenavModule,
+    MatTooltipModule,
     RouterModule
   ],
   templateUrl: './navbar.component.html',
@@ -25,6 +27,7 @@ export class NavbarComponent {
 
   constructor(
     private breakpointObserver: BreakpointObserver,
+    public authService: AuthService
   ) {
     this.breakpointObserver.observe([Breakpoints.Handset])
       .subscribe(result => {
@@ -40,14 +43,8 @@ export class NavbarComponent {
     this.isMenuOpen = false;
   }
 
-  isAdmin(): boolean {
-    const userId = sessionStorage.getItem('userId');
-    return userId === User.ADMIN;
+  logout(): void {
+    this.closeMenu();
+    this.authService.logout();
   }
-
-  isSuperAdmin(): boolean {
-    const userId = sessionStorage.getItem('userId');
-    return userId === User.SUPER_ADMIN;
-  }
-
 }

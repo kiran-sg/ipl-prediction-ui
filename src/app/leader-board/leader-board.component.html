@@ -1,33 +1,71 @@
-<div class="card-container">
-  <ng-container *ngFor="let loc of locations">
-    <mat-card class="leaderboard-card">
-      <mat-card-header class="leaderboard-header">
-        <div mat-card-avatar></div>
-        <mat-card-title class="leaderboard-title">Leaderboard {{ loc.loc }} - TOP 5</mat-card-title> 
-      </mat-card-header>
-      <mat-card-content>
-        <div class="logo-container">
-          <table mat-table [dataSource]="loc.leaderBoard" class="mat-elevation-z8">
-            <ng-container matColumnDef="position">
-              <th mat-header-cell *matHeaderCellDef> Position </th>
-              <td mat-cell *matCellDef="let element"> {{element.position}} </td>
-            </ng-container>
-            <ng-container matColumnDef="userName">
-              <th mat-header-cell *matHeaderCellDef> Name </th>
-              <td mat-cell *matCellDef="let element"> {{element.userName}} </td>
-            </ng-container>
-            <!-- <ng-container matColumnDef="points">
-              <th mat-header-cell *matHeaderCellDef> Total Points </th>
-              <td mat-cell *matCellDef="let element"> {{element.totalPoints}} </td>
-            </ng-container>   -->
-            <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
-            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-          </table>   
+<div class="leaderboard-page">
+  <div class="leaderboard-banner">
+    <h1 class="banner-title">🏆 Leaderboard</h1>
+  </div>
+
+  <mat-tab-group class="location-tabs" animationDuration="300ms" mat-stretch-tabs="false">
+    @for (loc of locations; track loc.loc) {
+      <mat-tab [label]="loc.label">
+        <div class="tab-content">
+
+          <!-- Your Rank Card -->
+          @if (getUserRank(loc.leaderBoard); as myRank) {
+            <div class="your-rank-card">
+              <div class="your-rank-label">Your Standing</div>
+              <div class="your-rank-body">
+                <div class="your-rank-position">
+                  @if (myRank.position <= 3) {
+                    <span class="medal large">{{ getMedal(myRank.position) }}</span>
+                  } @else {
+                    <span class="rank-number">#{{ myRank.position }}</span>
+                  }
+                </div>
+                <div class="your-rank-info">
+                  <span class="your-rank-name">{{ myRank.userName }}</span>
+                  <span class="your-rank-points">{{ myRank.totalPoints }} pts</span>
+                </div>
+              </div>
+            </div>
+          }
+
+          <!-- Podium: Top 3 -->
+          @if (getTop3(loc.leaderBoard).length > 0) {
+            <div class="podium">
+              @for (entry of getTop3(loc.leaderBoard); track entry.userId) {
+                <div class="podium-item rank-{{ entry.position }}"
+                     [class.is-current-user]="entry.userId === currentUserId">
+                  <div class="podium-medal">{{ getMedal(entry.position) }}</div>
+                  <div class="podium-bar">
+                    <span class="podium-name">{{ entry.userName }}</span>
+                    <span class="podium-points">{{ entry.totalPoints }} pts</span>
+                  </div>
+                </div>
+              }
+            </div>
+          }
+
+          <!-- Rest of the board -->
+          @if (getRest(loc.leaderBoard).length > 0) {
+            <div class="rank-list">
+              @for (entry of getRest(loc.leaderBoard); track entry.userId) {
+                <div class="rank-row" [class.is-current-user]="entry.userId === currentUserId">
+                  <span class="rank-pos">#{{ entry.position }}</span>
+                  <span class="rank-name">{{ entry.userName }}</span>
+                  <span class="rank-pts">{{ entry.totalPoints }} pts</span>
+                </div>
+              }
+            </div>
+          }
+
+          @if (loc.leaderBoard.length === 0) {
+            <div class="empty-state">
+              <mat-icon>emoji_events</mat-icon>
+              <p>No standings yet. Predictions are being tallied!</p>
+            </div>
+          }
+
         </div>
-           
-      </mat-card-content>
-    </mat-card>
-  </ng-container>
+      </mat-tab>
+    }
+  </mat-tab-group>
 </div>
-  
-  

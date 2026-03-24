@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
-import { catchError, finalize, Observable, tap, throwError } from 'rxjs';
+import { catchError, finalize, Observable, throwError } from 'rxjs';
 import { environment } from '../environments/environment';
 import { PredictedMatch } from './models/predicted-match.model';
 import { LoadingService } from './loading.service';
@@ -26,12 +26,6 @@ export class CommonService {
     this.loadingService.show(); // Show loader
     const user = { userId, pwd };
     return this.http.post(`${this.baseUrl}/users/validate`, user).pipe(
-      tap((data: any) => {
-        if (data.validUser) {
-          sessionStorage.removeItem('userId');
-          sessionStorage.setItem('userId', userId);
-        }
-      }),
       finalize(() => this.loadingService.hide()) // Hide loader when the request completes
     );
   }
@@ -60,7 +54,7 @@ export class CommonService {
 
   getPredictionByMatchId(matchId: string): Observable<any> {
     this.loadingService.show(); // Show loader
-    const userId = sessionStorage.getItem('userId');
+    const userId = localStorage.getItem('userId');
     const body = { userId, matchId };
     return this.http.post(`${this.baseUrl}/predictions/match`, body).pipe(
       finalize(() => this.loadingService.hide()) // Hide loader when the request completes
@@ -77,7 +71,7 @@ export class CommonService {
           // Handle 401 Unauthorized error
           console.error('Unauthorized access - redirecting to login');
           this._snackBar.open(error.message, "Close");
-          sessionStorage.removeItem('userId');
+          localStorage.removeItem('userId');
           this.router.navigate(['/login']); // Redirect to login page
         }
         return throwError(() => error); // Re-throw the error for further handling
@@ -88,7 +82,7 @@ export class CommonService {
 
   getPredictionsByUserId(): Observable<any> {
     this.loadingService.show(); // Show loader
-    const userId = sessionStorage.getItem('userId');
+    const userId = localStorage.getItem('userId');
     return this.http.get(`${this.baseUrl}/predictions?user=${userId}`).pipe(
       finalize(() => this.loadingService.hide()) // Hide loader when the request completes
     );
@@ -96,7 +90,7 @@ export class CommonService {
 
   getPredictionsForUserByMatches(matchIds: string[]): Observable<any> {
     this.loadingService.show(); // Show loader
-    const userId = sessionStorage.getItem('userId');
+    const userId = localStorage.getItem('userId');
     const body = { userId, matchIds };
     return this.http.post(`${this.baseUrl}/predictions/user/matches`, body).pipe(
       finalize(() => this.loadingService.hide()) // Hide loader when the request completes
@@ -113,7 +107,7 @@ export class CommonService {
           // Handle 401 Unauthorized error
           console.error('Unauthorized access - redirecting to login');
           this._snackBar.open(error.message, "Close");
-          sessionStorage.removeItem('userId');
+          localStorage.removeItem('userId');
           this.router.navigate(['/login']); // Redirect to login page
         }
         if (error.status === 400 && error.error.message !== null) {
@@ -127,7 +121,7 @@ export class CommonService {
 
   getTournamentPredictionByUserId(): Observable<any> {
     this.loadingService.show(); // Show loader
-    const userId = sessionStorage.getItem('userId');
+    const userId = localStorage.getItem('userId');
     return this.http.get(`${this.baseUrl}/predictions/tournament?user=${userId}`).pipe(
       finalize(() => this.loadingService.hide()) // Hide loader when the request completes
     );
