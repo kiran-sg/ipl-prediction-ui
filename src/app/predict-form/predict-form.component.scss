@@ -3,3 +3,113 @@
   flex-direction: column;
   gap: 8px;
 }
+
+.surge-section {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background: linear-gradient(135deg, #1a1a2e, #16213e);
+  border: 2px solid #444;
+  border-radius: 10px;
+  padding: 10px 12px;
+  text-align: center;
+  transition: all 0.3s ease;
+
+  &.surge-active {
+    border-color: #f5a623;
+    box-shadow: 0 0 12px rgba(245, 166, 35, 0.4);
+    background: linear-gradient(135deg, #1a1a2e, #2a1a0e);
+  }
+}
+
+.surge-header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  margin-bottom: 4px;
+}
+
+.surge-icon {
+  font-size: 1rem;
+}
+
+.surge-title {
+  font-weight: 700;
+  font-size: 0.8rem;
+  color: #f5a623;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+.surge-badge {
+  background: #f5a623;
+  color: #1a1a2e;
+  font-size: 0.6rem;
+  font-weight: 700;
+  padding: 1px 6px;
+  border-radius: 8px;
+  text-transform: uppercase;
+}
+
+.surge-description {
+  color: #ccc;
+  font-size: 0.75rem;
+  margin: 0 0 8px;
+  line-height: 1.4;
+}
+
+.surge-toggle-btn {
+  background: transparent;
+  color: #f5a623;
+  border: 1.5px solid #f5a623;
+  border-radius: 20px;
+  padding: 5px 18px;
+  font-weight: 600;
+  font-size: 0.75rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+
+  &:hover:not(:disabled) {
+    background: rgba(245, 166, 35, 0.15);
+  }
+
+  &.active {
+    background: #f5a623;
+    color: #1a1a2e;
+    animation: surge-pulse 2s ease-in-out infinite;
+  }
+
+  &:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+  }
+}
+
+@keyframes surge-pulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(245, 166, 35, 0.5); }
+  50% { box-shadow: 0 0 12px 4px rgba(245, 166, 35, 0.3); }
+}
+
+@media (max-width: 600px) {
+  .surge-section {
+    padding: 6px 8px;
+    border-radius: 8px;
+  }
+
+  .surge-title {
+    font-size: 0.65rem;
+  }
+
+  .surge-description {
+    font-size: 0.65rem;
+    margin: 0 0 5px;
+  }
+
+  .surge-toggle-btn {
+    padding: 3px 12px;
+    font-size: 0.65rem;
+  }
+}

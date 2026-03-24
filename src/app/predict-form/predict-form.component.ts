@@ -12,6 +12,7 @@ import { TeamService } from '../team.service';
 import { TeamSelectorComponent } from '../shared/team-selector/team-selector.component';
 import { ScoreSelectorComponent } from '../shared/score-selector/score-selector.component';
 import { PlayerSelectorComponent } from '../shared/player-selector/player-selector.component';
+import { AuthService } from '../auth.service';
 
 @Component({
   selector: 'app-predict-form',
@@ -32,6 +33,7 @@ export class PredictFormComponent implements OnInit {
     '< 100', '100 - 130', '131 - 160', '161 - 180', '181 - 200', '> 200'
   ];
   predictForm!: FormGroup;
+  surgesRemaining = 3;
 
   @Input() matchDetails!: Match;
   @Output() formSubmitted = new EventEmitter<PredictedMatch>();
@@ -41,9 +43,11 @@ export class PredictFormComponent implements OnInit {
     private service: CommonService,
     private router: Router,
     private teamService: TeamService,
+    private authService: AuthService,
   ) {}
 
   ngOnInit(): void {
+    this.surgesRemaining = this.authService.surgesRemaining;
     this.setPredictForm();
     this.validateUser();
     this.setTeams();
@@ -97,6 +101,7 @@ export class PredictFormComponent implements OnInit {
       mostRunsScorerPredicted: prediction.mostRunsScorerPredicted,
       mostWicketsTakerPredicted: prediction.mostWicketsTakerPredicted,
       momPredicted: prediction.momPredicted,
+      surgeUsed: prediction.surgeUsed || false,
     });
   }
 
@@ -111,7 +116,17 @@ export class PredictFormComponent implements OnInit {
       mostRunsScorerPredicted: ['', Validators.required],
       mostWicketsTakerPredicted: ['', Validators.required],
       momPredicted: ['', Validators.required],
+      surgeUsed: [false],
     });
+  }
+
+  toggleSurge(): void {
+    const current = this.predictForm.get('surgeUsed')?.value;
+    this.predictForm.get('surgeUsed')?.setValue(!current);
+  }
+
+  get isSurgeActive(): boolean {
+    return this.predictForm.get('surgeUsed')?.value === true;
   }
 
   setTeams(): void {

@@ -1,9 +1,10 @@
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
-import { Component, inject, Inject } from '@angular/core';
+import { Component, inject, Inject, OnDestroy, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { CommonService } from '../common.service';
+import { AuthService } from '../auth.service';
 import { PredictDialogComponent } from '../predict-dialog/predict-dialog.component';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
@@ -41,7 +42,7 @@ export interface MatchData {
   templateUrl: './match-result-dialog.component.html',
   styleUrl: './match-result-dialog.component.scss'
 })
-export class MatchResultDialogComponent {
+export class MatchResultDialogComponent implements OnInit, OnDestroy {
   matchDetails!: MatchData;
   dialogWidth: string = '500px';
   dialogHeight: string = 'auto';
@@ -52,6 +53,8 @@ export class MatchResultDialogComponent {
   ];
   resultForm!: FormGroup;
   isMatchAbandoned: boolean = false;
+  sessionTimer = '';
+  private timerInterval: any;
 
   private _snackBar = inject(MatSnackBar);
 
@@ -64,11 +67,16 @@ export class MatchResultDialogComponent {
     private router: Router,
     private fb: FormBuilder,
     private teamService: TeamService,
+    private authService: AuthService,
   ) {
     this.matchDetails = data.match;
   }
 
   ngOnInit(): void {
+    this.sessionTimer = this.authService.getSessionRemainingText();
+    this.timerInterval = setInterval(() => {
+      this.sessionTimer = this.authService.getSessionRemainingText();
+    }, 1000);
     this.adjustScreen();
     this.setResultForm();
     this.setTeams();
@@ -202,5 +210,9 @@ export class MatchResultDialogComponent {
   resetResults() {
     ['tossWon', 'teamWon', 'playerOfTheMatch', 'mostRunsScorer', 'mostWicketsTaker', 'firstInnScore']
       .forEach(f => this.resultForm.get(f)?.setValue(''));
+  }
+
+  ngOnDestroy(): void {
+    clearInterval(this.timerInterval);
   }
 }

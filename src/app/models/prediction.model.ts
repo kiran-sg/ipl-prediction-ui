@@ -18,4 +18,5 @@ export interface Prediction {
     mostRunsScorerPredicted: string;
     mostWicketsTakerPredicted: string;
     points: number;
+    surgeUsed: boolean;
 }

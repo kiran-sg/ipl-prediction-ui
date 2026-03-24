@@ -1,41 +1,101 @@
- .login-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-    height: 100vh; /* Full viewport height */
-    width: 100vw; /* Full viewport width */
-    background-color: lightblue; /* Optional: for visibility */
-    padding: 20px; /* Optional: for spacing */
-    box-sizing: border-box; /* Ensure padding is included in width/height */
+.login-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  width: 100vw;
+  background-color: #11141c;
+  padding: 20px;
+  box-sizing: border-box;
+  position: relative;
+  overflow: hidden;
+
+  &::before, &::after {
+    content: '';
+    position: absolute;
+    width: 500px;
+    height: 500px;
+    background-size: contain;
+    background-repeat: no-repeat;
+    pointer-events: none;
   }
-  
+
+  &::before {
+    top: 0;
+    left: 0;
+    background-image: url('https://documents.iplt20.com/ipl/assets/images/footer-rounded_spiral-top.png');
+  }
+
+  &::after {
+    bottom: 0;
+    right: 0;
+    background-image: url('https://documents.iplt20.com/ipl/assets/images/footer-rounded_spiral-bottom.png');
+  }
+}
+
+.login-card {
+  width: 100%;
+  max-width: 400px;
+  padding: 32px;
+  border-radius: 16px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+  backdrop-filter: blur(8px);
+  background: rgba(255, 255, 255, 0.92);
+}
+
+.login-header {
+  text-align: center;
+  margin-bottom: 24px;
+}
+
+.login-logo {
+  width: 140px;
+  margin-bottom: 12px;
+}
+
+.login-header h2 {
+  margin: 0;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #1a378b;
+}
+
+.login-subtitle {
+  margin: 4px 0 0;
+  font-size: 0.9rem;
+  color: #777;
+}
+
+.full-width {
+  width: 100%;
+  margin-bottom: 8px;
+}
+
+.login-btn {
+  padding: 10px 0;
+  font-size: 1rem;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  border-radius: 8px;
+  margin-top: 8px;
+}
+
+@media (max-width: 600px) {
   .login-card {
-    width: 100%;
-    max-width: 400px; /* Limit card width */
-    padding: 24px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Add shadow */
-  }  
-  
-  .full-width {
-    width: 100%;
-    margin-bottom: 16px;
+    padding: 20px;
+    max-width: 300px;
   }
-  
-  .login-actions {
-    display: flex;
-    justify-content: space-between;
-    margin-top: 16px;
+
+  .login-logo {
+    width: 100px;
   }
-  
-  @media (max-width: 600px) {
-    .login-card {
-      padding: 16px;
-    }
-  
-    .login-actions {
-      flex-direction: column;
-      align-items: center;
-      gap: 8px;
-    }
+
+  .login-header h2 {
+    font-size: 1.2rem;
   }
+
+  .login-container::before, .login-container::after {
+    width: 200px;
+    height: 200px;
+  }
+}

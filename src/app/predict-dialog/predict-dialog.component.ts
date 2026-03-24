@@ -1,7 +1,7 @@
-import { Component, inject, Inject, ViewChild } from '@angular/core';
+import { Component, inject, Inject, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { PredictFormComponent } from "../predict-form/predict-form.component";
 import { MatButtonModule } from '@angular/material/button';
-import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialog, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { Match } from '../models/match.model';
 import { CommonModule } from '@angular/common';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
@@ -12,6 +12,8 @@ import { MatInputModule } from '@angular/material/input';
 import { CommonService } from '../common.service';
 import { Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { AuthService } from '../auth.service';
+import { ErrorDialogComponent } from '../shared/error-dialog/error-dialog.component';
 
 @Component({
   selector: 'app-predict-dialog',
@@ -28,13 +30,16 @@ import { MatSnackBar } from '@angular/material/snack-bar';
   styleUrl: './predict-dialog.component.scss',
   //changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class PredictDialogComponent {
+export class PredictDialogComponent implements OnInit, OnDestroy {
   matchDetails!: Match;
   dialogWidth: string = '500px'; // Default width
   dialogHeight: string = 'auto'; // Default height
+  sessionTimer = '';
+  private timerInterval: any;
 
 
   private _snackBar = inject(MatSnackBar);
+  private errorDialog = inject(MatDialog);
 
   @ViewChild(PredictFormComponent) predictFormComponent!: PredictFormComponent;
 
@@ -43,13 +48,18 @@ export class PredictDialogComponent {
     private breakpointObserver: BreakpointObserver,
     private dialogRef: MatDialogRef<PredictDialogComponent>,
     private service: CommonService,
-    private router: Router, 
+    private router: Router,
+    private authService: AuthService,
   ) {
     this.matchDetails = data.match;
     console.log(this.matchDetails);
   }
 
   ngOnInit(): void {
+    this.sessionTimer = this.authService.getSessionRemainingText();
+    this.timerInterval = setInterval(() => {
+      this.sessionTimer = this.authService.getSessionRemainingText();
+    }, 1000);
     this.breakpointObserver.observe([
       Breakpoints.Handset, // Small devices (phones)
       Breakpoints.Tablet, // Medium devices (tablets)
@@ -79,21 +89,28 @@ export class PredictDialogComponent {
     if (predictedMatch == undefined) {
       this.dialogRef.close();
     }
-    this.service.predictMatch(predictedMatch).subscribe((data) => {
-      if (data.invalidUser) {
-        //alert(data.message);
-        this.dialogRef.close(predictedMatch);
-        this._snackBar.open(data.message, "Close");
-        this.router.navigate(['/login']);
-        return;
-      }
-      if (data.status) {
-        //alert('Prediction submitted');
-        this.dialogRef.close(predictedMatch);
-        this._snackBar.open(data.message, "Close");
-      } else {
-        alert('Prediction failed');
-      }
+    this.service.predictMatch(predictedMatch).subscribe({
+      next: (data) => {
+        if (data.invalidUser) {
+          this.dialogRef.close(predictedMatch);
+          this._snackBar.open(data.message, "Close");
+          this.router.navigate(['/login']);
+          return;
+        }
+        if (data.status) {
+          if (data.surgesRemaining !== undefined && data.surgesRemaining !== null) {
+            this.authService.setSurgesRemaining(data.surgesRemaining);
+          }
+          this.dialogRef.close(predictedMatch);
+          this._snackBar.open(data.message, "Close");
+        } else {
+          this.errorDialog.open(ErrorDialogComponent, {
+            width: '340px',
+            data: { message: 'Prediction failed. Please try again.' },
+          });
+        }
+      },
+      error: () => {}
     });
   }
 
@@ -101,4 +118,7 @@ export class PredictDialogComponent {
     this._snackBar.open(message, action);
   }
 
+  ngOnDestroy(): void {
+    clearInterval(this.timerInterval);
+  }
 }

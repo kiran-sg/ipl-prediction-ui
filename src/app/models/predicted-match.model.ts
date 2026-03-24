@@ -8,4 +8,5 @@ export interface PredictedMatch {
     momPredicted: string;
     mostRunsScorerPredicted: string;
     mostWicketsTakerPredicted: string;
+    surgeUsed: boolean;
 }

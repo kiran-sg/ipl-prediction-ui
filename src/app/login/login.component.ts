@@ -46,7 +46,7 @@ export class LoginComponent {
       this.service.validateUser(userId, password).subscribe(
         (data: any) => {
           if (data.validUser) {
-            this.authService.login(userId, data.user?.isAdmin || false, data.user?.location);
+            this.authService.login(userId, data.user?.isAdmin || false, data.user?.location, data.user?.surgesRemaining);
             this.router.navigate([data.user?.isAdmin ? '/admin' : '/home']);
           } else {
             this.invalidPwd = true;

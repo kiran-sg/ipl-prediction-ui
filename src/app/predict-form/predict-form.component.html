@@ -1,4 +1,24 @@
 <form [formGroup]="predictForm" (ngSubmit)="onSubmit()" class="predict-form">
+
+  <!-- Surge Section -->
+  <div class="surge-section" [class.surge-active]="isSurgeActive">
+    <div class="surge-header">
+      <span class="surge-icon">⚡</span>
+      <span class="surge-title">SURGE MODE</span>
+      <span class="surge-badge">x2 Points</span>
+    </div>
+    <p class="surge-description">
+      Activate surge to double your points for this match.
+      You have <strong>{{ surgesRemaining }}</strong> surge{{ surgesRemaining !== 1 ? 's' : '' }} remaining.
+    </p>
+    <button type="button" class="surge-toggle-btn"
+      [class.active]="isSurgeActive"
+      [disabled]="surgesRemaining <= 0 && !isSurgeActive"
+      (click)="toggleSurge()">
+      {{ isSurgeActive ? '⚡ Surge Activated' : 'Activate Surge' }}
+    </button>
+  </div>
+
   <app-team-selector
     [teams]="teams"
     label="Toss Winner"

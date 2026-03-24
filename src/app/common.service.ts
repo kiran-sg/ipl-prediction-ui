@@ -6,7 +6,10 @@ import { PredictedMatch } from './models/predicted-match.model';
 import { LoadingService } from './loading.service';
 import { Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatDialog } from '@angular/material/dialog';
 import { TournamentPrediction } from './models/tournament-prediction.model';
+import { AuthService } from './auth.service';
+import { ErrorDialogComponent } from './shared/error-dialog/error-dialog.component';
 
 @Injectable({
   providedIn: 'root'
@@ -15,11 +18,13 @@ export class CommonService {
 
   private baseUrl = environment.apiUrl;
   private _snackBar = inject(MatSnackBar);
+  private dialog = inject(MatDialog);
 
   constructor(
     private http: HttpClient, 
     private loadingService: LoadingService,
-    private router: Router
+    private router: Router,
+    private authService: AuthService,
   ) { }
 
   validateUser(userId: string, pwd: string): Observable<any> {
@@ -62,21 +67,23 @@ export class CommonService {
   }
 
   predictMatch(predictedMatch: PredictedMatch): Observable<any> {
-    this.loadingService.show(); // Show loader
+    this.loadingService.show();
     return this.http.post(`${this.baseUrl}/predictions`, predictedMatch, {
       withCredentials: true,
     }).pipe(
       catchError((error) => {
         if (error.status === 401) {
-          // Handle 401 Unauthorized error
           console.error('Unauthorized access - redirecting to login');
-          this._snackBar.open(error.message, "Close");
+          this.showErrorDialog(error.message);
           localStorage.removeItem('userId');
-          this.router.navigate(['/login']); // Redirect to login page
+          this.router.navigate(['/login']);
         }
-        return throwError(() => error); // Re-throw the error for further handling
+        if (error.status === 400 && error.error?.message) {
+          this.showErrorDialog(error.error.message);
+        }
+        return throwError(() => error);
       }),
-      finalize(() => this.loadingService.hide()) // Hide loader when the request completes
+      finalize(() => this.loadingService.hide())
     );
   }
 
@@ -111,7 +118,7 @@ export class CommonService {
           this.router.navigate(['/login']); // Redirect to login page
         }
         if (error.status === 400 && error.error.message !== null) {
-          alert(error.error.message);// Redirect to login page
+          this.showErrorDialog(error.error.message);
         }
         return throwError(() => error); // Re-throw the error for further handling
       }),
@@ -125,6 +132,13 @@ export class CommonService {
     return this.http.get(`${this.baseUrl}/predictions/tournament?user=${userId}`).pipe(
       finalize(() => this.loadingService.hide()) // Hide loader when the request completes
     );
+  }
+
+  private showErrorDialog(message: string, title?: string): void {
+    this.dialog.open(ErrorDialogComponent, {
+      width: '340px',
+      data: { message, title },
+    });
   }
 
 }

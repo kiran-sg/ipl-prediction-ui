@@ -1,3 +1,4 @@
+<div class="session-banner" *ngIf="sessionTimer">Session expires in <strong>{{ sessionTimer }}</strong></div>
 <h2 mat-dialog-title>{{matchDetails.home + ' VS ' + matchDetails.away}}</h2>
 
   <mat-dialog-content class="mat-typography">
@@ -7,4 +8,3 @@
     <button mat-button mat-dialog-close>Cancel</button>
     <button mat-button cdkFocusInitial (click)="onPredictClick()">Predict</button>
   </mat-dialog-actions>
-
