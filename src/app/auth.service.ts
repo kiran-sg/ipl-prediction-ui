@@ -5,7 +5,7 @@ import { ErrorDialogComponent } from './shared/error-dialog/error-dialog.compone
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
-  private readonly SESSION_DURATION_MS = 2 * 60 * 1000; // 30 minutes
+  private readonly SESSION_DURATION_MS = 30 * 60 * 1000; // 30 minutes
   private sessionTimer: any;
 
   constructor(private router: Router, private dialog: MatDialog) {
