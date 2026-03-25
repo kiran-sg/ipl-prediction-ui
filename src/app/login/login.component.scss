@@ -48,9 +48,20 @@
   margin-bottom: 24px;
 }
 
+.login-logos {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
 .login-logo {
   width: 140px;
-  margin-bottom: 12px;
+}
+
+.login-mascot {
+  width: 60px;
 }
 
 .login-header h2 {

@@ -19,49 +19,67 @@
     </button>
   </div>
 
-  <app-team-selector
-    [teams]="teams"
-    label="Toss Winner"
-    [selected]="predictForm.get('tossPredicted')?.value"
-    (selectionChange)="onSelect('tossPredicted', $event)">
-  </app-team-selector>
+  <div class="field-row">
+    <app-team-selector
+      [teams]="teams"
+      label="Toss Winner"
+      [selected]="predictForm.get('tossPredicted')?.value"
+      (selectionChange)="onSelect('tossPredicted', $event)">
+    </app-team-selector>
+    <mat-error class="inline-error" *ngIf="submitted && predictForm.get('tossPredicted')?.hasError('required')">* Required</mat-error>
+  </div>
 
-  <app-team-selector
-    [teams]="teams"
-    label="Match Winner"
-    [showNoResult]="true"
-    [selected]="predictForm.get('teamPredicted')?.value"
-    (selectionChange)="onSelect('teamPredicted', $event)">
-  </app-team-selector>
+  <div class="field-row">
+    <app-team-selector
+      [teams]="teams"
+      label="Match Winner"
+      [showNoResult]="true"
+      [selected]="predictForm.get('teamPredicted')?.value"
+      (selectionChange)="onSelect('teamPredicted', $event)">
+    </app-team-selector>
+    <mat-error class="inline-error" *ngIf="submitted && predictForm.get('teamPredicted')?.hasError('required')">* Required</mat-error>
+  </div>
 
-  <app-score-selector
-    [options]="firstInnScoreOptions"
-    label="First Innings Score"
-    [selected]="predictForm.get('firstInnScorePredicted')?.value"
-    (selectionChange)="onSelect('firstInnScorePredicted', $event)">
-  </app-score-selector>
+  <div class="field-row">
+    <app-score-selector
+      [options]="firstInnScoreOptions"
+      label="First Innings Score"
+      [selected]="predictForm.get('firstInnScorePredicted')?.value"
+      (selectionChange)="onSelect('firstInnScorePredicted', $event)">
+    </app-score-selector>
+    <mat-error class="inline-error" *ngIf="submitted && predictForm.get('firstInnScorePredicted')?.hasError('required')">* Required</mat-error>
+  </div>
 
-  <app-player-selector
-    [players]="players"
-    label="FUEL UP Batter"
-    [defaultCategories]="['Batter', 'WK-Batter', 'All-Rounder']"
-    [selected]="predictForm.get('mostRunsScorerPredicted')?.value"
-    (selectionChange)="onSelect('mostRunsScorerPredicted', $event)">
-  </app-player-selector>
+  <div class="field-row">
+    <app-player-selector
+      [players]="players"
+      label="FUEL UP Batter"
+      [defaultCategories]="['Batter', 'WK-Batter', 'All-Rounder']"
+      [selected]="predictForm.get('mostRunsScorerPredicted')?.value"
+      (selectionChange)="onSelect('mostRunsScorerPredicted', $event)">
+    </app-player-selector>
+    <mat-error class="inline-error" *ngIf="submitted && predictForm.get('mostRunsScorerPredicted')?.hasError('required')">* Required</mat-error>
+  </div>
 
-  <app-player-selector
-    [players]="players"
-    label="FUEL UP Bowler"
-    [defaultCategories]="['Bowler', 'All-Rounder']"
-    [selected]="predictForm.get('mostWicketsTakerPredicted')?.value"
-    (selectionChange)="onSelect('mostWicketsTakerPredicted', $event)">
-  </app-player-selector>
+  <div class="field-row">
+    <app-player-selector
+      [players]="players"
+      label="FUEL UP Bowler"
+      [defaultCategories]="['Bowler', 'All-Rounder']"
+      [selected]="predictForm.get('mostWicketsTakerPredicted')?.value"
+      (selectionChange)="onSelect('mostWicketsTakerPredicted', $event)">
+    </app-player-selector>
+    <mat-error class="inline-error" *ngIf="submitted && predictForm.get('mostWicketsTakerPredicted')?.hasError('required')">* Required</mat-error>
+  </div>
 
-  <app-player-selector
-    [players]="players"
-    label="FUEL UP Man of the Match"
-    [defaultCategories]="[]"
-    [selected]="predictForm.get('momPredicted')?.value"
-    (selectionChange)="onSelect('momPredicted', $event)">
-  </app-player-selector>
+  <div class="field-row">
+    <app-player-selector
+      [players]="players"
+      label="FUEL UP Man of the Match"
+      [defaultCategories]="[]"
+      [selected]="predictForm.get('momPredicted')?.value"
+      (selectionChange)="onSelect('momPredicted', $event)">
+    </app-player-selector>
+    <mat-error class="inline-error" *ngIf="submitted && predictForm.get('momPredicted')?.hasError('required')">* Required</mat-error>
+  </div>
 </form>

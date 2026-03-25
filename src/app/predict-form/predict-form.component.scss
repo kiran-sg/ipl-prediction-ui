@@ -4,6 +4,18 @@
   gap: 8px;
 }
 
+.field-row {
+  position: relative;
+
+  .inline-error {
+    position: absolute;
+    top: 2px;
+    right: 0;
+    font-size: 0.75rem;
+    font-weight: 600;
+  }
+}
+
 .surge-section {
   position: sticky;
   top: 0;

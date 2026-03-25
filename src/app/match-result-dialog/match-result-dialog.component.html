@@ -1,5 +1,9 @@
 <div class="session-banner" *ngIf="sessionTimer">Session expires in <strong>{{ sessionTimer }}</strong></div>
-<h2 mat-dialog-title>{{matchDetails.home + ' VS ' + matchDetails.away}}</h2>
+<h2 mat-dialog-title class="dialog-title">
+  <mat-icon class="title-icon">sports_cricket</mat-icon>
+  {{matchDetails.home}} vs {{matchDetails.away}}
+  <span class="match-date-subtitle">Update Result</span>
+</h2>
 
 <form [formGroup]="resultForm" (ngSubmit)="onSubmit()">
   <mat-dialog-content class="mat-typography">

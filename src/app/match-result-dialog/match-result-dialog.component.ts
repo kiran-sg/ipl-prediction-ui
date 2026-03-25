@@ -9,6 +9,7 @@ import { PredictDialogComponent } from '../predict-dialog/predict-dialog.compone
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
 import { AdminService } from '../admin.service';
 import { Player } from '../models/player.model';
 import { Team } from '../models/team.model';
@@ -33,6 +34,7 @@ export interface MatchData {
     CommonModule,
     MatDialogModule,
     MatButtonModule,
+    MatIconModule,
     ReactiveFormsModule,
     MatSlideToggleModule,
     TeamSelectorComponent,

@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { MatFormFieldModule } from '@angular/material/form-field';
 import { Match } from '../models/match.model';
 import { Team } from '../models/team.model';
 import { CommonService } from '../common.service';
@@ -19,6 +20,7 @@ import { AuthService } from '../auth.service';
   imports: [
     CommonModule,
     ReactiveFormsModule,
+    MatFormFieldModule,
     TeamSelectorComponent,
     ScoreSelectorComponent,
     PlayerSelectorComponent
@@ -34,6 +36,7 @@ export class PredictFormComponent implements OnInit {
   ];
   predictForm!: FormGroup;
   surgesRemaining = 3;
+  submitted = false;
 
   @Input() matchDetails!: Match;
   @Output() formSubmitted = new EventEmitter<PredictedMatch>();
@@ -87,8 +90,11 @@ export class PredictFormComponent implements OnInit {
     if (this.predictForm.valid) {
       const predictedMatch: PredictedMatch = this.predictForm.value;
       this.formSubmitted.emit(predictedMatch);
-    } else if (this.predictForm.value.userId == '') {
-      this.router.navigate(['/login']);
+    } else {
+      this.submitted = true;
+      if (this.predictForm.value.userId == '') {
+        this.router.navigate(['/login']);
+      }
     }
   }
 

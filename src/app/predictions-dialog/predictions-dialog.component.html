@@ -1,60 +1,86 @@
 @if (source==='admin') {
-    <h2 mat-dialog-title>Predictions - {{matchDetails.home + ' VS ' + matchDetails.away + ' - ' + matchDetails.dateTime}}</h2>
+    <h2 mat-dialog-title class="dialog-title">
+        <mat-icon class="title-icon">sports_cricket</mat-icon>
+        {{matchDetails.home}} vs {{matchDetails.away}}
+        <span class="match-date-subtitle">{{ matchDetails.dateTime }}</span>
+    </h2>
 } @else {
-    <h2 mat-dialog-title>Predictions History</h2>
+    <h2 mat-dialog-title class="dialog-title">
+        <mat-icon class="title-icon">history</mat-icon>
+        Predictions History
+    </h2>
 }
 
 @if (source==='admin' && matchResult) {
-    <button mat-button [matMenuTriggerFor]="menu" 
-        class="result-menu" matTooltip="Click here to view match results">
-        Match Results
-    </button>
-    <mat-menu #menu="matMenu" style="margin-left: 15px;">
-        <div style="padding: 10px;">
-            <p>Toss Won : {{matchResult.tossWon}}</p>
-            <p>Team Won : {{matchResult.teamWon}}</p>
-            <p>First Inns. Score : {{matchResult.firstInnScore}}</p>
-            <p>FUEL UP Batter : {{matchResult.mostRunsScorer}}</p>
-            <p>FUEL UP Bowler : {{matchResult.mostWicketsTaker}}</p>
-            <p>FUEL UP Man of the Match : {{matchResult.playerOfTheMatch}}</p>
+    <div class="result-card">
+        <div class="result-header">
+            <mat-icon>emoji_events</mat-icon>
+            <span>Match Result</span>
         </div>
-    </mat-menu>
+        <div class="result-grid">
+            <div class="result-item">
+                <span class="result-label">Toss Won</span>
+                <span class="result-value">{{matchResult.tossWon}}</span>
+            </div>
+            <div class="result-item">
+                <span class="result-label">Match Won</span>
+                <span class="result-value highlight">{{matchResult.teamWon}}</span>
+            </div>
+            <div class="result-item">
+                <span class="result-label">1st Innings Score</span>
+                <span class="result-value">{{matchResult.firstInnScore}}</span>
+            </div>
+            <div class="result-item">
+                <span class="result-label">Best Batter</span>
+                <span class="result-value">{{matchResult.mostRunsScorer}}</span>
+            </div>
+            <div class="result-item">
+                <span class="result-label">Best Bowler</span>
+                <span class="result-value">{{matchResult.mostWicketsTaker}}</span>
+            </div>
+            <div class="result-item">
+                <span class="result-label">Player of the Match</span>
+                <span class="result-value">{{matchResult.playerOfTheMatch}}</span>
+            </div>
+        </div>
+    </div>
 }
 
 <mat-dialog-content class="mat-typography dialog-container">
-    <mat-form-field>
-        <mat-label>Filter</mat-label>
-        <input matInput (keyup)="applyFilter($event)" placeholder="Search..." #input>
+    <mat-form-field appearance="outline" class="filter-field">
+        <mat-label>Search predictions</mat-label>
+        <input matInput (keyup)="applyFilter($event)" placeholder="Type to filter..." #input>
+        <mat-icon matSuffix>search</mat-icon>
     </mat-form-field>
       
-    <section class="table-container mat-elevation-z8">
+    <section class="table-container mat-elevation-z2">
         <div class="table-wrapper">
             <table mat-table [dataSource]="dataSource" matSort class="responsive-table">
 
                 @if (source==='admin') {
                     <ng-container matColumnDef="name">
-                        <th mat-header-cell *matHeaderCellDef> Name </th>
-                        <td mat-cell *matCellDef="let row"> {{row.user.name}} </td>
+                        <th mat-header-cell *matHeaderCellDef>User</th>
+                        <td mat-cell *matCellDef="let row" class="user-cell">{{row.user.name}}</td>
                     </ng-container>
                 } @else {
                     <ng-container matColumnDef="matchDate">
-                        <th mat-header-cell *matHeaderCellDef> Date </th>
-                        <td mat-cell *matCellDef="let row"> {{row.matchDate}} </td>
+                        <th mat-header-cell *matHeaderCellDef>Date</th>
+                        <td mat-cell *matCellDef="let row">{{row.matchDate}}</td>
                     </ng-container>
                     <ng-container matColumnDef="match">
-                        <th mat-header-cell *matHeaderCellDef> Match </th>
+                        <th mat-header-cell *matHeaderCellDef>Match</th>
                         <td mat-cell *matCellDef="let row" style="padding-left: 0;">
                             <a mat-button [matMenuTriggerFor]="menuUser" 
-                                matTooltip="Click here to view match results"
+                                matTooltip="Click to view match results"
                                 (click)="getMatchResult(row)">{{row.match}}</a>
                             <mat-menu #menuUser="matMenu">
                                 <div style="padding: 10px;">
                                     <p>Toss Won : {{row.matchResult?.tossWon}}</p>
                                     <p>Team Won : {{row.matchResult?.teamWon}}</p>
-                                    <p>First Inns. Score : {{row.matchResult?.firstInnScore}}</p>
-                                    <p>FUEL UP Batter : {{row.matchResult?.mostRunsScorer}}</p>
-                                    <p>FUEL UP Bowler : {{row.matchResult?.mostWicketsTaker}}</p>
-                                    <p>FUEL UP Man of the Match : {{row.matchResult?.playerOfTheMatch}}</p>
+                                    <p>1st Innings Score : {{row.matchResult?.firstInnScore}}</p>
+                                    <p>Best Batter : {{row.matchResult?.mostRunsScorer}}</p>
+                                    <p>Best Bowler : {{row.matchResult?.mostWicketsTaker}}</p>
+                                    <p>Player of the Match : {{row.matchResult?.playerOfTheMatch}}</p>
                                 </div>
                             </mat-menu> 
                         </td>
@@ -62,38 +88,70 @@
                 }
 
                 <ng-container matColumnDef="tossPredicted">
-                    <th mat-header-cell *matHeaderCellDef> Toss </th>
-                    <td mat-cell *matCellDef="let row"> {{row.tossPredicted}} </td>
+                    <th mat-header-cell *matHeaderCellDef>Toss Winner</th>
+                    <td mat-cell *matCellDef="let row" [class.correct]="matchResult && row.tossPredicted === matchResult.tossWon" [class.incorrect]="matchResult && row.tossPredicted !== matchResult.tossWon">
+                        {{row.tossPredicted}}
+                        @if (matchResult) {
+                            <span class="match-icon">{{ row.tossPredicted === matchResult.tossWon ? '✅' : '❌' }}</span>
+                        }
+                    </td>
                 </ng-container>
 
                 <ng-container matColumnDef="teamPredicted">
-                    <th mat-header-cell *matHeaderCellDef> Team </th>
-                    <td mat-cell *matCellDef="let row"> {{row.teamPredicted}} </td>
+                    <th mat-header-cell *matHeaderCellDef>Match Winner</th>
+                    <td mat-cell *matCellDef="let row" [class.correct]="matchResult && row.teamPredicted === matchResult.teamWon" [class.incorrect]="matchResult && row.teamPredicted !== matchResult.teamWon">
+                        {{row.teamPredicted}}
+                        @if (matchResult) {
+                            <span class="match-icon">{{ row.teamPredicted === matchResult.teamWon ? '✅' : '❌' }}</span>
+                        }
+                    </td>
                 </ng-container>
 
                 <ng-container matColumnDef="firstInnScorePredicted">
-                    <th mat-header-cell *matHeaderCellDef> First Inns. Score </th>
-                    <td mat-cell *matCellDef="let row"> {{row.firstInnScorePredicted}} </td>
+                    <th mat-header-cell *matHeaderCellDef>1st Innings Score</th>
+                    <td mat-cell *matCellDef="let row" [class.correct]="matchResult && row.firstInnScorePredicted === matchResult.firstInnScore" [class.incorrect]="matchResult && row.firstInnScorePredicted !== matchResult.firstInnScore">
+                        {{row.firstInnScorePredicted}}
+                        @if (matchResult) {
+                            <span class="match-icon">{{ row.firstInnScorePredicted === matchResult.firstInnScore ? '✅' : '❌' }}</span>
+                        }
+                    </td>
                 </ng-container>
 
                 <ng-container matColumnDef="mostRunsScorerPredicted">
-                    <th mat-header-cell *matHeaderCellDef> FUEL UP Batter </th>
-                    <td mat-cell *matCellDef="let row"> {{row.mostRunsScorerPredicted}} </td>
+                    <th mat-header-cell *matHeaderCellDef>Best Batter</th>
+                    <td mat-cell *matCellDef="let row" [class.correct]="matchResult && row.mostRunsScorerPredicted === matchResult.mostRunsScorer" [class.incorrect]="matchResult && row.mostRunsScorerPredicted !== matchResult.mostRunsScorer">
+                        {{row.mostRunsScorerPredicted}}
+                        @if (matchResult) {
+                            <span class="match-icon">{{ row.mostRunsScorerPredicted === matchResult.mostRunsScorer ? '✅' : '❌' }}</span>
+                        }
+                    </td>
                 </ng-container>
 
                 <ng-container matColumnDef="mostWicketsTakerPredicted">
-                    <th mat-header-cell *matHeaderCellDef> FUEL UP Bowler </th>
-                    <td mat-cell *matCellDef="let row"> {{row.mostWicketsTakerPredicted}} </td>
+                    <th mat-header-cell *matHeaderCellDef>Best Bowler</th>
+                    <td mat-cell *matCellDef="let row" [class.correct]="matchResult && row.mostWicketsTakerPredicted === matchResult.mostWicketsTaker" [class.incorrect]="matchResult && row.mostWicketsTakerPredicted !== matchResult.mostWicketsTaker">
+                        {{row.mostWicketsTakerPredicted}}
+                        @if (matchResult) {
+                            <span class="match-icon">{{ row.mostWicketsTakerPredicted === matchResult.mostWicketsTaker ? '✅' : '❌' }}</span>
+                        }
+                    </td>
                 </ng-container>
 
                 <ng-container matColumnDef="momPredicted">
-                    <th mat-header-cell *matHeaderCellDef> FUEL UP Man of the Match </th>
-                    <td mat-cell *matCellDef="let row"> {{row.momPredicted}} </td>
+                    <th mat-header-cell *matHeaderCellDef>Player of the Match</th>
+                    <td mat-cell *matCellDef="let row" [class.correct]="matchResult && row.momPredicted === matchResult.playerOfTheMatch" [class.incorrect]="matchResult && row.momPredicted !== matchResult.playerOfTheMatch">
+                        {{row.momPredicted}}
+                        @if (matchResult) {
+                            <span class="match-icon">{{ row.momPredicted === matchResult.playerOfTheMatch ? '✅' : '❌' }}</span>
+                        }
+                    </td>
                 </ng-container>
 
                 <ng-container matColumnDef="points">
-                    <th mat-header-cell *matHeaderCellDef> Points </th>
-                    <td mat-cell *matCellDef="let row"> {{row.points}} </td>
+                    <th mat-header-cell *matHeaderCellDef>Points</th>
+                    <td mat-cell *matCellDef="let row" class="points-cell">
+                        <span class="points-badge" [class.has-points]="row.points > 0">{{row.points}}</span>
+                    </td>
                 </ng-container>
 
                 @if (source === 'admin') {
@@ -104,18 +162,16 @@
                     <tr mat-row *matRowDef="let row; columns: columnsToDisplayForUser;"></tr>
                 }
 
-                <!-- Row shown when there is no matching data. -->
                 <tr class="mat-row" *matNoDataRow>
-                    <td class="mat-cell" colspan="4">No data matching the filter "{{input.value}}"</td>
+                    <td class="mat-cell no-data" colspan="8">No data matching "{{input.value}}"</td>
                 </tr>
             </table>
         </div>
         
-        <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]" aria-label="Select page of users"></mat-paginator>
+        <mat-paginator [pageSizeOptions]="[10, 25, 50]" aria-label="Select page of users"></mat-paginator>
     </section>
 </mat-dialog-content>
 
-
 <mat-dialog-actions align="end">
-  <button mat-button mat-dialog-close>Close</button>
+  <button mat-flat-button mat-dialog-close color="primary">Close</button>
 </mat-dialog-actions>
