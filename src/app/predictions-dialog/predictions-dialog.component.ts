@@ -103,6 +103,8 @@ export class PredictionsDialogComponent {
       if (data.matchResult !== null) {
         this.matchResult = {
           ...data.matchResult,
+          tossWon: this.displayValue(data.matchResult.tossWon),
+          teamWon: this.displayValue(data.matchResult.teamWon),
           mostRunsScorer: this.getPlayerById(data.matchResult.mostRunsScorer),
           mostWicketsTaker: this.getPlayerById(data.matchResult.mostWicketsTaker),
           playerOfTheMatch: this.getPlayerById(data.matchResult.playerOfTheMatch),
@@ -132,6 +134,9 @@ export class PredictionsDialogComponent {
             ...prediction,
             userName: prediction.user.name,
             location: prediction.user.location,
+            tossPredicted: this.displayValue(prediction.tossPredicted),
+            teamPredicted: this.displayValue(prediction.teamPredicted),
+            firstInnScorePredicted: this.displayValue(prediction.firstInnScorePredicted),
             mostRunsScorerPredicted: this.getPlayerById(prediction.mostRunsScorerPredicted),
             mostWicketsTakerPredicted: this.getPlayerById(prediction.mostWicketsTakerPredicted),
             momPredicted: this.getPlayerById(prediction.momPredicted),
@@ -152,6 +157,9 @@ export class PredictionsDialogComponent {
         this.predictions = data.predictions.map((prediction: Prediction) => {
           return {
             ...prediction,
+            tossPredicted: this.displayValue(prediction.tossPredicted),
+            teamPredicted: this.displayValue(prediction.teamPredicted),
+            firstInnScorePredicted: this.displayValue(prediction.firstInnScorePredicted),
             mostRunsScorerPredicted: this.getPlayerById(prediction.mostRunsScorerPredicted),
             mostWicketsTakerPredicted: this.getPlayerById(prediction.mostWicketsTakerPredicted),
             momPredicted: this.getPlayerById(prediction.momPredicted),
@@ -189,6 +197,10 @@ export class PredictionsDialogComponent {
   getPlayerById(playerId: string): string {
     const playerName = this.players?.find((player:Player) => player.playerNo === playerId)?.playerName;
     return playerName != undefined ? playerName : '';
+  }
+
+  private displayValue(value: string): string {
+    return value === 'no_result' ? 'No Result' : value;
   }
 
   setTeams(): void {

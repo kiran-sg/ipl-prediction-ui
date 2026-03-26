@@ -109,6 +109,9 @@ export class PredictFormComponent implements OnInit {
       momPredicted: prediction.momPredicted,
       surgeUsed: prediction.surgeUsed || false,
     });
+    if (prediction.teamPredicted === 'no_result') {
+      this.handleNoResult(true);
+    }
   }
 
   setPredictForm() {
@@ -166,5 +169,44 @@ export class PredictFormComponent implements OnInit {
 
   onSelect(field: string, value: string): void {
     this.predictForm.get(field)?.setValue(value);
+    if (field === 'tossPredicted' && value === 'no_result') {
+      this.predictForm.get('tossPredicted')?.setValue('');
+      this.predictForm.get('teamPredicted')?.setValue('no_result');
+      this.handleNoResult(true);
+    } else if (field === 'teamPredicted' && value === 'no_result') {
+      this.predictForm.get('tossPredicted')?.setValue('');
+      this.handleNoResult(true);
+    } else if (field === 'teamPredicted' && value !== 'no_result') {
+      this.handleNoResult(false);
+    }
+  }
+
+  get isNoResult(): boolean {
+    return this.predictForm.get('teamPredicted')?.value === 'no_result';
+  }
+
+  private handleNoResult(noResult: boolean): void {
+    const fields = ['firstInnScorePredicted', 'mostRunsScorerPredicted', 'mostWicketsTakerPredicted', 'momPredicted'];
+    const tossCtrl = this.predictForm.get('tossPredicted');
+    const teamCtrl = this.predictForm.get('teamPredicted');
+    fields.forEach(f => {
+      const control = this.predictForm.get(f);
+      if (noResult) {
+        control?.setValue('');
+        control?.clearValidators();
+      } else {
+        control?.setValidators(Validators.required);
+      }
+      control?.updateValueAndValidity();
+    });
+    if (noResult) {
+      tossCtrl?.clearValidators();
+      teamCtrl?.clearValidators();
+    } else {
+      tossCtrl?.setValidators(Validators.required);
+      teamCtrl?.setValidators(Validators.required);
+    }
+    tossCtrl?.updateValueAndValidity();
+    teamCtrl?.updateValueAndValidity();
   }
 }

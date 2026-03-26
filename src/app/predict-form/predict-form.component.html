@@ -19,14 +19,15 @@
     </button>
   </div>
 
-  <div class="field-row">
+  <div class="field-row" *ngIf="!isNoResult">
     <app-team-selector
       [teams]="teams"
       label="Toss Winner"
+      [showNoResult]="true"
       [selected]="predictForm.get('tossPredicted')?.value"
       (selectionChange)="onSelect('tossPredicted', $event)">
     </app-team-selector>
-    <mat-error class="inline-error" *ngIf="submitted && predictForm.get('tossPredicted')?.hasError('required')">* Required</mat-error>
+    <mat-error class="inline-error" *ngIf="submitted && !isNoResult && predictForm.get('tossPredicted')?.hasError('required')">* Required</mat-error>
   </div>
 
   <div class="field-row">
@@ -40,7 +41,11 @@
     <mat-error class="inline-error" *ngIf="submitted && predictForm.get('teamPredicted')?.hasError('required')">* Required</mat-error>
   </div>
 
-  <div class="field-row">
+  <div class="no-result-info" *ngIf="isNoResult">
+    🚫 No Result selected — other predictions are not required.
+  </div>
+
+  <div class="field-row" *ngIf="!isNoResult">
     <app-score-selector
       [options]="firstInnScoreOptions"
       label="First Innings Score"
@@ -50,7 +55,7 @@
     <mat-error class="inline-error" *ngIf="submitted && predictForm.get('firstInnScorePredicted')?.hasError('required')">* Required</mat-error>
   </div>
 
-  <div class="field-row">
+  <div class="field-row" *ngIf="!isNoResult">
     <app-player-selector
       [players]="players"
       label="FUEL UP Batter"
@@ -61,7 +66,7 @@
     <mat-error class="inline-error" *ngIf="submitted && predictForm.get('mostRunsScorerPredicted')?.hasError('required')">* Required</mat-error>
   </div>
 
-  <div class="field-row">
+  <div class="field-row" *ngIf="!isNoResult">
     <app-player-selector
       [players]="players"
       label="FUEL UP Bowler"
@@ -72,7 +77,7 @@
     <mat-error class="inline-error" *ngIf="submitted && predictForm.get('mostWicketsTakerPredicted')?.hasError('required')">* Required</mat-error>
   </div>
 
-  <div class="field-row">
+  <div class="field-row" *ngIf="!isNoResult">
     <app-player-selector
       [players]="players"
       label="FUEL UP Man of the Match"

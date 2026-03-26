@@ -7,17 +7,15 @@
 
 <form [formGroup]="resultForm" (ngSubmit)="onSubmit()">
   <mat-dialog-content class="mat-typography">
-    <p><mat-slide-toggle [checked]="isMatchAbandoned" (change)="onMatchAbandonedChange($event.checked)">
-      Match Abandoned
-    </mat-slide-toggle></p>
-
-    <app-team-selector
-      [teams]="teams"
-      label="Toss Winner"
-      [showNoResult]="true"
-      [selected]="resultForm.get('tossWon')?.value"
-      (selectionChange)="onSelect('tossWon', $event)">
-    </app-team-selector>
+    @if (!isNoResult) {
+      <app-team-selector
+        [teams]="teams"
+        label="Toss Winner"
+        [showNoResult]="true"
+        [selected]="resultForm.get('tossWon')?.value"
+        (selectionChange)="onSelect('tossWon', $event)">
+      </app-team-selector>
+    }
 
     <app-team-selector
       [teams]="teams"
@@ -27,14 +25,22 @@
       (selectionChange)="onSelect('teamWon', $event)">
     </app-team-selector>
 
-    <app-score-selector
-      [options]="firstInnScoreOptions"
-      label="First Innings Score"
-      [selected]="resultForm.get('firstInnScore')?.value"
-      (selectionChange)="onSelect('firstInnScore', $event)">
-    </app-score-selector>
+    @if (isNoResult) {
+      <div class="no-result-info">
+        🚫 No Result selected — other fields are not required.
+      </div>
+    }
 
-    @if (!isMatchAbandoned) {
+    @if (!isNoResult) {
+      <app-score-selector
+        [options]="firstInnScoreOptions"
+        label="First Innings Score"
+        [selected]="resultForm.get('firstInnScore')?.value"
+        (selectionChange)="onSelect('firstInnScore', $event)">
+      </app-score-selector>
+    }
+
+    @if (!isNoResult) {
       <app-player-selector
         [players]="players"
         label="FUEL UP Batter"

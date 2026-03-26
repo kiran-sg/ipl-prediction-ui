@@ -14,7 +14,6 @@ import { AdminService } from '../admin.service';
 import { Player } from '../models/player.model';
 import { Team } from '../models/team.model';
 import { MatchResult } from '../models/match-result';
-import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { TeamService } from '../team.service';
 import { TeamSelectorComponent } from '../shared/team-selector/team-selector.component';
 import { ScoreSelectorComponent } from '../shared/score-selector/score-selector.component';
@@ -36,7 +35,6 @@ export interface MatchData {
     MatButtonModule,
     MatIconModule,
     ReactiveFormsModule,
-    MatSlideToggleModule,
     TeamSelectorComponent,
     ScoreSelectorComponent,
     PlayerSelectorComponent
@@ -54,7 +52,6 @@ export class MatchResultDialogComponent implements OnInit, OnDestroy {
     '< 100', '100 - 130', '131 - 160', '161 - 180', '181 - 200', '> 200'
   ];
   resultForm!: FormGroup;
-  isMatchAbandoned: boolean = false;
   sessionTimer = '';
   private timerInterval: any;
 
@@ -96,14 +93,6 @@ export class MatchResultDialogComponent implements OnInit, OnDestroy {
 
   onSubmit(): void {
     if (this.resultForm.valid) {
-      if (!this.isMatchAbandoned && this.resultForm.value.tossWon === 'no_result') {
-        alert("Please select a team for Toss Winner. If the match is abandoned, please select the checkbox.");
-        return;
-      }
-      if (!this.isMatchAbandoned && this.resultForm.value.teamWon === 'no_result') {
-        alert("Please select a team for Team Winner. If the match is abandoned, please select the checkbox.");
-        return;
-      }
       const matchResult: MatchResult = this.resultForm.value;
       this.adminService.updateMatchResults(matchResult).subscribe(data => {
         if (data.status) {
@@ -129,10 +118,7 @@ export class MatchResultDialogComponent implements OnInit, OnDestroy {
 
   updateForm(result: MatchResult) {
     if (result.teamWon === 'no_result') {
-      this.isMatchAbandoned = true;
-      this.onMatchAbandonedChange(this.isMatchAbandoned);
-    } else {
-      this.isMatchAbandoned = false;
+      this.handleNoResult(true);
     }
     this.resultForm.patchValue({
       tossWon: result.tossWon,
@@ -175,6 +161,45 @@ export class MatchResultDialogComponent implements OnInit, OnDestroy {
 
   onSelect(field: string, value: string): void {
     this.resultForm.get(field)?.setValue(value);
+    if (field === 'tossWon' && value === 'no_result') {
+      this.resultForm.get('tossWon')?.setValue('');
+      this.resultForm.get('teamWon')?.setValue('no_result');
+      this.handleNoResult(true);
+    } else if (field === 'teamWon' && value === 'no_result') {
+      this.resultForm.get('tossWon')?.setValue('');
+      this.handleNoResult(true);
+    } else if (field === 'teamWon' && value !== 'no_result') {
+      this.handleNoResult(false);
+    }
+  }
+
+  get isNoResult(): boolean {
+    return this.resultForm.get('teamWon')?.value === 'no_result';
+  }
+
+  private handleNoResult(noResult: boolean): void {
+    const fields = ['firstInnScore', 'mostRunsScorer', 'mostWicketsTaker', 'playerOfTheMatch'];
+    const tossCtrl = this.resultForm.get('tossWon');
+    const teamCtrl = this.resultForm.get('teamWon');
+    fields.forEach(f => {
+      const ctrl = this.resultForm.get(f);
+      if (noResult) {
+        ctrl?.setValue('');
+        ctrl?.clearValidators();
+      } else {
+        ctrl?.setValidators(Validators.required);
+      }
+      ctrl?.updateValueAndValidity();
+    });
+    if (noResult) {
+      tossCtrl?.clearValidators();
+      teamCtrl?.clearValidators();
+    } else {
+      tossCtrl?.setValidators(Validators.required);
+      teamCtrl?.setValidators(Validators.required);
+    }
+    tossCtrl?.updateValueAndValidity();
+    teamCtrl?.updateValueAndValidity();
   }
 
   adjustScreen() {
@@ -185,33 +210,18 @@ export class MatchResultDialogComponent implements OnInit, OnDestroy {
     ]).subscribe(result => {
       if (result.breakpoints[Breakpoints.Handset]) {
         this.dialogWidth = '95vw';
-        this.dialogHeight = '90vh';
       } else {
         this.dialogWidth = '80vw';
-        this.dialogHeight = '85vh';
       }
-      this.dialogRef.updateSize(this.dialogWidth, this.dialogHeight);
+      this.dialogRef.updateSize(this.dialogWidth, '');
+      this.dialogRef.addPanelClass('auto-height-dialog');
     });
   }
 
-  onMatchAbandonedChange(isMatchAbandoned: any) {
-    this.isMatchAbandoned = isMatchAbandoned;
-    this.resetResults();
-    const fields = ['playerOfTheMatch', 'mostRunsScorer', 'mostWicketsTaker', 'firstInnScore'];
-    fields.forEach(f => {
-      const ctrl = this.resultForm.get(f);
-      if (isMatchAbandoned) {
-        ctrl?.clearValidators();
-      } else {
-        ctrl?.setValidators([Validators.required]);
-      }
-      ctrl?.updateValueAndValidity();
-    });
+  onMatchAbandonedChange(_isMatchAbandoned: any) {
   }
 
   resetResults() {
-    ['tossWon', 'teamWon', 'playerOfTheMatch', 'mostRunsScorer', 'mostWicketsTaker', 'firstInnScore']
-      .forEach(f => this.resultForm.get(f)?.setValue(''));
   }
 
   ngOnDestroy(): void {
