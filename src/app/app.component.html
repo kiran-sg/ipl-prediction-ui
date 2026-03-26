@@ -7,7 +7,7 @@
       <router-outlet></router-outlet>
     </div>
   </div>
-  <footer class="footer">
+  <footer class="footer" [class.footer-login]="!authService.isLoggedIn">
     <div class="footer-content">
       <span class="footer-title">© IPL Prediction App</span>
       <span class="app-author">Developed by Kiran Nair</span>
