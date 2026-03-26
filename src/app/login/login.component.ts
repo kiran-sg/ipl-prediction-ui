@@ -35,15 +35,14 @@ export class LoginComponent {
     private authService: AuthService
   ) {
     this.loginForm = this.fb.group({
-      userId: ['', [Validators.required]],
-      password: ['', [Validators.required]]
+      userId: ['', [Validators.required]]
     });
   }
 
   onSubmit(): void {
     if (this.loginForm.valid) {
-      const { userId, password } = this.loginForm.value;
-      this.service.validateUser(userId, password).subscribe(
+      const { userId } = this.loginForm.value;
+      this.service.validateUser(userId, '').subscribe(
         (data: any) => {
           if (data.validUser) {
             this.authService.login(userId, data.user?.isAdmin || false, data.user?.location, data.user?.surgesRemaining);
