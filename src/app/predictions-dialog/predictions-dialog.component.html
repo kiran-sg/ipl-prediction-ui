@@ -1,7 +1,8 @@
 @if (source==='admin') {
     <h2 mat-dialog-title class="dialog-title">
         <mat-icon class="title-icon">sports_cricket</mat-icon>
-        {{matchDetails.home}} vs {{matchDetails.away}}
+        <span class="full-name">{{matchDetails.home}} vs {{matchDetails.away}}</span>
+        <span class="short-name">{{homeShort}} vs {{awayShort}}</span>
         <span class="match-date-subtitle">{{ matchDetails.dateTime }}</span>
     </h2>
 } @else {
@@ -47,6 +48,9 @@
 }
 
 <mat-dialog-content class="mat-typography dialog-container">
+    @if (hasSurgeUsers) {
+        <div class="surge-legend">⚡ = Surge activated (2x points)</div>
+    }
     <mat-form-field appearance="outline" class="filter-field">
         <mat-label>Search predictions</mat-label>
         <input matInput (keyup)="applyFilter($event)" placeholder="Type to filter..." #input>
@@ -60,7 +64,11 @@
                 @if (source==='admin') {
                     <ng-container matColumnDef="name">
                         <th mat-header-cell *matHeaderCellDef>User</th>
-                        <td mat-cell *matCellDef="let row" class="user-cell">{{row.user.name}}</td>
+                        <td mat-cell *matCellDef="let row" class="user-cell">
+                            {{row.user.name}}
+                            <span *ngIf="row.surgeUsed" class="surge-badge">⚡</span>
+                            <div *ngIf="row.surgeUsed" class="surge-info">Surges left: {{row.user.surgesRemaining}}</div>
+                        </td>
                     </ng-container>
                 } @else {
                     <ng-container matColumnDef="matchDate">
@@ -72,7 +80,7 @@
                         <td mat-cell *matCellDef="let row" style="padding-left: 0;">
                             <a mat-button [matMenuTriggerFor]="menuUser" 
                                 matTooltip="Click to view match results"
-                                (click)="getMatchResult(row)">{{row.match}}</a>
+                                (click)="getMatchResult(row)">{{row.matchShort || row.match}} <span *ngIf="row.surgeUsed" class="surge-badge">⚡</span></a>
                             <mat-menu #menuUser="matMenu">
                                 <div style="padding: 10px;">
                                     <p>Toss Won : {{row.matchResult?.tossWon}}</p>
@@ -89,60 +97,60 @@
 
                 <ng-container matColumnDef="tossPredicted">
                     <th mat-header-cell *matHeaderCellDef>Toss Winner</th>
-                    <td mat-cell *matCellDef="let row" [class.correct]="matchResult && row.tossPredicted && row.tossPredicted === matchResult.tossWon" [class.incorrect]="matchResult && row.tossPredicted && row.tossPredicted !== matchResult.tossWon">
+                    <td mat-cell *matCellDef="let row" [class.correct]="getResult(row) && row.tossPredicted && row.tossPredicted === getResult(row).tossWon" [class.incorrect]="getResult(row) && row.tossPredicted && row.tossPredicted !== getResult(row).tossWon">
                         {{row.tossPredicted}}
-                        @if (matchResult && row.tossPredicted) {
-                            <span class="match-icon">{{ row.tossPredicted === matchResult.tossWon ? '✅' : '❌' }}</span>
+                        @if (getResult(row) && row.tossPredicted) {
+                            <span class="match-icon">{{ row.tossPredicted === getResult(row).tossWon ? '✅' : '❌' }}</span>
                         }
                     </td>
                 </ng-container>
 
                 <ng-container matColumnDef="teamPredicted">
                     <th mat-header-cell *matHeaderCellDef>Match Winner</th>
-                    <td mat-cell *matCellDef="let row" [class.correct]="matchResult && row.teamPredicted && row.teamPredicted === matchResult.teamWon" [class.incorrect]="matchResult && row.teamPredicted && row.teamPredicted !== matchResult.teamWon">
+                    <td mat-cell *matCellDef="let row" [class.correct]="getResult(row) && row.teamPredicted && row.teamPredicted === getResult(row).teamWon" [class.incorrect]="getResult(row) && row.teamPredicted && row.teamPredicted !== getResult(row).teamWon">
                         {{row.teamPredicted}}
-                        @if (matchResult && row.teamPredicted) {
-                            <span class="match-icon">{{ row.teamPredicted === matchResult.teamWon ? '✅' : '❌' }}</span>
+                        @if (getResult(row) && row.teamPredicted) {
+                            <span class="match-icon">{{ row.teamPredicted === getResult(row).teamWon ? '✅' : '❌' }}</span>
                         }
                     </td>
                 </ng-container>
 
                 <ng-container matColumnDef="firstInnScorePredicted">
                     <th mat-header-cell *matHeaderCellDef>1st Innings Score</th>
-                    <td mat-cell *matCellDef="let row" [class.correct]="matchResult && row.firstInnScorePredicted && row.firstInnScorePredicted === matchResult.firstInnScore" [class.incorrect]="matchResult && row.firstInnScorePredicted && row.firstInnScorePredicted !== matchResult.firstInnScore">
+                    <td mat-cell *matCellDef="let row" [class.correct]="getResult(row) && row.firstInnScorePredicted && row.firstInnScorePredicted === getResult(row).firstInnScore" [class.incorrect]="getResult(row) && row.firstInnScorePredicted && row.firstInnScorePredicted !== getResult(row).firstInnScore">
                         {{row.firstInnScorePredicted}}
-                        @if (matchResult && row.firstInnScorePredicted) {
-                            <span class="match-icon">{{ row.firstInnScorePredicted === matchResult.firstInnScore ? '✅' : '❌' }}</span>
+                        @if (getResult(row) && row.firstInnScorePredicted) {
+                            <span class="match-icon">{{ row.firstInnScorePredicted === getResult(row).firstInnScore ? '✅' : '❌' }}</span>
                         }
                     </td>
                 </ng-container>
 
                 <ng-container matColumnDef="mostRunsScorerPredicted">
                     <th mat-header-cell *matHeaderCellDef>Best Batter</th>
-                    <td mat-cell *matCellDef="let row" [class.correct]="matchResult && row.mostRunsScorerPredicted && row.mostRunsScorerPredicted === matchResult.mostRunsScorer" [class.incorrect]="matchResult && row.mostRunsScorerPredicted && row.mostRunsScorerPredicted !== matchResult.mostRunsScorer">
+                    <td mat-cell *matCellDef="let row" [class.correct]="getResult(row) && row.mostRunsScorerPredicted && row.mostRunsScorerPredicted === getResult(row).mostRunsScorer" [class.incorrect]="getResult(row) && row.mostRunsScorerPredicted && row.mostRunsScorerPredicted !== getResult(row).mostRunsScorer">
                         {{row.mostRunsScorerPredicted}}
-                        @if (matchResult && row.mostRunsScorerPredicted) {
-                            <span class="match-icon">{{ row.mostRunsScorerPredicted === matchResult.mostRunsScorer ? '✅' : '❌' }}</span>
+                        @if (getResult(row) && row.mostRunsScorerPredicted) {
+                            <span class="match-icon">{{ row.mostRunsScorerPredicted === getResult(row).mostRunsScorer ? '✅' : '❌' }}</span>
                         }
                     </td>
                 </ng-container>
 
                 <ng-container matColumnDef="mostWicketsTakerPredicted">
                     <th mat-header-cell *matHeaderCellDef>Best Bowler</th>
-                    <td mat-cell *matCellDef="let row" [class.correct]="matchResult && row.mostWicketsTakerPredicted && row.mostWicketsTakerPredicted === matchResult.mostWicketsTaker" [class.incorrect]="matchResult && row.mostWicketsTakerPredicted && row.mostWicketsTakerPredicted !== matchResult.mostWicketsTaker">
+                    <td mat-cell *matCellDef="let row" [class.correct]="getResult(row) && row.mostWicketsTakerPredicted && row.mostWicketsTakerPredicted === getResult(row).mostWicketsTaker" [class.incorrect]="getResult(row) && row.mostWicketsTakerPredicted && row.mostWicketsTakerPredicted !== getResult(row).mostWicketsTaker">
                         {{row.mostWicketsTakerPredicted}}
-                        @if (matchResult && row.mostWicketsTakerPredicted) {
-                            <span class="match-icon">{{ row.mostWicketsTakerPredicted === matchResult.mostWicketsTaker ? '✅' : '❌' }}</span>
+                        @if (getResult(row) && row.mostWicketsTakerPredicted) {
+                            <span class="match-icon">{{ row.mostWicketsTakerPredicted === getResult(row).mostWicketsTaker ? '✅' : '❌' }}</span>
                         }
                     </td>
                 </ng-container>
 
                 <ng-container matColumnDef="momPredicted">
                     <th mat-header-cell *matHeaderCellDef>Player of the Match</th>
-                    <td mat-cell *matCellDef="let row" [class.correct]="matchResult && row.momPredicted && row.momPredicted === matchResult.playerOfTheMatch" [class.incorrect]="matchResult && row.momPredicted && row.momPredicted !== matchResult.playerOfTheMatch">
+                    <td mat-cell *matCellDef="let row" [class.correct]="getResult(row) && row.momPredicted && row.momPredicted === getResult(row).playerOfTheMatch" [class.incorrect]="getResult(row) && row.momPredicted && row.momPredicted !== getResult(row).playerOfTheMatch">
                         {{row.momPredicted}}
-                        @if (matchResult && row.momPredicted) {
-                            <span class="match-icon">{{ row.momPredicted === matchResult.playerOfTheMatch ? '✅' : '❌' }}</span>
+                        @if (getResult(row) && row.momPredicted) {
+                            <span class="match-icon">{{ row.momPredicted === getResult(row).playerOfTheMatch ? '✅' : '❌' }}</span>
                         }
                     </td>
                 </ng-container>

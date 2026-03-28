@@ -14,6 +14,7 @@ import { Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { AuthService } from '../auth.service';
 import { ErrorDialogComponent } from '../shared/error-dialog/error-dialog.component';
+import { TeamService } from '../team.service';
 
 @Component({
   selector: 'app-predict-dialog',
@@ -32,6 +33,8 @@ import { ErrorDialogComponent } from '../shared/error-dialog/error-dialog.compon
 })
 export class PredictDialogComponent implements OnInit, OnDestroy {
   matchDetails!: Match;
+  homeShort = '';
+  awayShort = '';
   dialogWidth: string = '500px'; // Default width
   dialogHeight: string = 'auto'; // Default height
   sessionTimer = '';
@@ -50,8 +53,11 @@ export class PredictDialogComponent implements OnInit, OnDestroy {
     private service: CommonService,
     private router: Router,
     private authService: AuthService,
+    private teamService: TeamService,
   ) {
     this.matchDetails = data.match;
+    this.homeShort = this.teamService.getShortName(this.matchDetails.home);
+    this.awayShort = this.teamService.getShortName(this.matchDetails.away);
     console.log(this.matchDetails);
   }
 

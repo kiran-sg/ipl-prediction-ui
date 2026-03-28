@@ -77,6 +77,16 @@
   width: 100%;
 }
 
+.surge-legend {
+  font-size: 0.8rem;
+  color: #e65100;
+  background: #fff3e0;
+  padding: 6px 12px;
+  border-radius: 6px;
+  margin-bottom: 8px;
+  font-weight: 500;
+}
+
 // Dialog content
 .dialog-container {
   display: flex;
@@ -121,6 +131,12 @@ th.mat-header-cell {
   color: #1a378b;
 }
 
+.surge-info {
+  font-size: 0.7rem;
+  font-weight: 400;
+  color: #777;
+}
+
 td.correct {
   color: #2e7d32;
 }
@@ -155,12 +171,16 @@ td.incorrect {
   color: #999;
 }
 
+.surge-badge {
+  font-size: 1rem;
+  margin-left: 4px;
+}
+
 // Responsive
 @media (max-width: 768px) {
   .result-grid {
     grid-template-columns: repeat(2, 1fr);
   }
-
   .result-card {
     margin: 0 0 12px;
   }
@@ -173,7 +193,7 @@ td.incorrect {
 
 @media (max-width: 480px) {
   .result-grid {
-    grid-template-columns: 1fr;
+    grid-template-columns: repeat(2, 1fr);
   }
 
   .responsive-table {
@@ -185,4 +205,10 @@ td.incorrect {
   .match-date-subtitle {
     display: none;
   }
+}
+
+.short-name { display: none; }
+@media (max-width: 600px) {
+  .full-name { display: none; }
+  .short-name { display: inline; }
 }

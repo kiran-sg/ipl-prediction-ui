@@ -25,7 +25,10 @@
 
                 <ng-container matColumnDef="match">
                 <th mat-header-cell *matHeaderCellDef> Match </th>
-                <td mat-cell *matCellDef="let row"> {{row.match}} </td>
+                <td mat-cell *matCellDef="let row">
+                    <span class="full-name">{{row.match}}</span>
+                    <span class="short-name">{{row.matchShort}}</span>
+                </td>
                 </ng-container>
 
                 <ng-container matColumnDef="dateTime">

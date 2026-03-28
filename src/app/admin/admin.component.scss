@@ -137,3 +137,17 @@ mat-header-cell, mat-cell {
     flex: 1 1 calc(25% - 32px); /* 4 cards per row */
   }
 }
+
+.short-name { display: none; }
+@media (max-width: 600px) {
+  .full-name { display: none; }
+  .short-name { display: inline; }
+
+  td, th {
+    width: auto;
+    padding: 6px 4px;
+    font-size: 0.75rem;
+    white-space: normal;
+    word-break: break-word;
+  }
+}

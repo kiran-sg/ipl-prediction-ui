@@ -1,5 +1,8 @@
 <div class="session-banner" *ngIf="sessionTimer">Session expires in <strong>{{ sessionTimer }}</strong></div>
-<h2 mat-dialog-title>{{matchDetails.home + ' VS ' + matchDetails.away}}</h2>
+<h2 mat-dialog-title>
+  <span class="full-name">{{matchDetails.home}} VS {{matchDetails.away}}</span>
+  <span class="short-name">{{homeShort}} VS {{awayShort}}</span>
+</h2>
 
   <mat-dialog-content class="mat-typography">
     <app-predict-form [matchDetails]="matchDetails" (formSubmitted)="onFormSubmitted($event)"></app-predict-form>  

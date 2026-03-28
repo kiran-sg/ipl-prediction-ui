@@ -1,4 +1,5 @@
 import { Component, Inject, inject, signal, ViewChild } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
@@ -25,6 +26,7 @@ import { Router } from '@angular/router';
 @Component({
   selector: 'app-predictions-dialog',
   imports: [
+    CommonModule,
     MatInputModule, 
     MatTableModule, 
     MatSortModule, 
@@ -45,6 +47,8 @@ export class PredictionsDialogComponent {
 
   source!: string;
   matchDetails!: Match;
+  homeShort = '';
+  awayShort = '';
   predictions: Prediction[] = [];
   teams!: Team[];
   players: Player[] = [];
@@ -52,6 +56,7 @@ export class PredictionsDialogComponent {
   dataSource: MatTableDataSource<Prediction>;
   readonly dialog = inject(MatDialog);
   readonly panelOpenState = signal(false);
+  hasSurgeUsers = false;
 
   columnsToDisplayForAdmin = ['name', 'tossPredicted', 'teamPredicted', 
     'firstInnScorePredicted', 'mostRunsScorerPredicted', 
@@ -73,6 +78,10 @@ export class PredictionsDialogComponent {
   ) {
     this.matchDetails = data.match;
     this.source = data.source;
+    if (this.matchDetails) {
+      this.homeShort = this.teamService.getShortName(this.matchDetails.home);
+      this.awayShort = this.teamService.getShortName(this.matchDetails.away);
+    }
     this.dataSource = new MatTableDataSource(this.predictions);
     if (this.source === 'admin') {
       this.setTeams();
@@ -118,6 +127,8 @@ export class PredictionsDialogComponent {
       if (data.matchResult !== null) {
         prediction.matchResult = {
           ...data.matchResult,
+          tossWon: this.displayValue(data.matchResult.tossWon),
+          teamWon: this.displayValue(data.matchResult.teamWon),
           mostRunsScorer: this.getPlayerById(data.matchResult.mostRunsScorer),
           mostWicketsTaker: this.getPlayerById(data.matchResult.mostWicketsTaker),
           playerOfTheMatch: this.getPlayerById(data.matchResult.playerOfTheMatch),
@@ -142,11 +153,8 @@ export class PredictionsDialogComponent {
             momPredicted: this.getPlayerById(prediction.momPredicted),
           };
         })
-        this.dataSource = new MatTableDataSource(this.predictions);
-        this.dataSource.paginator = this.paginator;
-      },
-      error: (error) => {
-        console.error('Error fetching matches:', error);
+        this.dataSource.data = this.predictions;
+        this.hasSurgeUsers = this.predictions.some((p: Prediction) => p.surgeUsed);
       },
     });
   }
@@ -155,18 +163,28 @@ export class PredictionsDialogComponent {
     this.service.getPredictionsByUserId().subscribe({
       next: (data: any) => {
         this.predictions = data.predictions.map((prediction: Prediction) => {
+          const hasResult = prediction.tossWon || prediction.teamWon;
           return {
             ...prediction,
+            matchShort: this.getMatchShort(prediction.match),
             tossPredicted: this.displayValue(prediction.tossPredicted),
             teamPredicted: this.displayValue(prediction.teamPredicted),
             firstInnScorePredicted: this.displayValue(prediction.firstInnScorePredicted),
             mostRunsScorerPredicted: this.getPlayerById(prediction.mostRunsScorerPredicted),
             mostWicketsTakerPredicted: this.getPlayerById(prediction.mostWicketsTakerPredicted),
             momPredicted: this.getPlayerById(prediction.momPredicted),
+            matchResult: hasResult ? {
+              tossWon: this.displayValue(prediction.tossWon),
+              teamWon: this.displayValue(prediction.teamWon),
+              firstInnScore: prediction.firstInnScore,
+              mostRunsScorer: this.getPlayerById(prediction.mostRunsScorer),
+              mostWicketsTaker: this.getPlayerById(prediction.mostWicketsTaker),
+              playerOfTheMatch: this.getPlayerById(prediction.mom),
+            } : null,
           };
         })
-        this.dataSource = new MatTableDataSource(this.predictions);
-        this.dataSource.paginator = this.paginator;
+        this.dataSource.data = this.predictions;
+        this.hasSurgeUsers = this.predictions.some((p: Prediction) => p.surgeUsed);
       },
       error: (error) => {
         console.error('Error fetching predictions:', error);
@@ -201,6 +219,17 @@ export class PredictionsDialogComponent {
 
   private displayValue(value: string): string {
     return value === 'no_result' ? 'No Result' : value;
+  }
+
+  private getMatchShort(match: string): string {
+    if (!match) return '';
+    return match.replace(/([A-Za-z ]+) VS ([A-Za-z ]+)/i, (_, home, away) => {
+      return this.teamService.getShortName(home.trim()) + ' VS ' + this.teamService.getShortName(away.trim());
+    });
+  }
+
+  getResult(row: any): any {
+    return this.matchResult || row.matchResult;
   }
 
   setTeams(): void {

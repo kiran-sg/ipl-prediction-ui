@@ -44,6 +44,8 @@ export interface MatchData {
 })
 export class MatchResultDialogComponent implements OnInit, OnDestroy {
   matchDetails!: MatchData;
+  homeShort = '';
+  awayShort = '';
   dialogWidth: string = '500px';
   dialogHeight: string = 'auto';
   teams!: Team[];
@@ -69,6 +71,8 @@ export class MatchResultDialogComponent implements OnInit, OnDestroy {
     private authService: AuthService,
   ) {
     this.matchDetails = data.match;
+    this.homeShort = this.teamService.getShortName(this.matchDetails.home);
+    this.awayShort = this.teamService.getShortName(this.matchDetails.away);
   }
 
   ngOnInit(): void {

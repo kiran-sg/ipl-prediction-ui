@@ -98,6 +98,7 @@ export class AdminComponent {
             return {
               ...match,
               match: match.home + ' VS ' + match.away + ' (Match ' + match.matchNo + ')',
+              matchShort: this.teamService.getShortName(match.home) + ' VS ' + this.teamService.getShortName(match.away) + ' (M' + match.matchNo + ')',
               disableUpdate: !isMatchOpenForUpdateResult(match.dateTime),
               dateTime: this.customDatePipe.transform(match.dateTime)
             };

@@ -19,4 +19,10 @@ export interface Prediction {
     mostWicketsTakerPredicted: string;
     points: number;
     surgeUsed: boolean;
+    tossWon: string;
+    teamWon: string;
+    firstInnScore: string;
+    mom: string;
+    mostRunsScorer: string;
+    mostWicketsTaker: string;
 }

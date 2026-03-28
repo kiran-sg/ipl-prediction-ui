@@ -69,3 +69,9 @@ mat-dialog-content {
   max-height: 70vh;
   overflow-y: auto;
 }
+
+.short-name { display: none; }
+@media (max-width: 600px) {
+  .full-name { display: none; }
+  .short-name { display: inline; }
+}
