@@ -78,19 +78,22 @@
                     <ng-container matColumnDef="match">
                         <th mat-header-cell *matHeaderCellDef>Match</th>
                         <td mat-cell *matCellDef="let row" style="padding-left: 0;">
-                            <a mat-button [matMenuTriggerFor]="menuUser" 
-                                matTooltip="Click to view match results"
-                                (click)="getMatchResult(row)">{{row.matchShort || row.match}} <span *ngIf="row.surgeUsed" class="surge-badge">⚡</span></a>
-                            <mat-menu #menuUser="matMenu">
-                                <div style="padding: 10px;">
-                                    <p>Toss Won : {{row.matchResult?.tossWon}}</p>
-                                    <p>Team Won : {{row.matchResult?.teamWon}}</p>
-                                    <p>1st Innings Score : {{row.matchResult?.firstInnScore}}</p>
-                                    <p>Best Batter : {{row.matchResult?.mostRunsScorer}}</p>
-                                    <p>Best Bowler : {{row.matchResult?.mostWicketsTaker}}</p>
-                                    <p>Player of the Match : {{row.matchResult?.playerOfTheMatch}}</p>
-                                </div>
-                            </mat-menu> 
+                            @if (row.matchResult) {
+                                <a mat-button [matMenuTriggerFor]="menuUser" 
+                                    matTooltip="Click to view match results">{{row.matchShort || row.match}} <span *ngIf="row.surgeUsed" class="surge-badge">⚡</span></a>
+                                <mat-menu #menuUser="matMenu">
+                                    <div style="padding: 10px;">
+                                        <p>Toss Won : {{row.matchResult?.tossWon}}</p>
+                                        <p>Team Won : {{row.matchResult?.teamWon}}</p>
+                                        <p>1st Innings Score : {{row.matchResult?.firstInnScore}}</p>
+                                        <p>Best Batter : {{row.matchResult?.mostRunsScorer}}</p>
+                                        <p>Best Bowler : {{row.matchResult?.mostWicketsTaker}}</p>
+                                        <p>Player of the Match : {{row.matchResult?.playerOfTheMatch}}</p>
+                                    </div>
+                                </mat-menu>
+                            } @else {
+                                {{row.matchShort || row.match}} <span *ngIf="row.surgeUsed" class="surge-badge">⚡</span>
+                            }
                         </td>
                     </ng-container>
                 }
@@ -158,7 +161,11 @@
                 <ng-container matColumnDef="points">
                     <th mat-header-cell *matHeaderCellDef>Points</th>
                     <td mat-cell *matCellDef="let row" class="points-cell">
-                        <span class="points-badge" [class.has-points]="row.points > 0">{{row.points}}</span>
+                        @if (getResult(row)) {
+                            <span class="points-badge" [class.has-points]="row.points > 0">{{row.points}}</span>
+                        } @else {
+                            <span class="pending-badge">Pending</span>
+                        }
                     </td>
                 </ng-container>
 
