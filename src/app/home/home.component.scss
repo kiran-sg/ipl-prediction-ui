@@ -1,9 +1,8 @@
-/* Container for better spacing control */
 .prediction-container {
   width: 100%;
-  max-width: 1200px; /* Optional: Prevents stretching on very large screens */
-  margin: 0 auto; /* Centers the container */
-  padding: 0 16px; /* Prevents content from touching edges on small screens */
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 16px;
 }
 
 .page-banner {
@@ -39,12 +38,20 @@
 .prediction-row {
   display: flex;
   flex-wrap: wrap;
-  justify-content: center; /* Center buttons horizontally */
+  justify-content: center;
   align-items: center;
   gap: 12px;
-  margin: 0 auto 20px auto; /* Center the row itself */
-  width: fit-content; /* Ensures the row doesn't stretch full width */
-  padding: 0 16px; /* Prevents edge-touching on small screens */
+  margin: 0 auto 20px auto;
+  width: fit-content;
+  padding: 0 16px;
+}
+
+.history-btn {
+  background: #1a378b;
+  color: white;
+  text-transform: uppercase;
+  font-weight: 600;
+  letter-spacing: 0.5px;
 }
 
 /* Text styling */
@@ -425,3 +432,4 @@
     grid-template-columns: repeat(3, 1fr); /* 3 columns */
   }
 }
+
