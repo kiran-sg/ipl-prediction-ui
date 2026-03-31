@@ -25,12 +25,20 @@ export class PlayerSelectorComponent implements OnChanges {
   filteredPlayers: Player[] = [];
   allCategories: string[] = [];
   selectedCategories: string[] = [];
+  allTeams: string[] = [];
+  selectedTeam = '';
 
   ngOnChanges(): void {
     this.allCategories = [...new Set(this.players.map(p => p.category))].sort();
+    this.allTeams = [...new Set(this.players.map(p => p.team))].sort();
     if (this.selectedCategories.length === 0 && this.defaultCategories.length > 0) {
       this.selectedCategories = [...this.defaultCategories];
     }
+    this.filter();
+  }
+
+  toggleTeam(team: string): void {
+    this.selectedTeam = this.selectedTeam === team ? '' : team;
     this.filter();
   }
 
@@ -46,11 +54,15 @@ export class PlayerSelectorComponent implements OnChanges {
 
   clearFilters(): void {
     this.selectedCategories = [];
+    this.selectedTeam = '';
     this.filter();
   }
 
   filter(): void {
     let result = this.players;
+    if (this.selectedTeam) {
+      result = result.filter(p => p.team === this.selectedTeam);
+    }
     if (this.selectedCategories.length > 0) {
       result = result.filter(p => this.selectedCategories.includes(p.category));
     }
@@ -58,7 +70,9 @@ export class PlayerSelectorComponent implements OnChanges {
     if (search) {
       result = result.filter(p => p.playerName.toLowerCase().includes(search) || p.team.toLowerCase().includes(search));
     }
-    this.filteredPlayers = result;
+    this.filteredPlayers = result.sort((a, b) =>
+      (b.playerNo === this.selected ? 1 : 0) - (a.playerNo === this.selected ? 1 : 0)
+    );
   }
 
   select(playerNo: string): void {

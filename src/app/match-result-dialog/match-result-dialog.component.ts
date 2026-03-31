@@ -228,6 +228,12 @@ export class MatchResultDialogComponent implements OnInit, OnDestroy {
   resetResults() {
   }
 
+  get isUpdateAllowed(): boolean {
+    const matchTime = new Date(this.matchDetails.dateTime).getTime();
+    const now = new Date().getTime();
+    return (now - matchTime) <= 24 * 60 * 60 * 1000;
+  }
+
   ngOnDestroy(): void {
     clearInterval(this.timerInterval);
   }

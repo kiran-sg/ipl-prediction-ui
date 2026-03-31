@@ -9,16 +9,21 @@
     <span class="chip-team">{{ player.team }}</span>
   </div>
 
-  <!-- Category filter chips -->
+  <!-- Filter chips -->
   <div class="category-filters">
     <mat-chip-set>
+      <mat-chip *ngFor="let team of allTeams"
+                [highlighted]="selectedTeam === team"
+                (click)="toggleTeam(team)">
+        {{ team }}
+      </mat-chip>
       <mat-chip *ngFor="let cat of allCategories"
                 [highlighted]="isCategorySelected(cat)"
                 (click)="toggleCategory(cat)">
         {{ cat }}
       </mat-chip>
     </mat-chip-set>
-    <button class="clear-btn" *ngIf="selectedCategories.length > 0" (click)="clearFilters()">
+    <button class="clear-btn" *ngIf="selectedCategories.length > 0 || selectedTeam" (click)="clearFilters()">
       <mat-icon>clear</mat-icon> Clear
     </button>
   </div>

@@ -132,10 +132,12 @@ export class AdminComponent {
   }
 
   openPredictionsDialog(match: MatchData): void {
+    const isMobile = window.innerWidth <= 600;
     const dialogRef = this.dialog.open(PredictionsDialogComponent, {
       height: 'auto',
-      maxWidth: '80vw',
-      maxHeight: '700vw',
+      width: isMobile ? '95vw' : 'auto',
+      maxWidth: isMobile ? '95vw' : '80vw',
+      maxHeight: '90vh',
       autoFocus: false,
       disableClose: true,
       scrollStrategy: this.overlay.scrollStrategies.block(),

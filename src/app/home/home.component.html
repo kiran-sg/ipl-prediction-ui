@@ -61,7 +61,7 @@
             (click)="openPredictDialog(match)">
             <div class="button-content">
               <div class="text-column">
-                <span class="main-text">Predict Match</span>
+                <span class="main-text">{{ match.isPredicted ? 'Edit Prediction' : 'Predict Match' }}</span>
               </div>
             </div>
           </button>
