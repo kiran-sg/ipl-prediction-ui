@@ -11,9 +11,9 @@ import { CustomDatePipe } from '../custom-date.pipe';
 import { isMatchTimeBelowSixtyMins, isMatchToday, TOURNAMENT_PREDICTION_CLOSING_TIME } from '../utils/common-utils';
 import { PredictionsDialogComponent } from '../predictions-dialog/predictions-dialog.component';
 import { Overlay } from '@angular/cdk/overlay';
-import { TournamentPredictionsDialogComponent } from '../tournament-predictions-dialog/tournament-predictions-dialog.component';
 import { MatIconModule } from '@angular/material/icon';
 import { TeamService } from '../team.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-home',
@@ -35,15 +35,16 @@ export class HomeComponent {
   matchStartDate: Date = new Date();
   matchEndDate: Date = new Date(new Date().setDate(new Date().getDate() + 10));
   readonly dialog = inject(MatDialog);
-  
+
   countdownText = 'Calculating...';
   private countdownInterval: any;
 
   constructor(
-    private service: CommonService, 
+    private service: CommonService,
     private overlay: Overlay,
     private datePipe: DatePipe,
     private teamService: TeamService,
+    private router: Router,
   ) {
     this.teamService.loadTeams().subscribe(() => this.fetchUpcomingMatches());
   }
@@ -69,7 +70,7 @@ export class HomeComponent {
       disableClose: true,
       data: { match }
     });
-  
+
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
         this.getPredictionsForMatches();
@@ -87,22 +88,14 @@ export class HomeComponent {
       scrollStrategy: this.overlay.scrollStrategies.block(),
       data: { source: 'user' }
     });
-  
+
     dialogRef.afterClosed().subscribe(result => {
-      
+
     });
   }
 
   openTournamentPredictionDialog(): void {
-    const dialogRef = this.dialog.open(TournamentPredictionsDialogComponent, {
-      width: '500px',
-      height: 'auto',
-      disableClose: true,
-    });
-  
-    dialogRef.afterClosed().subscribe(result => {
-      
-    });
+    this.router.navigate(['/season-predictor']);
   }
 
   private getTeamLogo(teamName: string): string {
@@ -163,7 +156,7 @@ export class HomeComponent {
   }
 
   updateCountdown() {
-    const closingDate = new Date(TOURNAMENT_PREDICTION_CLOSING_TIME); // May 9, 6 PM IST
+    const closingDate = new Date(TOURNAMENT_PREDICTION_CLOSING_TIME);
     const now = new Date();
     const diff = closingDate.getTime() - now.getTime();
 
@@ -173,12 +166,20 @@ export class HomeComponent {
       return;
     }
 
-    const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-    const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-    const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-    const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+    const isSameDay =
+      closingDate.getFullYear() === now.getFullYear() &&
+      closingDate.getMonth() === now.getMonth() &&
+      closingDate.getDate() === now.getDate();
 
-    this.countdownText = 'Closes in ' + `${days}d ${hours}h ${minutes}m ${seconds}s`;
+    if (isSameDay) {
+      const hours = Math.floor(diff / (1000 * 60 * 60));
+      const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+      const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+      this.countdownText = `Closes in ${hours}h ${minutes}m ${seconds}s`;
+    } else {
+      const formatted = this.datePipe.transform(closingDate, 'dd-MMM-yyyy') || '';
+      this.countdownText = `Closes on ${formatted}`;
+    }
   }
 
 }

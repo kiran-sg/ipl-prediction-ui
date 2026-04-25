@@ -1,0 +1,165 @@
+<div class="page-top">
+  <div class="page-top-inner">
+    <div class="page-header">
+      <button mat-icon-button (click)="goBack()">
+        <mat-icon>arrow_back</mat-icon>
+      </button>
+      <h2>Season Predictor</h2>
+    </div>
+    <div class="closing-message">
+      <mat-icon>schedule</mat-icon>
+      <span>{{ countdownText }}</span>
+    </div>
+  </div>
+</div>
+
+<div class="page-container">
+  <form [formGroup]="tournamentPredictionForm" (ngSubmit)="onSubmit()" class="predict-form">
+    <mat-tab-group animationDuration="200ms">
+
+      <!-- Awards Tab -->
+      <mat-tab>
+        <ng-template mat-tab-label>
+          <span class="tab-label">
+            <span>🏆 Awards</span>
+            <span class="tab-boxes">
+              <span *ngFor="let filled of filledFlags(awardsFields)" class="tab-box" [class.filled]="filled">{{ filled ? '☑' : '☐' }}</span>
+            </span>
+          </span>
+        </ng-template>
+        <div class="tab-content">
+          <div class="field-row">
+            <app-player-selector
+              [requireTeamFilter]="false"
+              [players]="players"
+              label="Player of the Tournament (MVP)"
+              [defaultCategories]="[]"
+              [selected]="tournamentPredictionForm.get('playerOfTournamentPredicted')?.value"
+              (selectionChange)="onSelect('playerOfTournamentPredicted', $event)">
+            </app-player-selector>
+          </div>
+
+          <div class="field-row">
+            <app-team-selector
+              [teams]="teams"
+              label="Fair Play Award"
+              [showNoResult]="false"
+              [selected]="tournamentPredictionForm.get('fairPlayTeamPredicted')?.value"
+              (selectionChange)="onSelect('fairPlayTeamPredicted', $event)">
+            </app-team-selector>
+          </div>
+
+          <div class="field-row">
+            <app-player-selector
+              [requireTeamFilter]="false"
+              [players]="players"
+              label="Emerging Player"
+              [defaultCategories]="[]"
+              [selected]="tournamentPredictionForm.get('emergingPlayerPredicted')?.value"
+              (selectionChange)="onSelect('emergingPlayerPredicted', $event)">
+            </app-player-selector>
+          </div>
+        </div>
+      </mat-tab>
+
+      <!-- Batting Tab -->
+      <mat-tab>
+        <ng-template mat-tab-label>
+          <span class="tab-label">
+            <span>🏏 Batting</span>
+            <span class="tab-boxes">
+              <span *ngFor="let filled of filledFlags(battingFields)" class="tab-box" [class.filled]="filled">{{ filled ? '☑' : '☐' }}</span>
+            </span>
+          </span>
+        </ng-template>
+        <div class="tab-content">
+          <div class="field-row">
+            <app-player-selector
+              [requireTeamFilter]="false"
+              [players]="players"
+              label="Orange Cap"
+              [defaultCategories]="['Batter', 'WK-Batter', 'All-Rounder']"
+              [selected]="tournamentPredictionForm.get('orangeCapPredicted')?.value"
+              (selectionChange)="onSelect('orangeCapPredicted', $event)">
+            </app-player-selector>
+          </div>
+
+          <div class="field-row">
+            <app-player-selector
+              [requireTeamFilter]="false"
+              [players]="players"
+              label="Most Fours"
+              [defaultCategories]="['Batter', 'WK-Batter', 'All-Rounder']"
+              [selected]="tournamentPredictionForm.get('mostFoursPredicted')?.value"
+              (selectionChange)="onSelect('mostFoursPredicted', $event)">
+            </app-player-selector>
+          </div>
+
+          <div class="field-row">
+            <app-player-selector
+              [requireTeamFilter]="false"
+              [players]="players"
+              label="Most Sixes"
+              [defaultCategories]="['Batter', 'WK-Batter', 'All-Rounder']"
+              [selected]="tournamentPredictionForm.get('mostSixesPredicted')?.value"
+              (selectionChange)="onSelect('mostSixesPredicted', $event)">
+            </app-player-selector>
+          </div>
+        </div>
+      </mat-tab>
+
+      <!-- Bowling Tab -->
+      <mat-tab>
+        <ng-template mat-tab-label>
+          <span class="tab-label">
+            <span>🎯 Bowling</span>
+            <span class="tab-boxes">
+              <span *ngFor="let filled of filledFlags(bowlingFields)" class="tab-box" [class.filled]="filled">{{ filled ? '☑' : '☐' }}</span>
+            </span>
+          </span>
+        </ng-template>
+        <div class="tab-content">
+          <div class="field-row">
+            <app-player-selector
+              [requireTeamFilter]="false"
+              [players]="players"
+              label="Purple Cap"
+              [defaultCategories]="['Bowler', 'All-Rounder']"
+              [selected]="tournamentPredictionForm.get('purpleCapPredicted')?.value"
+              (selectionChange)="onSelect('purpleCapPredicted', $event)">
+            </app-player-selector>
+          </div>
+
+          <div class="field-row">
+            <app-player-selector
+              [requireTeamFilter]="false"
+              [players]="players"
+              label="Most Dot Balls"
+              [defaultCategories]="['Bowler', 'All-Rounder']"
+              [selected]="tournamentPredictionForm.get('mostDotBallsPredicted')?.value"
+              (selectionChange)="onSelect('mostDotBallsPredicted', $event)">
+            </app-player-selector>
+          </div>
+
+          <div class="field-row">
+            <app-player-selector
+              [requireTeamFilter]="false"
+              [players]="players"
+              label="Best Bowling Figure"
+              [defaultCategories]="['Bowler', 'All-Rounder']"
+              [selected]="tournamentPredictionForm.get('bestBowlingFigPredicted')?.value"
+              (selectionChange)="onSelect('bestBowlingFigPredicted', $event)">
+            </app-player-selector>
+          </div>
+        </div>
+      </mat-tab>
+
+    </mat-tab-group>
+
+    <div class="page-actions-spacer"></div>
+    <div class="page-actions">
+      <button mat-button type="button" (click)="goBack()">Back to Home</button>
+      <button mat-flat-button type="submit" *ngIf="!lockPrediction">Update Prediction</button>
+    </div>
+  </form>
+</div>

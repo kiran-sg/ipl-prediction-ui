@@ -25,27 +25,27 @@ td, th {
     letter-spacing: 1px;
     font-weight: bold;
 }
-  
+
 .card-container {
     display: flex;
     flex-wrap: wrap;
     gap: 16px;
     padding: 16px;
 }
-  
+
 .admin-card {
-    flex: 1 1 100%; /* 1 card per row on mobile */
+    flex: 1 1 100%;
     box-sizing: border-box;
-    background-color: #faf9fd; /* Card background */
-    border: 1px solid #ddd;
-    border-radius: 8px;
+    background: none;
+    border: none;
+    box-shadow: none;
     padding: 16px;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
     min-height: 350px;
 }
-  
+
 .admin-header {
     display: flex;
     justify-content: center;
@@ -94,7 +94,7 @@ td, th {
   white-space: pre-line;
   max-width: 300px;
 }
-  
+
 mat-card-content {
   margin-top: 0; /* Remove default margin */
   padding-top: 0; /* Remove default padding */
@@ -110,7 +110,7 @@ mat-header-cell, mat-cell {
   text-align: center; /* Center-align table content */
   padding: 8px; /* Add padding for better spacing */
 }
-  
+
 /* Responsive styles for tablets (2 cards per row) */
 @media (min-width: 768px) {
   .leaderboard-card {
@@ -149,5 +149,46 @@ mat-header-cell, mat-cell {
     font-size: 0.75rem;
     white-space: normal;
     word-break: break-word;
+  }
+}
+
+.tab-content {
+  padding: 16px 0;
+}
+
+.season-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  clear: both;
+}
+
+.season-form-field {
+  width: 100%;
+}
+
+.season-submit {
+  margin-top: 16px;
+  float: right;
+}
+
+.season-view-btn {
+  margin-bottom: 16px;
+}
+
+.season-top-actions {
+  margin-bottom: 16px;
+  overflow: hidden;
+}
+
+@media (max-width: 768px) {
+  .season-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 480px) {
+  .season-grid {
+    grid-template-columns: 1fr;
   }
 }

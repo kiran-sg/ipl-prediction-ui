@@ -19,6 +19,7 @@ export class PlayerSelectorComponent implements OnChanges {
   @Input() label = '';
   @Input() selected = '';
   @Input() defaultCategories: string[] = [];
+  @Input() requireTeamFilter = false;
   @Output() selectionChange = new EventEmitter<string>();
 
   searchText = '';
@@ -86,5 +87,9 @@ export class PlayerSelectorComponent implements OnChanges {
 
   isCategorySelected(cat: string): boolean {
     return this.selectedCategories.includes(cat);
+  }
+
+  get showGrid(): boolean {
+    return !this.requireTeamFilter || !!this.selectedTeam;
   }
 }

@@ -39,4 +39,21 @@ export class TeamService {
   getAllShortNames(): string[] {
     return this.teams.map(t => t.shortName);
   }
+
+  getIdByShortName(shortName: string): number | null {
+    return this.teams.find(t => t.shortName === shortName)?.id ?? null;
+  }
+
+  getShortNameById(id: number): string {
+    return this.teams.find(t => t.id === id)?.shortName ?? '';
+  }
+
+  getTeamsForSelector(): { id: number; name: string; shortName: string; logo: string }[] {
+    return this.teams.map(t => ({
+      id: t.id,
+      name: t.shortName,
+      shortName: t.shortName,
+      logo: t.logoUrl,
+    }));
+  }
 }

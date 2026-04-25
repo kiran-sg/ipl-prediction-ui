@@ -1,78 +1,105 @@
 <div class="card-container">
-    <ng-container>
-      <mat-card class="admin-card">
-        <mat-card-header class="admin-header">
-          <mat-card-title class="admin-title">Admin Dashboard</mat-card-title> 
-          <mat-icon
-            class="admin-info-icon"
-            [matTooltip]="'Today’s matches are shown on top.\n
-            Yesterday’s matches come next.\n
-            All other matches follow in chronological order.'"
-            matTooltipClass="multiline-tooltip"
-            aria-label="Button that displays a tooltip when focused or hovered over">
-            info
-          </mat-icon>
-        </mat-card-header>
-        <mat-card-content>
-          <div>
-            <mat-form-field>
-                <mat-label>Filter</mat-label>
-                <input matInput (keyup)="applyFilter($event)" placeholder="Search..." #input>
-            </mat-form-field>
-              
-            <section class="example-container mat-elevation-z8" tabindex="0">
-            <table mat-table [dataSource]="dataSource" matSort>
+  <mat-card class="admin-card">
+    <mat-card-header class="admin-header">
+      <mat-card-title class="admin-title">Admin Dashboard</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <mat-tab-group>
 
+        <!-- Match Results Tab -->
+        <mat-tab label="Match Results">
+          <div class="tab-content">
+            <mat-form-field>
+              <mat-label>Filter</mat-label>
+              <input matInput (keyup)="applyFilter($event)" placeholder="Search..." #input>
+            </mat-form-field>
+
+            <section class="example-container mat-elevation-z8" tabindex="0">
+              <table mat-table [dataSource]="dataSource" matSort>
                 <ng-container matColumnDef="match">
-                <th mat-header-cell *matHeaderCellDef> Match </th>
-                <td mat-cell *matCellDef="let row">
+                  <th mat-header-cell *matHeaderCellDef> Match </th>
+                  <td mat-cell *matCellDef="let row">
                     <span class="full-name">{{row.match}}</span>
                     <span class="short-name">{{row.matchShort}}</span>
-                </td>
+                  </td>
                 </ng-container>
 
                 <ng-container matColumnDef="dateTime">
-                <th mat-header-cell *matHeaderCellDef> Date & Time </th>
-                <td mat-cell *matCellDef="let row"> {{row.dateTime}} </td>
+                  <th mat-header-cell *matHeaderCellDef> Date & Time </th>
+                  <td mat-cell *matCellDef="let row"> {{row.dateTime}} </td>
                 </ng-container>
 
                 <ng-container matColumnDef="action">
-                <th mat-header-cell *matHeaderCellDef> Action </th>
-                <td mat-cell *matCellDef="let row">
+                  <th mat-header-cell *matHeaderCellDef> Action </th>
+                  <td mat-cell *matCellDef="let row">
                     <div class="action-button-row">
-                        <button mat-mini-fab [disabled]="row.disableUpdate"
-                          (click)="openMatchResultDialog(row)"
-                          class="match-button" matTooltip="Update Match Results">
-                          <mat-icon>sports_score</mat-icon>                          
-                        </button>
-                        <button mat-mini-fab aria-label="View Predictions"
-                          (click)="openPredictionsDialog(row)"
-                          matTooltip="View Predictions">
-                          <mat-icon>format_list_bulleted</mat-icon>
-                        </button>
+                      <button mat-mini-fab [disabled]="row.disableUpdate"
+                        (click)="openMatchResultDialog(row)"
+                        class="match-button" matTooltip="Update Match Results">
+                        <mat-icon>sports_score</mat-icon>
+                      </button>
+                      <button mat-mini-fab aria-label="View Predictions"
+                        (click)="openPredictionsDialog(row)"
+                        matTooltip="View Predictions">
+                        <mat-icon>format_list_bulleted</mat-icon>
+                      </button>
                     </div>
-                </td>
+                  </td>
                 </ng-container>
-            
+
                 <tr mat-header-row *matHeaderRowDef="columnsToDisplay; sticky: true"></tr>
                 <tr mat-row *matRowDef="let row; columns: columnsToDisplay;"
-                [ngClass]="{
-                  'today-row': isToday(row.dateTime),
-                  'yesterday-row': isYesterday(row.dateTime)}"></tr>
-            
-                <!-- Row shown when there is no matching data. -->
+                  [ngClass]="{
+                    'today-row': isToday(row.dateTime),
+                    'yesterday-row': isYesterday(row.dateTime)}"></tr>
                 <tr class="mat-row" *matNoDataRow>
-                <td class="mat-cell" colspan="4">No data matching the filter "{{input.value}}"</td>
+                  <td class="mat-cell" colspan="4">No data matching the filter "{{input.value}}"</td>
                 </tr>
-            </table>
-            
-            <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]" aria-label="Select page of users"></mat-paginator>
-            </section>   
+              </table>
+              <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]" aria-label="Select page of users"></mat-paginator>
+            </section>
           </div>
-             
-        </mat-card-content>
-      </mat-card>
-    </ng-container>
-  </div>
-    
-    
+        </mat-tab>
+
+        <!-- Season Results Tab -->
+        <mat-tab label="Season Results">
+          <div class="tab-content">
+            <div class="season-top-actions">
+              <button mat-stroked-button (click)="viewTournamentPredictions()">
+                <mat-icon>format_list_bulleted</mat-icon> View Predictions
+              </button>
+            </div>
+            <div class="season-grid">
+              <div class="season-field" *ngFor="let field of seasonFields">
+                <mat-form-field appearance="outline" class="season-form-field">
+                  <mat-label>{{ field.label }}</mat-label>
+                  <input matInput
+                    [ngModel]="field.value"
+                    [matAutocomplete]="auto"
+                    (input)="onSearchInput(field, $event)"
+                    (focus)="filterOptions(field)">
+                  <mat-autocomplete #auto="matAutocomplete"
+                    [displayWith]="field.type === 'player' ? displayPlayer : displayTeam"
+                    (optionSelected)="onOptionSelected(field, $event.option.value)">
+                    <mat-option *ngFor="let option of field.filteredOptions" [value]="option">
+                      <ng-container *ngIf="field.type === 'player'">
+                        {{ option.playerName }} ({{ option.team }})
+                      </ng-container>
+                      <ng-container *ngIf="field.type === 'team'">
+                        {{ option.name }}
+                      </ng-container>
+                    </mat-option>
+                  </mat-autocomplete>
+                </mat-form-field>
+              </div>
+            </div>
+            <button mat-flat-button class="season-submit" (click)="submitSeasonResult()">
+              Update Season Results
+            </button>
+          </div>
+        </mat-tab>
+
+      </mat-tab-group>
+    </mat-card-content>
+  </mat-card>
+</div>

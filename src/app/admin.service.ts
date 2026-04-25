@@ -15,25 +15,48 @@ export class AdminService {
   constructor(private http: HttpClient, private loadingService: LoadingService) { }
 
   getMatchResult(matchId: string): Observable<any> {
-    this.loadingService.show(); // Show loader
+    this.loadingService.show();
     return this.http.get(`${this.baseUrl}/match/result?matchId=${matchId}`).pipe(
-      finalize(() => this.loadingService.hide()) // Hide loader when the request completes
+      finalize(() => this.loadingService.hide())
     );
   }
 
   updateMatchResults(matchResult: MatchResult): Observable<any> {
-    this.loadingService.show(); // Show loader
+    this.loadingService.show();
     return this.http.post(`${this.baseUrl}/match/result`, matchResult, {
       withCredentials: true,
     }).pipe(
-      finalize(() => this.loadingService.hide()) // Hide loader when the request completes
+      finalize(() => this.loadingService.hide())
     );
   }
 
   getPredictionsByMatch(matchId: string): Observable<any> {
-    this.loadingService.show(); // Show loader
+    this.loadingService.show();
     return this.http.get(`${this.baseUrl}/predictions/match?matchId=${matchId}`).pipe(
-      finalize(() => this.loadingService.hide()) // Hide loader when the request completes
+      finalize(() => this.loadingService.hide())
+    );
+  }
+
+  saveTournamentResult(result: any): Observable<any> {
+    this.loadingService.show();
+    return this.http.post(`${this.baseUrl}/tournament/result`, result, {
+      withCredentials: true,
+    }).pipe(
+      finalize(() => this.loadingService.hide())
+    );
+  }
+
+  getTournamentResult(): Observable<any> {
+    this.loadingService.show();
+    return this.http.get(`${this.baseUrl}/tournament/result`).pipe(
+      finalize(() => this.loadingService.hide())
+    );
+  }
+
+  getAllTournamentPredictions(): Observable<any> {
+    this.loadingService.show();
+    return this.http.get(`${this.baseUrl}/tournament/predictions`).pipe(
+      finalize(() => this.loadingService.hide())
     );
   }
 }

@@ -1,0 +1,119 @@
+:host {
+  display: block;
+}
+
+.page-top {
+  position: sticky;
+  top: 0;
+  background: white;
+  z-index: 10;
+}
+
+.page-top-inner {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 16px 16px 0;
+}
+
+.page-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+
+  h2 {
+    margin: 0;
+    font-size: 1.4rem;
+  }
+}
+
+.closing-message {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  color: #d32f2f;
+  background: rgba(211, 47, 47, 0.1);
+  padding: 8px 12px;
+  border-radius: 4px;
+  margin-bottom: 12px;
+}
+
+.page-container {
+  max-width: 900px;
+  margin: 0 auto;
+  box-sizing: border-box;
+}
+
+.predict-form {
+  display: flex;
+  flex-direction: column;
+  padding: 16px;
+}
+
+.page-content {
+  flex: 1;
+}
+
+.field-row {
+  position: relative;
+  margin-bottom: 8px;
+}
+
+.tab-content {
+  padding: 16px 0;
+}
+
+.tab-label {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  line-height: 1.2;
+}
+
+.tab-boxes {
+  display: inline-flex;
+  gap: 2px;
+  font-size: 14px;
+}
+
+.tab-box {
+  color: #bbb;
+
+  &.filled {
+    color: #4caf50;
+  }
+}
+
+@media (max-width: 600px) {
+  .tab-label {
+    font-size: 0.8rem;
+  }
+
+  .tab-boxes {
+    font-size: 12px;
+  }
+
+  .predict-form {
+    padding: 8px;
+  }
+}
+
+.page-actions-spacer {
+  height: 110px;
+}
+
+.page-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  padding: 12px 16px 60px;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  max-width: 900px;
+  margin: 0 auto;
+  background: white;
+  z-index: 999;
+}

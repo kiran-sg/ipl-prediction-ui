@@ -184,8 +184,93 @@ td.incorrect {
 
 // Responsive
 .short-name { display: none; }
+.mobile-only { display: none; }
+.desktop-only { display: block; }
+
+.mobile-cards-container {
+  max-height: 55vh;
+  overflow-y: auto;
+  padding: 0 4px;
+}
+
+.prediction-card {
+  background: #f9f9f9;
+  border: 1px solid #e0e0e0;
+  border-radius: 10px;
+  padding: 12px;
+  margin-bottom: 10px;
+}
+
+.card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+  border-bottom: 1px solid #e0e0e0;
+  padding-bottom: 8px;
+}
+
+.card-user {
+  font-weight: 700;
+  font-size: 0.95rem;
+}
+
+.card-points {
+  margin-left: auto;
+}
+
+.card-date {
+  font-size: 0.75rem;
+  color: #777;
+  margin-bottom: 8px;
+}
+
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 6px;
+}
+
+.card-field {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.card-label {
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  color: #777;
+  font-weight: 600;
+}
+
+.card-value {
+  font-size: 0.85rem;
+  font-weight: 500;
+
+  &.correct { color: #2e7d32; }
+  &.incorrect { color: #c62828; }
+}
+
+.points-top {
+  display: inline-block;
+  padding: 1px 8px;
+  border-radius: 10px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  background: #eee;
+  color: #777;
+
+  &.has-points {
+    background: #e8f5e9;
+    color: #2e7d32;
+  }
+}
 
 @media (max-width: 768px) {
+  .mobile-only { display: block; }
+  .desktop-only { display: none !important; }
+
   .result-grid {
     grid-template-columns: repeat(2, 1fr);
   }

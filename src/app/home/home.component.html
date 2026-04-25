@@ -6,9 +6,7 @@
     <button mat-flat-button class="history-btn" (click)="openPreviousPredictionsDialog()">
       <mat-icon>history</mat-icon> My Predictions
     </button>
-  </div>
-  <!-- <div class="prediction-row">
-    <button mat-fab extended class="tournament-prediction" 
+    <button mat-fab extended class="tournament-prediction"
         (click)="openTournamentPredictionDialog()">
       <div class="button-content">
         <mat-icon>emoji_events</mat-icon>
@@ -18,7 +16,7 @@
         </div>
       </div>
     </button>
-  </div> -->
+  </div>
   <div class="card-container">
     <ng-container *ngFor="let match of matches">
       <mat-card class="match-card">
@@ -32,7 +30,7 @@
             </h3>
           </div>
           <div class="prediction-pending-badge-container">
-            <span *ngIf="!match.isPredicted && !match.isLocked && match.home !== 'TBC' && match.away !== 'TBC'" 
+            <span *ngIf="!match.isPredicted && !match.isLocked && match.home !== 'TBC' && match.away !== 'TBC'"
               class="prediction-pending-badge">
               Prediction Pending
             </span>
@@ -54,8 +52,8 @@
           <div *ngIf="!match.isLocked && match.isToday" class="locks-at-badge">
             🔒 Predictions lock at {{ match.predictionLockingTime }} IST
           </div>
-          <button mat-flat-button 
-            [disabled]="match.isLocked || match.home === 'TBC' || match.away === 'TBC'" 
+          <button mat-flat-button
+            [disabled]="match.isLocked || match.home === 'TBC' || match.away === 'TBC'"
             class="predict-match-button"
             [class.has-pending]="!match.isPredicted"
             (click)="openPredictDialog(match)">

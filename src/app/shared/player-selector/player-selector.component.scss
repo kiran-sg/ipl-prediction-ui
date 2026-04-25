@@ -181,6 +181,25 @@
   font-size: 0.85rem;
 }
 
+.team-filter-prompt {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: #888;
+  font-size: 0.85rem;
+  padding: 10px 12px;
+  background: #f5f5f5;
+  border-radius: 8px;
+  border: 1px dashed #ccc;
+
+  mat-icon {
+    font-size: 18px;
+    width: 18px;
+    height: 18px;
+    color: #aaa;
+  }
+}
+
 @media (max-width: 400px) {
   .player-grid {
     grid-template-columns: repeat(2, 1fr);

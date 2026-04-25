@@ -56,8 +56,10 @@
         <input matInput (keyup)="applyFilter($event)" placeholder="Type to filter..." #input>
         <mat-icon matSuffix>search</mat-icon>
     </mat-form-field>
-      
-    <section class="table-container mat-elevation-z2">
+
+    <mat-paginator [pageSizeOptions]="[10, 25, 50]" aria-label="Select page of users"></mat-paginator>
+
+    <section class="table-container mat-elevation-z2 desktop-only">
         <div class="table-wrapper">
             <table mat-table [dataSource]="dataSource" matSort class="responsive-table">
 
@@ -79,7 +81,7 @@
                         <th mat-header-cell *matHeaderCellDef>Match</th>
                         <td mat-cell *matCellDef="let row" style="padding-left: 0;">
                             @if (row.matchResult) {
-                                <a mat-button [matMenuTriggerFor]="menuUser" 
+                                <a mat-button [matMenuTriggerFor]="menuUser"
                                     matTooltip="Click to view match results">{{row.matchShort || row.match}} <span *ngIf="row.surgeUsed" class="surge-badge">⚡</span></a>
                                 <mat-menu #menuUser="matMenu">
                                     <div style="padding: 10px;">
@@ -182,9 +184,45 @@
                 </tr>
             </table>
         </div>
-        
-        <mat-paginator [pageSizeOptions]="[10, 25, 50]" aria-label="Select page of users"></mat-paginator>
     </section>
+
+    <!-- Mobile Cards -->
+    <div class="mobile-only mobile-cards-container">
+        <div class="prediction-card" *ngFor="let row of pagedData">
+            <div class="card-header">
+                @if (source === 'admin') {
+                    <span class="card-user">{{ row.user?.name || row.userName }}
+                        <span *ngIf="row.surgeUsed" class="surge-badge">⚡</span>
+                    </span>
+                } @else {
+                    <span class="card-user">{{ row.matchShort || row.match }}</span>
+                }
+                <span class="card-points">
+                    @if (getResult(row)) {
+                        <span class="points-top" [class.has-points]="row.points > 0">{{ row.points }} pts</span>
+                    } @else {
+                        <span class="pending-badge">Pending</span>
+                    }
+                </span>
+            </div>
+            @if (source === 'user' && row.matchDate) {
+                <div class="card-date">{{ row.matchDate }}</div>
+            }
+            <div class="card-grid">
+                <div class="card-field" *ngFor="let field of (source === 'admin' ? adminCardFields : userCardFields)">
+                    <span class="card-label">{{ field.label }}</span>
+                    <span class="card-value"
+                        [class.correct]="isCardCorrect(row, field.key)"
+                        [class.incorrect]="isCardIncorrect(row, field.key)">
+                        {{ row[field.key] || '-' }}
+                        <span class="match-icon" *ngIf="getCardResultValue(row, field.key) != null && row[field.key]">
+                            {{ isCardCorrect(row, field.key) ? '✅' : '❌' }}
+                        </span>
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
 </mat-dialog-content>
 
 <mat-dialog-actions align="end">
