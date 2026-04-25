@@ -195,7 +195,9 @@
                         <span *ngIf="row.surgeUsed" class="surge-badge">⚡</span>
                     </span>
                 } @else {
-                    <span class="card-user">{{ row.matchShort || row.match }}</span>
+                    <span class="card-user">{{ row.matchShort || row.match }}
+                        <span *ngIf="row.surgeUsed" class="surge-badge">⚡</span>
+                    </span>
                 }
                 <span class="card-points">
                     @if (getResult(row)) {
