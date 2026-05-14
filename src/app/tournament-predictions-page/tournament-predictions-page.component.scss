@@ -36,7 +36,26 @@
   background: rgba(211, 47, 47, 0.1);
   padding: 8px 12px;
   border-radius: 4px;
+  margin-bottom: 4px;
+}
+
+.points-info {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: #1565c0;
+  background: rgba(21, 101, 192, 0.08);
+  padding: 6px 12px;
+  border-radius: 4px;
   margin-bottom: 12px;
+
+  mat-icon {
+    font-size: 18px;
+    width: 18px;
+    height: 18px;
+    color: #f9a825;
+  }
 }
 
 .page-container {
@@ -85,7 +104,32 @@
   }
 }
 
+.tab-pts {
+  font-size: 11px;
+  font-weight: 600;
+  color: #1565c0;
+  margin-left: 4px;
+}
+
 @media (max-width: 600px) {
+  .page-top-inner {
+    padding: 10px 10px 0;
+  }
+
+  .page-header h2 {
+    font-size: 1.1rem;
+  }
+
+  .closing-message {
+    font-size: 12px;
+    padding: 6px 10px;
+  }
+
+  .points-info {
+    font-size: 12px;
+    padding: 5px 10px;
+  }
+
   .tab-label {
     font-size: 0.8rem;
   }
@@ -94,8 +138,16 @@
     font-size: 12px;
   }
 
+  .tab-pts {
+    font-size: 10px;
+  }
+
   .predict-form {
     padding: 8px;
+  }
+
+  .page-actions {
+    padding: 10px 12px 60px;
   }
 }
 

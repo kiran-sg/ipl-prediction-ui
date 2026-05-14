@@ -69,7 +69,7 @@
                 <mat-icon>format_list_bulleted</mat-icon> View Predictions
               </button>
             </div>
-            <div class="season-grid">
+            <div class="season-grid" *ngIf="canUpdateSeasonResult">
               <div class="season-field" *ngFor="let field of seasonFields">
                 <mat-form-field appearance="outline" class="season-form-field">
                   <mat-label>{{ field.label }}</mat-label>
@@ -93,7 +93,7 @@
                 </mat-form-field>
               </div>
             </div>
-            <button mat-flat-button class="season-submit" (click)="submitSeasonResult()">
+            <button mat-flat-button class="season-submit" (click)="submitSeasonResult()" *ngIf="canUpdateSeasonResult">
               Update Season Results
             </button>
           </div>

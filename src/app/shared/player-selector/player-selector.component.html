@@ -1,10 +1,9 @@
 <div class="selector-section">
-  <div class="section-label">{{ label }}</div>
+  <div class="section-label">{{ label }}<span class="pts-badge" *ngIf="points"> {{ points }}</span></div>
 
   <!-- Selected player chip -->
   <div class="selected-chip" *ngIf="getSelectedPlayer() as player">
-    <img [src]="player.imageUrl" [alt]="player.playerName" class="chip-img"
-         (error)="$any($event.target).src='assets/ipl/tbc.png'">
+    <img *ngIf="player.imageUrl" [src]="player.imageUrl" class="chip-photo" alt="{{ player.playerName }}">
     <span class="chip-name">{{ player.playerName }}</span>
     <span class="chip-team">{{ player.team }}</span>
   </div>
@@ -53,9 +52,8 @@
            tabindex="0"
            (keydown.enter)="select(player.playerNo)"
            (keydown.space)="select(player.playerNo); $event.preventDefault()">
-        <img [src]="player.imageUrl" [alt]="player.playerName" class="player-img"
-             (error)="$any($event.target).src='assets/ipl/tbc.png'">
         <div class="player-info">
+          <img *ngIf="player.imageUrl" [src]="player.imageUrl" class="player-photo" alt="{{ player.playerName }}">
           <span class="player-name">{{ player.playerName }}</span>
           <span class="player-team">{{ player.team }}</span>
         </div>

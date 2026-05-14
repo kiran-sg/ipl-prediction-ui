@@ -15,6 +15,7 @@ export class TeamSelectorComponent {
   @Input() label = '';
   @Input() selected = '';
   @Input() showNoResult = false;
+  @Input() points = '';
   @Output() selectionChange = new EventEmitter<string>();
 
   select(value: string): void {

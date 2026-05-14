@@ -93,6 +93,8 @@ export class AdminComponent {
     { key: 'bestBowlingFigWinnerId', label: 'Best Bowling Figure', type: 'player', value: null, filteredOptions: [], searchText: '' },
   ];
 
+  canUpdateSeasonResult = new Date() >= new Date('2026-06-01T00:00:00+05:30');
+
   constructor(
     private service: CommonService,
     private adminService: AdminService,

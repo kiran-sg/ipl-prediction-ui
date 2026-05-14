@@ -148,18 +148,21 @@ export class TournamentPredictionsPageComponent {
       bestBowlingFigPredictedId: this.playerNoToId(formValues.bestBowlingFigPredicted),
       playerOfTournamentPredictedId: this.playerNoToId(formValues.playerOfTournamentPredicted),
     };
-    this.service.saveTournamentPrediction(prediction).subscribe((data) => {
-      if (data.invalidUser) {
-        this._snackBar.open(data.message, 'Close');
-        this.router.navigate(['/login']);
-        return;
-      }
-      if (data.status) {
-        this._snackBar.open(data.message, 'Close');
-        this.router.navigate(['/home']);
-      } else {
-        this._snackBar.open('Prediction failed', 'Close');
-      }
+    this.service.saveTournamentPrediction(prediction).subscribe({
+      next: (data) => {
+        if (data.invalidUser) {
+          this._snackBar.open(data.message, 'Close');
+          this.router.navigate(['/login']);
+          return;
+        }
+        if (data.status) {
+          this._snackBar.open(data.message, 'Close');
+          this.router.navigate(['/home']);
+        } else {
+          this._snackBar.open('Prediction failed', 'Close');
+        }
+      },
+      error: () => {}
     });
   }
 
@@ -235,7 +238,8 @@ export class TournamentPredictionsPageComponent {
     const diff = closingDate.getTime() - now.getTime();
 
     if (diff <= 0) {
-      this.countdownText = 'PREDICTION CLOSED!';
+      this.countdownText = 'SEASON PREDICTION CLOSED!';
+      this.lockPrediction = true;
       clearInterval(this.countdownInterval);
       return;
     }
@@ -245,14 +249,17 @@ export class TournamentPredictionsPageComponent {
       closingDate.getMonth() === now.getMonth() &&
       closingDate.getDate() === now.getDate();
 
-    if (isSameDay) {
+    const diffDays = Math.ceil(diff / (1000 * 60 * 60 * 24));
+
+    if (isSameDay || diffDays <= 1) {
       const hours = Math.floor(diff / (1000 * 60 * 60));
       const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
       const seconds = Math.floor((diff % (1000 * 60)) / 1000);
-      this.countdownText = `Closes in ${hours}h ${minutes}m ${seconds}s`;
+      this.countdownText = `Season Prediction Closes in ${hours}h ${minutes}m ${seconds}s`;
     } else {
-      const formatted = this.datePipe.transform(closingDate, 'dd-MMM-yyyy') || '';
-      this.countdownText = `Closes on ${formatted}`;
+      const displayDate = new Date(closingDate.getTime() - 1); // show previous day since closing is midnight
+      const formatted = this.datePipe.transform(displayDate, 'dd-MMM-yyyy') || '';
+      this.countdownText = `Season Prediction Closes on ${formatted}`;
     }
   }
 }

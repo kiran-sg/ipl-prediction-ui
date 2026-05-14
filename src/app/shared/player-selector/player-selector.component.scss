@@ -9,6 +9,18 @@
   color: #333;
   margin-bottom: 10px;
   letter-spacing: 0.5px;
+
+  .pts-badge {
+    font-size: 0.7rem;
+    font-weight: 600;
+    color: #1565c0;
+    background: rgba(21, 101, 192, 0.1);
+    padding: 2px 6px;
+    border-radius: 8px;
+    margin-left: 6px;
+    vertical-align: middle;
+    text-transform: none;
+  }
 }
 
 .selected-chip {
@@ -22,7 +34,7 @@
   margin-bottom: 10px;
   width: fit-content;
 
-  .chip-img {
+  .chip-photo {
     width: 28px;
     height: 28px;
     border-radius: 50%;
@@ -89,7 +101,7 @@
 
 .player-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
   gap: 8px;
   max-height: 280px;
   overflow-y: auto;
@@ -100,7 +112,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 8px 4px;
+  padding: 10px 8px;
   border: 2px solid #e0e0e0;
   border-radius: 10px;
   cursor: pointer;
@@ -111,17 +123,8 @@
   &:hover {
     border-color: #81c784;
     box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
-    transform: scale(1.15);
+    transform: scale(1.05);
     z-index: 10;
-
-    .player-img {
-      width: 90px;
-      height: 90px;
-    }
-
-    .player-name {
-      font-size: 0.85rem;
-    }
   }
 
   &.selected {
@@ -131,25 +134,19 @@
   }
 }
 
-.player-img {
-  width: 68px;
-  height: 68px;
-  border-radius: 50%;
-  object-fit: cover;
-  margin-bottom: 4px;
-  border: 2px solid #e0e0e0;
-  transition: all 0.2s ease;
-}
-
-.player-card.selected .player-img {
-  border-color: #2e7d32;
-}
-
 .player-info {
   display: flex;
   flex-direction: column;
   align-items: center;
   text-align: center;
+}
+
+.player-photo {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-bottom: 4px;
 }
 
 .player-name {
@@ -203,5 +200,43 @@
 @media (max-width: 400px) {
   .player-grid {
     grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 600px) {
+  .section-label {
+    font-size: 0.9rem;
+    margin-bottom: 8px;
+  }
+
+  .selected-chip {
+    max-width: 100%;
+  }
+
+  .category-filters {
+    gap: 4px;
+  }
+
+  .player-grid {
+    grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+    gap: 6px;
+    max-height: 240px;
+  }
+
+  .player-card {
+    padding: 8px 6px;
+  }
+
+  .player-photo {
+    width: 32px;
+    height: 32px;
+  }
+
+  .player-name {
+    font-size: 0.7rem;
+  }
+
+  .player-team {
+    font-size: 0.6rem;
   }
 }

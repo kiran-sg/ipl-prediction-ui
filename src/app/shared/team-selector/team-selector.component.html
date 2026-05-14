@@ -1,5 +1,5 @@
 <div class="selector-section">
-  <div class="section-label">{{ label }}</div>
+  <div class="section-label">{{ label }}<span class="pts-badge" *ngIf="points"> {{ points }}</span></div>
   <div class="team-cards">
     <div *ngFor="let team of teams"
          class="team-card"

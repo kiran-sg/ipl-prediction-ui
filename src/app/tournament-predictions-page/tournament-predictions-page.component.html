@@ -10,6 +10,10 @@
       <mat-icon>schedule</mat-icon>
       <span>{{ countdownText }}</span>
     </div>
+    <div class="points-info">
+      <mat-icon>stars</mat-icon>
+      <span>Each correct prediction = <strong>5 pts</strong> | Max: <strong>45 pts</strong></span>
+    </div>
   </div>
 </div>
 
@@ -30,9 +34,10 @@
         <div class="tab-content">
           <div class="field-row">
             <app-player-selector
-              [requireTeamFilter]="false"
+              [requireTeamFilter]="true"
               [players]="players"
               label="Player of the Tournament (MVP)"
+              points="5 pts"
               [defaultCategories]="[]"
               [selected]="tournamentPredictionForm.get('playerOfTournamentPredicted')?.value"
               (selectionChange)="onSelect('playerOfTournamentPredicted', $event)">
@@ -43,6 +48,7 @@
             <app-team-selector
               [teams]="teams"
               label="Fair Play Award"
+              points="5 pts"
               [showNoResult]="false"
               [selected]="tournamentPredictionForm.get('fairPlayTeamPredicted')?.value"
               (selectionChange)="onSelect('fairPlayTeamPredicted', $event)">
@@ -51,9 +57,10 @@
 
           <div class="field-row">
             <app-player-selector
-              [requireTeamFilter]="false"
+              [requireTeamFilter]="true"
               [players]="players"
               label="Emerging Player"
+              points="5 pts"
               [defaultCategories]="[]"
               [selected]="tournamentPredictionForm.get('emergingPlayerPredicted')?.value"
               (selectionChange)="onSelect('emergingPlayerPredicted', $event)">
@@ -75,9 +82,10 @@
         <div class="tab-content">
           <div class="field-row">
             <app-player-selector
-              [requireTeamFilter]="false"
+              [requireTeamFilter]="true"
               [players]="players"
               label="Orange Cap"
+              points="5 pts"
               [defaultCategories]="['Batter', 'WK-Batter', 'All-Rounder']"
               [selected]="tournamentPredictionForm.get('orangeCapPredicted')?.value"
               (selectionChange)="onSelect('orangeCapPredicted', $event)">
@@ -86,9 +94,10 @@
 
           <div class="field-row">
             <app-player-selector
-              [requireTeamFilter]="false"
+              [requireTeamFilter]="true"
               [players]="players"
               label="Most Fours"
+              points="5 pts"
               [defaultCategories]="['Batter', 'WK-Batter', 'All-Rounder']"
               [selected]="tournamentPredictionForm.get('mostFoursPredicted')?.value"
               (selectionChange)="onSelect('mostFoursPredicted', $event)">
@@ -97,9 +106,10 @@
 
           <div class="field-row">
             <app-player-selector
-              [requireTeamFilter]="false"
+              [requireTeamFilter]="true"
               [players]="players"
               label="Most Sixes"
+              points="5 pts"
               [defaultCategories]="['Batter', 'WK-Batter', 'All-Rounder']"
               [selected]="tournamentPredictionForm.get('mostSixesPredicted')?.value"
               (selectionChange)="onSelect('mostSixesPredicted', $event)">
@@ -121,9 +131,10 @@
         <div class="tab-content">
           <div class="field-row">
             <app-player-selector
-              [requireTeamFilter]="false"
+              [requireTeamFilter]="true"
               [players]="players"
               label="Purple Cap"
+              points="5 pts"
               [defaultCategories]="['Bowler', 'All-Rounder']"
               [selected]="tournamentPredictionForm.get('purpleCapPredicted')?.value"
               (selectionChange)="onSelect('purpleCapPredicted', $event)">
@@ -132,9 +143,10 @@
 
           <div class="field-row">
             <app-player-selector
-              [requireTeamFilter]="false"
+              [requireTeamFilter]="true"
               [players]="players"
               label="Most Dot Balls"
+              points="5 pts"
               [defaultCategories]="['Bowler', 'All-Rounder']"
               [selected]="tournamentPredictionForm.get('mostDotBallsPredicted')?.value"
               (selectionChange)="onSelect('mostDotBallsPredicted', $event)">
@@ -143,9 +155,10 @@
 
           <div class="field-row">
             <app-player-selector
-              [requireTeamFilter]="false"
+              [requireTeamFilter]="true"
               [players]="players"
               label="Best Bowling Figure"
+              points="5 pts"
               [defaultCategories]="['Bowler', 'All-Rounder']"
               [selected]="tournamentPredictionForm.get('bestBowlingFigPredicted')?.value"
               (selectionChange)="onSelect('bestBowlingFigPredicted', $event)">
