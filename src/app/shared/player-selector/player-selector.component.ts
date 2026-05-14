@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output, OnChanges } from '@angular/core';
+import { Component, EventEmitter, Input, Output, OnChanges, SimpleChanges } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -30,18 +30,26 @@ export class PlayerSelectorComponent implements OnChanges {
   allTeams: string[] = [];
   selectedTeam = '';
 
-  ngOnChanges(): void {
-    this.allCategories = [...new Set(this.players.map(p => p.category))].sort();
-    this.allTeams = [...new Set(this.players.map(p => p.team))].sort();
+  ngOnChanges(changes: SimpleChanges): void {
+    // Rebuild categories and teams from all players
+    if (changes['players'] && this.players.length > 0) {
+      this.allCategories = [...new Set(this.players.map(p => p.category))].sort();
+      this.allTeams = [...new Set(this.players.map(p => p.team))].sort();
+    }
+
+    // Initialize default categories
     if (this.selectedCategories.length === 0 && this.defaultCategories.length > 0) {
       this.selectedCategories = [...this.defaultCategories];
     }
-    if (this.requireTeamFilter && !this.selectedTeam && this.selected) {
+
+    // Set selected team from selected player when editing
+    if (changes['selected'] && this.selected) {
       const player = this.players.find(p => p.playerNo === this.selected);
-      if (player) {
+      if (player && this.requireTeamFilter && !this.selectedTeam) {
         this.selectedTeam = player.team;
       }
     }
+
     this.filter();
   }
 
