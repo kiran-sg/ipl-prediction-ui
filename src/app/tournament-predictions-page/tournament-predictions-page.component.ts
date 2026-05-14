@@ -44,6 +44,7 @@ export class TournamentPredictionsPageComponent {
   countdownText = 'Calculating...';
   private countdownInterval: any;
   lockPrediction = false;
+  private pendingPrediction: TournamentPrediction | null = null;
 
   constructor(
     private service: CommonService,
@@ -77,7 +78,11 @@ export class TournamentPredictionsPageComponent {
         return;
       }
       if (data.status && data.tournamentPrediction !== null) {
-        this.updateForm(data.tournamentPrediction);
+        if (this.players.length > 0) {
+          this.updateForm(data.tournamentPrediction);
+        } else {
+          this.pendingPrediction = data.tournamentPrediction;
+        }
       }
     });
   }
@@ -228,6 +233,10 @@ export class TournamentPredictionsPageComponent {
           ...player,
           displayValue: player.playerName + ' - ' + player.category + ' - ' + player.team,
         }));
+        if (this.pendingPrediction) {
+          this.updateForm(this.pendingPrediction);
+          this.pendingPrediction = null;
+        }
       }
     });
   }
