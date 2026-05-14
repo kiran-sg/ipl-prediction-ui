@@ -177,7 +177,8 @@ export class HomeComponent {
       const seconds = Math.floor((diff % (1000 * 60)) / 1000);
       this.countdownText = `Closes in ${hours}h ${minutes}m ${seconds}s`;
     } else {
-      const formatted = this.datePipe.transform(closingDate, 'dd-MMM-yyyy') || '';
+      const displayDate = new Date(closingDate.getTime() - 1);
+      const formatted = this.datePipe.transform(displayDate, 'dd-MMM-yyyy') || '';
       this.countdownText = `Closes on ${formatted}`;
     }
   }
