@@ -59,7 +59,7 @@
 
     <mat-paginator [pageSizeOptions]="[10, 25, 50]" aria-label="Select page of users"></mat-paginator>
 
-    <section class="table-container mat-elevation-z2 desktop-only">
+    <section class="table-container mat-elevation-z2" [class.desktop-only]="source !== 'admin'">
         <div class="table-wrapper">
             <table mat-table [dataSource]="dataSource" matSort class="responsive-table">
 
@@ -187,7 +187,7 @@
     </section>
 
     <!-- Mobile Cards -->
-    <div class="mobile-only mobile-cards-container">
+    <div class="mobile-only mobile-cards-container" *ngIf="source !== 'admin'">
         <div class="prediction-card" *ngFor="let row of pagedData">
             <div class="card-header">
                 @if (source === 'admin') {
