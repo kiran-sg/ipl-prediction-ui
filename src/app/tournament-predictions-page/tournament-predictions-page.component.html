@@ -6,18 +6,53 @@
       </button>
       <h2>Season Predictor</h2>
     </div>
-    <div class="closing-message">
+    <div class="closing-message" *ngIf="!hasResults">
       <mat-icon>schedule</mat-icon>
       <span>{{ countdownText }}</span>
     </div>
-    <div class="points-info">
+    <div class="points-info" *ngIf="!hasResults">
       <mat-icon>stars</mat-icon>
       <span>Each correct prediction = <strong>5 pts</strong> | Max: <strong>45 pts</strong></span>
+    </div>
+    <div class="points-earned" *ngIf="hasResults">
+      <mat-icon>emoji_events</mat-icon>
+      <span>Your Score: <strong>{{ totalPoints }} pts</strong></span>
     </div>
   </div>
 </div>
 
-<div class="page-container">
+<!-- Results Comparison View -->
+<div class="page-container" *ngIf="hasResults">
+  <div class="results-section">
+    <div class="result-row" *ngFor="let item of resultComparison">
+      <div class="result-label">{{ item.label }}</div>
+      <div class="result-picks">
+        <div class="pick-col">
+          <span class="pick-header">Your Pick</span>
+          <span class="pick-value" [class.correct]="item.isCorrect" [class.incorrect]="!item.isCorrect && item.userPick !== '-'">
+            {{ item.userPick }}
+          </span>
+        </div>
+        <div class="pick-col">
+          <span class="pick-header">Result</span>
+          <span class="pick-value result-value">{{ item.correctResult }}</span>
+        </div>
+        <div class="pick-status">
+          <span *ngIf="item.isCorrect">✅</span>
+          <span *ngIf="!item.isCorrect && item.userPick !== '-'">❌</span>
+          <span *ngIf="item.userPick === '-'" class="no-pick">—</span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="page-actions-spacer"></div>
+  <div class="page-actions">
+    <button mat-flat-button (click)="goBack()">Back to Home</button>
+  </div>
+</div>
+
+<!-- Prediction Form (hidden when results exist) -->
+<div class="page-container" *ngIf="!hasResults">
   <form [formGroup]="tournamentPredictionForm" (ngSubmit)="onSubmit()" class="predict-form">
     <mat-tab-group animationDuration="200ms">
 

@@ -46,6 +46,10 @@ export class TournamentPredictionsPageComponent {
   lockPrediction = false;
   private pendingPrediction: TournamentPrediction | null = null;
 
+  hasResults = false;
+  resultComparison: { label: string; userPick: string; correctResult: string; isCorrect: boolean }[] = [];
+  totalPoints = 0;
+
   constructor(
     private service: CommonService,
     private router: Router,
@@ -237,8 +241,50 @@ export class TournamentPredictionsPageComponent {
           this.updateForm(this.pendingPrediction);
           this.pendingPrediction = null;
         }
+        this.fetchResults();
       }
     });
+  }
+
+  private fetchResults(): void {
+    this.service.getTournamentResult().subscribe({
+      next: (result: any) => {
+        if (!result || !Object.values(result).some(v => v != null)) return;
+        this.hasResults = true;
+        this.service.getTournamentPredictionByUserId().subscribe(data => {
+          if (!data.status || !data.tournamentPrediction) return;
+          const pred = data.tournamentPrediction;
+          const fields = [
+            { label: 'Player of Tournament', predId: pred.playerOfTournamentPredictedId, resultId: result.playerOfTournamentWinnerId, type: 'player' },
+            { label: 'Fair Play Award', predId: pred.fairPlayTeamPredictedId, resultId: result.fairPlayTeamWinnerId, type: 'team' },
+            { label: 'Emerging Player', predId: pred.emergingPlayerPredictedId, resultId: result.emergingPlayerWinnerId, type: 'player' },
+            { label: 'Orange Cap', predId: pred.orangeCapPredictedId, resultId: result.orangeCapWinnerId, type: 'player' },
+            { label: 'Most Fours', predId: pred.mostFoursPredictedId, resultId: result.mostFoursWinnerId, type: 'player' },
+            { label: 'Most Sixes', predId: pred.mostSixesPredictedId, resultId: result.mostSixesWinnerId, type: 'player' },
+            { label: 'Purple Cap', predId: pred.purpleCapPredictedId, resultId: result.purpleCapWinnerId, type: 'player' },
+            { label: 'Most Dot Balls', predId: pred.mostDotBallsPredictedId, resultId: result.mostDotBallsWinnerId, type: 'player' },
+            { label: 'Best Bowling Figure', predId: pred.bestBowlingFigPredictedId, resultId: result.bestBowlingFigWinnerId, type: 'player' },
+          ];
+          this.resultComparison = fields.map(f => ({
+            label: f.label,
+            userPick: f.type === 'player' ? this.playerNameById(f.predId) : this.teamNameById(f.predId),
+            correctResult: f.type === 'player' ? this.playerNameById(f.resultId) : this.teamNameById(f.resultId),
+            isCorrect: f.predId != null && f.resultId != null && f.predId === f.resultId,
+          }));
+          this.totalPoints = pred.points ?? 0;
+        });
+      }
+    });
+  }
+
+  private playerNameById(id: number | null): string {
+    if (!id) return '-';
+    return this.players.find(p => p.id === id)?.playerName || '-';
+  }
+
+  private teamNameById(id: number | null): string {
+    if (!id) return '-';
+    return this.teamService.getTeamsForSelector().find(t => t.id === id)?.name || '-';
   }
 
   updateCountdown() {

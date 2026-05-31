@@ -370,19 +370,6 @@
 } */
 
 // Optional: Add a "New" badge
-.tournament-prediction::after {
-  content: "New";
-  position: absolute;
-  top: -8px;
-  right: -8px;
-  background: #ff4081; // Pink (or another attention-grabbing color)
-  color: white;
-  font-size: 10px;
-  font-weight: bold;
-  padding: 3px 6px;
-  border-radius: 12px;
-}
-
 .no-matches-banner {
   background-color: #ffe0e0;
   color: #b00020;

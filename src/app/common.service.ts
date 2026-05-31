@@ -134,6 +134,13 @@ export class CommonService {
     );
   }
 
+  getTournamentResult(): Observable<any> {
+    this.loadingService.show();
+    return this.http.get(`${this.baseUrl}/predictions/tournament/result`).pipe(
+      finalize(() => this.loadingService.hide())
+    );
+  }
+
   private showErrorDialog(message: string, title?: string): void {
     this.dialog.open(ErrorDialogComponent, {
       width: '340px',

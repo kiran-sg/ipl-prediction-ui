@@ -169,3 +169,111 @@
   background: white;
   z-index: 999;
 }
+
+.points-earned {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  color: #2e7d32;
+  background: rgba(46, 125, 50, 0.1);
+  padding: 10px 12px;
+  border-radius: 4px;
+  margin-bottom: 12px;
+
+  mat-icon {
+    color: #f9a825;
+  }
+}
+
+.results-section {
+  padding: 16px;
+}
+
+.result-row {
+  background: #f9f9f9;
+  border: 1px solid #e0e0e0;
+  border-radius: 10px;
+  padding: 12px 16px;
+  margin-bottom: 10px;
+}
+
+.result-label {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  color: #777;
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+
+.result-picks {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.pick-col {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+  overflow: hidden;
+}
+
+.pick-header {
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  color: #999;
+  font-weight: 600;
+}
+
+.pick-value {
+  font-size: 0.9rem;
+  font-weight: 500;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+
+  &.correct {
+    color: #2e7d32;
+    font-weight: 700;
+  }
+
+  &.incorrect {
+    color: #c62828;
+  }
+
+  &.result-value {
+    color: #1a378b;
+    font-weight: 600;
+  }
+}
+
+.pick-status {
+  font-size: 1.2rem;
+  min-width: 28px;
+  text-align: center;
+}
+
+.no-pick {
+  color: #bbb;
+}
+
+@media (max-width: 600px) {
+  .results-section {
+    padding: 8px;
+  }
+
+  .result-row {
+    padding: 10px 12px;
+  }
+
+  .result-picks {
+    gap: 8px;
+  }
+
+  .pick-value {
+    font-size: 0.82rem;
+  }
+}
