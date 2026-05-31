@@ -6,38 +6,42 @@
       </button>
       <h2>Season Predictor</h2>
     </div>
-    <div class="closing-message" *ngIf="!hasResults">
+    <div class="closing-message" *ngIf="!showResultsView">
       <mat-icon>schedule</mat-icon>
       <span>{{ countdownText }}</span>
     </div>
-    <div class="points-info" *ngIf="!hasResults">
+    <div class="points-info" *ngIf="!showResultsView">
       <mat-icon>stars</mat-icon>
       <span>Each correct prediction = <strong>5 pts</strong> | Max: <strong>45 pts</strong></span>
     </div>
-    <div class="points-earned" *ngIf="hasResults">
+    <div class="points-earned" *ngIf="showResultsView && totalPoints !== null">
       <mat-icon>emoji_events</mat-icon>
       <span>Your Score: <strong>{{ totalPoints }} pts</strong></span>
+    </div>
+    <div class="points-earned pending" *ngIf="showResultsView && totalPoints === null">
+      <mat-icon>hourglass_empty</mat-icon>
+      <span>Points: <strong>Pending</strong></span>
     </div>
   </div>
 </div>
 
 <!-- Results Comparison View -->
-<div class="page-container" *ngIf="hasResults">
-  <div class="results-section">
+<div class="page-container" *ngIf="showResultsView">
+  <div class="results-section" [class.two-col]="!hasResults">
     <div class="result-row" *ngFor="let item of resultComparison">
       <div class="result-label">{{ item.label }}</div>
       <div class="result-picks">
         <div class="pick-col">
           <span class="pick-header">Your Pick</span>
-          <span class="pick-value" [class.correct]="item.isCorrect" [class.incorrect]="!item.isCorrect && item.userPick !== '-'">
+          <span class="pick-value" [class.correct]="item.isCorrect" [class.incorrect]="hasResults && !item.isCorrect && item.userPick !== '-'">
             {{ item.userPick }}
           </span>
         </div>
-        <div class="pick-col">
+        <div class="pick-col" *ngIf="hasResults">
           <span class="pick-header">Result</span>
           <span class="pick-value result-value">{{ item.correctResult }}</span>
         </div>
-        <div class="pick-status">
+        <div class="pick-status" *ngIf="hasResults">
           <span *ngIf="item.isCorrect">✅</span>
           <span *ngIf="!item.isCorrect && item.userPick !== '-'">❌</span>
           <span *ngIf="item.userPick === '-'" class="no-pick">—</span>
@@ -51,8 +55,8 @@
   </div>
 </div>
 
-<!-- Prediction Form (hidden when results exist) -->
-<div class="page-container" *ngIf="!hasResults">
+<!-- Prediction Form (hidden when results view is shown) -->
+<div class="page-container" *ngIf="!showResultsView">
   <form [formGroup]="tournamentPredictionForm" (ngSubmit)="onSubmit()" class="predict-form">
     <mat-tab-group animationDuration="200ms">
 

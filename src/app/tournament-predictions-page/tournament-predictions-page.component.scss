@@ -184,10 +184,25 @@
   mat-icon {
     color: #f9a825;
   }
+
+  &.pending {
+    color: #e65100;
+    background: rgba(230, 81, 0, 0.08);
+
+    mat-icon {
+      color: #e65100;
+    }
+  }
 }
 
 .results-section {
   padding: 16px;
+
+  &.two-col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
 }
 
 .result-row {
@@ -263,6 +278,10 @@
 @media (max-width: 600px) {
   .results-section {
     padding: 8px;
+
+    &.two-col {
+      grid-template-columns: 1fr;
+    }
   }
 
   .result-row {
